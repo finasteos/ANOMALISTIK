@@ -18,6 +18,10 @@ Lab + control-plane for multimodal empirical structure detection.
 
 Start at [`wiki/index.md`](wiki/index.md). Status tags: **LANDED** · **DESIGNED** · **NEVER**.
 
+Data & credentials (no secrets):
+- [`wiki/data-inventory.md`](wiki/data-inventory.md) — open DBs · OWN catalogs · OSINT
+- [`wiki/api-keys.md`](wiki/api-keys.md) — which keys/accounts, env names only
+
 Verdict source of truth = research lab `outputs/*/run.json` (TIN-STUDY / crop-circles), not dashboard severity alone.
 
 ## MCP

@@ -17,6 +17,8 @@ Agent entry point. Prefer these pages over scraping the React dashboard.
 - [[m-engines]] — future combinations
 - [[open-work]] — NEVER / DESIGNED / next
 - [[tools]] — probe reuse map
+- [[data-inventory]] — open DBs · OWN catalogs · OSINT
+- [[api-keys]] — credentials map (no secrets)
 - [[zetetics-lab]] — funding framing
 
 ## Raw sources (immutable)
