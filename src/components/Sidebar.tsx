@@ -173,7 +173,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             
             {/* Github Link */}
             <a
-              href="https://github.com/wawawee/ANOMALISTICS"
+              href="https://github.com/finasteos/ANOMALISTIK"
               target="_blank"
               rel="noopener noreferrer"
               className={`w-full flex items-center justify-center space-x-1.5 px-3 py-2 rounded-lg text-xs font-mono border transition ${

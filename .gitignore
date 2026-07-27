@@ -6,3 +6,7 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# agent-wiki local cache / staging
+.agent-wiki/
+_ingest/
