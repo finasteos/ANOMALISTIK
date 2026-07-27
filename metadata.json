@@ -1,0 +1,6 @@
+{
+  "name": "ANOMALISTICS • Integrated Laboratory & Universal Entropy Atlas",
+  "description": "Multimodal Empirical Structure & Universal Entropy Detection Framework for ANOMALISTICS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
