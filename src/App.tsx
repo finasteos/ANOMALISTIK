@@ -7,6 +7,7 @@ import { BiophysicsSection } from './components/BiophysicsSection';
 import { GeophysicsAstroSection } from './components/GeophysicsAstroSection';
 import { AdjudicationSimulator } from './components/AdjudicationSimulator';
 import { AiSearchAssistant } from './components/AiSearchAssistant';
+import { DataVerificationSection } from './components/DataVerificationSection';
 import { ThemeProvider, useTheme } from './ThemeContext';
 import { Menu } from 'lucide-react';
 
@@ -51,6 +52,7 @@ function AppContent() {
           {activeTab === 'biophysics' && <BiophysicsSection />}
           {activeTab === 'geophysics' && <GeophysicsAstroSection />}
           {activeTab === 'simulator' && <AdjudicationSimulator />}
+          {activeTab === 'data-verification' && <DataVerificationSection />}
           {activeTab === 'ai-assistant' && <AiSearchAssistant />}
         </main>
 
