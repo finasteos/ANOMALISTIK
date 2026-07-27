@@ -334,13 +334,71 @@ export const ProjectTrackerSection: React.FC<ProjectTrackerProps> = ({ onNavigat
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 font-mono text-xs">
+          <div className="flex flex-wrap items-center space-x-2 font-mono text-xs">
+            <span className={`px-3 py-1 rounded-full border font-bold flex items-center space-x-1.5 ${
+              isLight ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-emerald-950 border-emerald-800 text-emerald-300'
+            }`}>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Real-Time Triage Ingestion Pipe: READY</span>
+            </span>
             <span className={`px-3 py-1 rounded-full border font-bold ${
               isLight ? 'bg-stone-100 border-stone-300 text-stone-900' : 'bg-cyan-950 border-cyan-800 text-cyan-300'
             }`}>
-              {projects.length} Active Research Projects
+              {projects.length} Active Projects
             </span>
           </div>
+        </div>
+
+        {/* Live Pipe / Triage Stream Banner */}
+        <div className={`mb-4 p-3.5 rounded-xl border font-mono text-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-3 ${
+          isLight ? 'bg-stone-50 border-stone-300 text-stone-800' : 'bg-slate-950 border-slate-800 text-slate-200'
+        }`}>
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-amber-500 flex-shrink-0" />
+              <span className="font-bold uppercase tracking-wide">Live Triage &amp; Adjudication Stream Pipeline</span>
+            </div>
+            <p className="text-[11px] opacity-80">
+              Real-time triage events from live sensors, M-Engine runs, and local scripts pipe directly into this dashboard via <code className="font-bold font-mono">POST /api/adjudicate</code> and local webhooks.
+            </p>
+          </div>
+
+          <button
+            onClick={() => {
+              const newId = 'LIVE_' + Math.floor(1000 + Math.random() * 9000);
+              const liveProject: ActiveProjectSchema = {
+                anomaly_id: newId,
+                code: 'LIVE',
+                title: 'Live Triage Signal Ingest #' + newId.slice(-4),
+                domain: 'Real-time Field Pipe',
+                target_tab: 'geophysics',
+                status: 'STRUCTURE_SIGNAL',
+                progress_percentage: 25,
+                last_anomaly_timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
+                metrics: { z_score: '+7.4', signal_snr: '18.2 dB' },
+                negative_controls_applied: ['Live baseline noise null', 'Sensor calibration check'],
+                repo_file_path: 'server.ts',
+                summary: 'Real-time triage event piped from live stream. Adjudication pipeline calculating entropy jump.',
+                tasks: [
+                  { id: 't1', title: 'Live stream ingested via /api/adjudicate', completed: true, assigned_role: 'Triage Pipe' },
+                  { id: 't2', title: 'Run automated negative control filter', completed: false, assigned_role: 'Auto-Filter' },
+                  { id: 't3', title: 'Adjudicate Z-score against null model', completed: false, assigned_role: 'Adjudicator' }
+                ],
+                logs: [
+                  { id: 'l1', timestamp: new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UTC', author: 'Live Webhook', note: 'Piped live triage event into dashboard.' }
+                ]
+              };
+              setProjects(prev => [liveProject, ...prev]);
+            }}
+            className={`px-3 py-1.5 rounded-lg border font-bold text-[11px] transition flex items-center space-x-1.5 flex-shrink-0 ${
+              isLight
+                ? 'bg-stone-900 hover:bg-stone-800 text-stone-50 border-stone-900'
+                : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 border-cyan-400'
+            }`}
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Pipe Test Triage Event</span>
+          </button>
         </div>
 
         {/* Search & Filter Bar */}

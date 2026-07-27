@@ -533,39 +533,51 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
     <div className="space-y-8 animate-fade-in">
       {/* REAL-TIME THRESHOLD ALERT NOTIFICATION BANNER */}
       {activeAlert && (
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-rose-950/90 via-slate-900 to-amber-950/90 border-2 border-rose-500/80 p-5 shadow-2xl shadow-rose-950/50 animate-pulse-subtle">
+        <div className={`relative overflow-hidden rounded-2xl p-5 border-2 shadow-lg animate-pulse-subtle transition-all ${
+          isLight
+            ? 'bg-rose-50/90 border-rose-300 text-stone-900 shadow-rose-100'
+            : 'bg-gradient-to-r from-rose-950/90 via-slate-900 to-amber-950/90 border-rose-500/80 text-slate-100 shadow-2xl shadow-rose-950/50'
+        }`}>
           <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
 
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
             {/* Left Column: Badge & Anomaly Details */}
             <div className="space-y-2 flex-1">
               <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-                <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-rose-600 text-slate-950 font-bold uppercase tracking-wider animate-pulse">
+                <span className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider animate-pulse ${
+                  isLight ? 'bg-rose-600 text-white' : 'bg-rose-600 text-slate-950'
+                }`}>
                   <BellRing className="w-3.5 h-3.5" />
                   <span>Real-Time Anomaly Alert</span>
                 </span>
 
-                <span className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-rose-300 font-bold">
+                <span className={`px-2 py-0.5 rounded font-bold border ${
+                  isLight ? 'bg-white border-rose-300 text-rose-900' : 'bg-slate-950 border-slate-800 text-rose-300'
+                }`}>
                   z = +{activeAlert.zScore.toFixed(1)} (|Z| &ge; {alertThresholdZ.toFixed(1)})
                 </span>
 
-                <span className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-cyan-300">
+                <span className={`px-2 py-0.5 rounded font-bold border ${
+                  isLight ? 'bg-white border-stone-300 text-stone-800' : 'bg-slate-950 border-slate-800 text-cyan-300'
+                }`}>
                   {activeAlert.domain}
                 </span>
 
-                <span className="text-slate-400 text-[11px] flex items-center space-x-1">
-                  <Clock className="w-3 h-3 text-slate-500" />
+                <span className={`text-[11px] flex items-center space-x-1 ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>
+                  <Clock className={`w-3 h-3 ${isLight ? 'text-stone-500' : 'text-slate-500'}`} />
                   <span>Detected: {activeAlert.timestamp}</span>
                 </span>
               </div>
 
-              <h2 className="text-lg font-bold text-slate-100 flex items-center space-x-2">
-                <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0" />
+              <h2 className={`text-lg font-bold flex items-center space-x-2 ${isLight ? 'text-stone-900' : 'text-slate-100'}`}>
+                <AlertTriangle className={`w-5 h-5 flex-shrink-0 ${isLight ? 'text-amber-600' : 'text-amber-400'}`} />
                 <span>{activeAlert.title}</span>
               </h2>
 
-              <p className="text-xs text-slate-300 leading-relaxed font-mono bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
-                <strong className="text-amber-300">{activeAlert.metricName}:</strong> {activeAlert.currentValue} (Exceeds Cutoff {activeAlert.thresholdValue}) • <span className="text-slate-400">Sensor: {activeAlert.sourceSensor}</span>. {activeAlert.description}
+              <p className={`text-xs leading-relaxed font-mono p-2.5 rounded-lg border ${
+                isLight ? 'bg-white/80 border-stone-300 text-stone-800' : 'bg-slate-950/60 border-slate-800/80 text-slate-300'
+              }`}>
+                <strong className={isLight ? 'text-amber-800' : 'text-amber-300'}>{activeAlert.metricName}:</strong> {activeAlert.currentValue} (Exceeds Cutoff {activeAlert.thresholdValue}) • <span className={isLight ? 'text-stone-600' : 'text-slate-400'}>Sensor: {activeAlert.sourceSensor}</span>. {activeAlert.description}
               </p>
             </div>
 
@@ -573,7 +585,9 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
             <div className="flex flex-wrap lg:flex-col items-stretch justify-center gap-2 min-w-[200px]">
               <button
                 onClick={() => onNavigate(activeAlert.targetTab)}
-                className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-cyan-500/20 flex items-center justify-center space-x-2"
+                className={`px-4 py-2 rounded-xl font-bold text-xs transition shadow-md flex items-center justify-center space-x-2 ${
+                  isLight ? 'bg-stone-900 hover:bg-stone-800 text-stone-50' : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-cyan-500/20'
+                }`}
               >
                 <span>Inspect in {activeAlert.domain}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -582,16 +596,20 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
               <div className="flex gap-2">
                 <button
                   onClick={() => setShowAlertHistory(!showAlertHistory)}
-                  className="flex-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs font-mono transition flex items-center justify-center space-x-1"
+                  className={`flex-1 px-3 py-1.5 rounded-lg border text-xs font-mono transition flex items-center justify-center space-x-1 ${
+                    isLight ? 'bg-white hover:bg-stone-100 text-stone-800 border-stone-300' : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
+                  }`}
                 >
-                  <Clock className="w-3.5 h-3.5 text-purple-400" />
+                  <Clock className={`w-3.5 h-3.5 ${isLight ? 'text-purple-600' : 'text-purple-400'}`} />
                   <span>Log ({alertHistory.length})</span>
                   {showAlertHistory ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                 </button>
 
                 <button
                   onClick={() => setActiveAlert(null)}
-                  className="px-3 py-1.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-xs transition flex items-center justify-center"
+                  className={`px-3 py-1.5 rounded-lg border text-xs transition flex items-center justify-center ${
+                    isLight ? 'bg-white hover:bg-stone-100 text-stone-600 hover:text-stone-900 border-stone-300' : 'bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800'
+                  }`}
                   title="Dismiss Alert"
                 >
                   <X className="w-4 h-4" />
@@ -603,11 +621,15 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
       )}
 
       {/* REAL-TIME ALERT STREAM CONTROL BAR & HISTORY LOG DRAWER */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-3 gap-3">
+      <div className={`p-5 rounded-2xl border space-y-4 shadow-sm transition-all ${
+        isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/90 border-slate-800 text-slate-100'
+      }`}>
+        <div className={`flex flex-col sm:flex-row sm:items-center justify-between border-b pb-3 gap-3 ${
+          isLight ? 'border-stone-200' : 'border-slate-800'
+        }`}>
           <div className="flex items-center space-x-2">
-            <Radio className={`w-4 h-4 ${isStreamActive ? 'text-emerald-400 animate-pulse' : 'text-slate-500'}`} />
-            <h2 className="text-sm font-bold text-slate-100 font-mono uppercase tracking-wider">
+            <Radio className={`w-4 h-4 ${isStreamActive ? 'text-emerald-500 animate-pulse' : 'text-stone-400'}`} />
+            <h2 className="text-sm font-black font-mono uppercase tracking-wider">
               Real-Time Entropy Stream &amp; Spike Detection Controls
             </h2>
           </div>
@@ -617,33 +639,37 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
               onClick={() => setIsStreamActive(!isStreamActive)}
               className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center space-x-1.5 ${
                 isStreamActive
-                  ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                  : 'bg-amber-950 text-amber-300 border border-amber-800'
+                  ? isLight ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                  : isLight ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-amber-950 text-amber-300 border border-amber-800'
               }`}
             >
-              {isStreamActive ? <Pause className="w-3.5 h-3.5 text-emerald-400" /> : <Play className="w-3.5 h-3.5 text-amber-400" />}
+              {isStreamActive ? <Pause className="w-3.5 h-3.5 text-emerald-600" /> : <Play className="w-3.5 h-3.5 text-amber-600" />}
               <span>{isStreamActive ? 'Stream Live' : 'Stream Paused'}</span>
             </button>
 
             <button
               onClick={() => setIsMuted(!isMuted)}
-              className="p-1.5 rounded-lg bg-slate-950 text-slate-400 border border-slate-800 hover:text-slate-200 transition"
+              className={`p-1.5 rounded-lg border transition ${
+                isLight ? 'bg-stone-100 text-stone-700 border-stone-300 hover:text-stone-900' : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200'
+              }`}
               title={isMuted ? 'Unmute Alerts' : 'Mute Alerts'}
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-cyan-400" />}
+              {isMuted ? <VolumeX className="w-4 h-4 text-rose-500" /> : <Volume2 className="w-4 h-4 text-cyan-600" />}
             </button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-xs font-mono">
           {/* Threshold Cutoff Slider */}
-          <div className="space-y-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+          <div className={`space-y-2 p-3.5 rounded-xl border ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950 border-slate-800 text-slate-100'
+          }`}>
             <div className="flex items-center justify-between">
-              <label className="text-slate-300 font-bold flex items-center space-x-1.5">
-                <Sliders className="w-3.5 h-3.5 text-amber-400" />
+              <label className="font-bold flex items-center space-x-1.5">
+                <Sliders className="w-3.5 h-3.5 text-amber-600" />
                 <span>Alert Trigger Cutoff (|Z| score)</span>
               </label>
-              <span className="text-amber-300 font-bold">z = {alertThresholdZ.toFixed(1)}</span>
+              <span className="text-amber-600 font-bold">z = {alertThresholdZ.toFixed(1)}</span>
             </div>
 
             <input
@@ -653,10 +679,10 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
               step="0.5"
               value={alertThresholdZ}
               onChange={(e) => setAlertThresholdZ(Number(e.target.value))}
-              className="w-full accent-amber-400 cursor-pointer"
+              className="w-full accent-amber-500 cursor-pointer"
             />
 
-            <div className="flex justify-between text-[10px] text-slate-500">
+            <div className={`flex justify-between text-[10px] ${isLight ? 'text-stone-500' : 'text-slate-500'}`}>
               <span>z = 2.0 (Low)</span>
               <span>z = 3.5 (Standard)</span>
               <span>z = 10.0 (Extreme)</span>
@@ -664,9 +690,11 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
           </div>
 
           {/* Interactive Manual Spike Trigger Panel */}
-          <div className="space-y-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800 lg:col-span-2">
-            <label className="text-slate-300 font-bold flex items-center space-x-1.5">
-              <Zap className="w-3.5 h-3.5 text-cyan-400" />
+          <div className={`space-y-2 p-3.5 rounded-xl border lg:col-span-2 ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950 border-slate-800 text-slate-100'
+          }`}>
+            <label className="font-bold flex items-center space-x-1.5">
+              <Zap className="w-3.5 h-3.5 text-cyan-600" />
               <span>Simulate Real-Time Anomaly Spike Test Triggers</span>
             </label>
 
@@ -681,7 +709,11 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
                 <button
                   key={item.index}
                   onClick={() => triggerSpike(item.index)}
-                  className="px-2.5 py-1.5 rounded bg-slate-900 hover:bg-cyan-950 text-slate-200 hover:text-cyan-300 border border-slate-800 hover:border-cyan-700 text-[11px] font-bold transition flex items-center space-x-1"
+                  className={`px-2.5 py-1.5 rounded text-[11px] font-bold transition flex items-center space-x-1 border ${
+                    isLight 
+                      ? 'bg-white hover:bg-stone-200 text-stone-900 border-stone-300' 
+                      : 'bg-slate-900 hover:bg-cyan-950 text-slate-200 hover:text-cyan-300 border-slate-800 hover:border-cyan-700'
+                  }`}
                 >
                   <span>{item.label}</span>
                 </button>
@@ -692,16 +724,20 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
 
         {/* Collapsible Auditor Chronological Event & Threshold Breach Log Drawer */}
         {showAlertHistory && (
-          <div className="pt-4 border-t border-slate-800 space-y-4 animate-fade-in font-mono">
+          <div className={`pt-4 border-t space-y-4 animate-fade-in font-mono ${
+            isLight ? 'border-stone-200' : 'border-slate-800'
+          }`}>
             {/* Auditor Header & Metric Summary Ribbon */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+            <div className={`flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3.5 rounded-xl border ${
+              isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950 border-slate-800 text-slate-100'
+            }`}>
               <div className="flex items-center space-x-2">
-                <FileText className="w-4 h-4 text-purple-400" />
+                <FileText className={`w-4 h-4 ${isLight ? 'text-purple-700' : 'text-purple-400'}`} />
                 <div>
-                  <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider">
+                  <h3 className="text-xs font-bold uppercase tracking-wider">
                     Auditor Threshold Breach &amp; Event Record Log
                   </h3>
-                  <p className="text-[10px] text-slate-400">
+                  <p className={`text-[10px] ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>
                     Chronological audit log tracking all real-time threshold breaches, sensor anomalies &amp; system alerts.
                   </p>
                 </div>
@@ -709,20 +745,28 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
 
               {/* Summary Badges */}
               <div className="flex flex-wrap items-center gap-2 text-[11px]">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-                  Total Breaches: <strong className="text-amber-300">{alertHistory.length}</strong>
+                <span className={`px-2.5 py-1 rounded-lg border ${
+                  isLight ? 'bg-white border-stone-300 text-stone-800' : 'bg-slate-900 border-slate-800 text-slate-300'
+                }`}>
+                  Total Breaches: <strong className={isLight ? 'text-amber-800 font-bold' : 'text-amber-300'}>{alertHistory.length}</strong>
                 </span>
 
-                <span className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-                  Critical: <strong className="text-rose-400">{alertHistory.filter(a => a.severity === 'CRITICAL').length}</strong>
+                <span className={`px-2.5 py-1 rounded-lg border ${
+                  isLight ? 'bg-white border-stone-300 text-stone-800' : 'bg-slate-900 border-slate-800 text-slate-300'
+                }`}>
+                  Critical: <strong className={isLight ? 'text-rose-700 font-bold' : 'text-rose-400'}>{alertHistory.filter(a => a.severity === 'CRITICAL').length}</strong>
                 </span>
 
-                <span className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-                  Max z: <strong className="text-cyan-300">{alertHistory.length > 0 ? Math.max(...alertHistory.map(a => a.zScore)).toFixed(1) : '0.0'}</strong>
+                <span className={`px-2.5 py-1 rounded-lg border ${
+                  isLight ? 'bg-white border-stone-300 text-stone-800' : 'bg-slate-900 border-slate-800 text-slate-300'
+                }`}>
+                  Max z: <strong className={isLight ? 'text-cyan-800 font-bold' : 'text-cyan-300'}>{alertHistory.length > 0 ? Math.max(...alertHistory.map(a => a.zScore)).toFixed(1) : '0.0'}</strong>
                 </span>
 
-                <span className="px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-emerald-800 text-emerald-300 font-bold flex items-center space-x-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span className={`px-2.5 py-1 rounded-lg font-bold flex items-center space-x-1 border ${
+                  isLight ? 'bg-emerald-100 border-emerald-300 text-emerald-900' : 'bg-emerald-950/80 border-emerald-800 text-emerald-300'
+                }`}>
+                  <ShieldCheck className={`w-3.5 h-3.5 ${isLight ? 'text-emerald-700' : 'text-emerald-400'}`} />
                   <span>AUDITOR VERIFIED</span>
                 </span>
               </div>
@@ -732,26 +776,32 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
               {/* Search Field */}
               <div className="relative flex-1">
-                <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5" />
+                <Search className={`w-3.5 h-3.5 absolute left-3 top-2.5 ${isLight ? 'text-stone-400' : 'text-slate-500'}`} />
                 <input
                   type="text"
                   placeholder="Filter audit logs by title, sensor, or metric..."
                   value={logSearchQuery}
                   onChange={(e) => setLogSearchQuery(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-slate-200 pl-8 pr-3 py-1.5 rounded-lg text-xs font-mono focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
+                  className={`w-full border pl-8 pr-3 py-1.5 rounded-lg text-xs font-mono focus:ring-1 ${
+                    isLight 
+                      ? 'bg-white border-stone-300 text-stone-900 focus:ring-stone-500 focus:border-stone-500' 
+                      : 'bg-slate-950 border-slate-800 text-slate-200 focus:ring-purple-500 focus:border-purple-500'
+                  }`}
                 />
               </div>
 
               {/* Severity Filter Buttons */}
-              <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px]">
+              <div className={`flex items-center space-x-1 p-1 rounded-lg border text-[11px] ${
+                isLight ? 'bg-stone-50 border-stone-300' : 'bg-slate-950 border-slate-800'
+              }`}>
                 {['ALL', 'CRITICAL', 'HIGH', 'MODERATE'].map((sev) => (
                   <button
                     key={sev}
                     onClick={() => setLogFilterSeverity(sev)}
                     className={`px-2.5 py-1 rounded font-bold transition ${
                       logFilterSeverity === sev
-                        ? 'bg-purple-600 text-slate-950'
-                        : 'text-slate-400 hover:text-slate-200'
+                        ? isLight ? 'bg-stone-900 text-stone-50' : 'bg-purple-600 text-slate-950'
+                        : isLight ? 'text-stone-600 hover:text-stone-900' : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
                     {sev}
@@ -763,17 +813,25 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={handleExportAuditLogs}
-                  className="px-3 py-1.5 rounded-lg bg-purple-950 hover:bg-purple-900 border border-purple-800 text-purple-300 hover:text-purple-200 text-xs font-bold transition flex items-center space-x-1.5 shadow-sm"
+                  className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition flex items-center space-x-1.5 shadow-sm ${
+                    isLight 
+                      ? 'bg-purple-100 hover:bg-purple-200 border-purple-300 text-purple-900' 
+                      : 'bg-purple-950 hover:bg-purple-900 border-purple-800 text-purple-300 hover:text-purple-200'
+                  }`}
                   title="Export complete JSON audit payload to clipboard"
                 >
-                  <FileJson className="w-3.5 h-3.5 text-purple-400" />
+                  <FileJson className={`w-3.5 h-3.5 ${isLight ? 'text-purple-700' : 'text-purple-400'}`} />
                   <span>{copiedAuditLog ? 'Copied JSON!' : 'Export JSON Audit'}</span>
                 </button>
 
                 {alertHistory.length > 0 && (
                   <button
                     onClick={() => setAlertHistory([])}
-                    className="px-2.5 py-1.5 rounded-lg bg-slate-950 hover:bg-rose-950 border border-slate-800 hover:border-rose-800 text-slate-400 hover:text-rose-300 text-xs transition"
+                    className={`px-2.5 py-1.5 rounded-lg border text-xs transition ${
+                      isLight 
+                        ? 'bg-white hover:bg-rose-100 border-stone-300 hover:border-rose-300 text-stone-600 hover:text-rose-900' 
+                        : 'bg-slate-950 hover:bg-rose-950 border-slate-800 hover:border-rose-800 text-slate-400 hover:text-rose-300'
+                    }`}
                     title="Reset Audit History"
                   >
                     Clear
@@ -784,7 +842,9 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
 
             {/* Event List */}
             {filteredAuditLogs.length === 0 ? (
-              <div className="text-center py-6 bg-slate-950 rounded-xl border border-slate-800 text-slate-500 text-xs">
+              <div className={`text-center py-6 rounded-xl border text-xs ${
+                isLight ? 'bg-stone-50 border-stone-300 text-stone-500' : 'bg-slate-950 border-slate-800 text-slate-500'
+              }`}>
                 No chronological audit log entries match the selected search or severity filters.
               </div>
             ) : (
@@ -795,7 +855,11 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
                   return (
                     <div
                       key={item.id}
-                      className="bg-slate-950 rounded-xl border border-slate-800 hover:border-slate-700 transition overflow-hidden"
+                      className={`rounded-xl border transition overflow-hidden ${
+                        isLight 
+                          ? 'bg-white border-stone-300 hover:border-stone-400 text-stone-900' 
+                          : 'bg-slate-950 border-slate-800 hover:border-slate-700 text-slate-100'
+                      }`}
                     >
                       {/* Item Main Row */}
                       <div className="p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
@@ -805,47 +869,55 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
                             <span
                               className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                                 item.severity === 'CRITICAL'
-                                  ? 'bg-rose-950 text-rose-300 border border-rose-800'
+                                  ? isLight ? 'bg-rose-100 text-rose-900 border border-rose-300' : 'bg-rose-950 text-rose-300 border border-rose-800'
                                   : item.severity === 'HIGH'
-                                  ? 'bg-amber-950 text-amber-300 border border-amber-800'
-                                  : 'bg-cyan-950 text-cyan-300 border border-cyan-800'
+                                  ? isLight ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-amber-950 text-amber-300 border border-amber-800'
+                                  : isLight ? 'bg-cyan-100 text-cyan-900 border border-cyan-300' : 'bg-cyan-950 text-cyan-300 border border-cyan-800'
                               }`}
                             >
                               {item.severity}
                             </span>
 
                             {/* Z Score */}
-                            <span className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300 text-[10px] font-bold">
+                            <span className={`px-1.5 py-0.5 rounded border text-[10px] font-bold ${
+                              isLight ? 'bg-stone-100 border-stone-300 text-stone-800' : 'bg-slate-900 border-slate-800 text-slate-300'
+                            }`}>
                               z = +{item.zScore.toFixed(1)}
                             </span>
 
-                            <span className="font-bold text-slate-100">{item.title}</span>
+                            <span className={`font-bold ${isLight ? 'text-stone-900' : 'text-slate-100'}`}>{item.title}</span>
 
-                            <span className="text-[10px] text-cyan-400 bg-cyan-950/40 px-1.5 py-0.5 rounded border border-cyan-900/60">
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded border ${
+                              isLight ? 'text-cyan-900 bg-cyan-50 border-cyan-200' : 'text-cyan-400 bg-cyan-950/40 border-cyan-900/60'
+                            }`}>
                               {item.domain}
                             </span>
                           </div>
 
-                          <p className="text-[11px] text-slate-400 line-clamp-1">
-                            <strong className="text-slate-300">{item.metricName}:</strong> {item.currentValue} (Threshold: {item.thresholdValue}) • Sensor: <span className="text-slate-300">{item.sourceSensor}</span>
+                          <p className={`text-[11px] line-clamp-1 ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>
+                            <strong className={isLight ? 'text-stone-800' : 'text-slate-300'}>{item.metricName}:</strong> {item.currentValue} (Threshold: {item.thresholdValue}) • Sensor: <span className={isLight ? 'text-stone-800' : 'text-slate-300'}>{item.sourceSensor}</span>
                           </p>
                         </div>
 
                         {/* Controls & Timestamp */}
                         <div className="flex items-center space-x-2 flex-shrink-0">
-                          <span className="text-[10px] text-slate-500">{item.timestamp}</span>
+                          <span className={`text-[10px] ${isLight ? 'text-stone-500' : 'text-slate-500'}`}>{item.timestamp}</span>
 
                           <button
                             onClick={() => setExpandedLogId(isExpanded ? null : item.id)}
-                            className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[11px] transition flex items-center space-x-1"
+                            className={`px-2.5 py-1 rounded border text-[11px] transition flex items-center space-x-1 ${
+                              isLight ? 'bg-stone-100 hover:bg-stone-200 text-stone-800 border-stone-300' : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                            }`}
                           >
-                            <Terminal className="w-3 h-3 text-purple-400" />
+                            <Terminal className={`w-3 h-3 ${isLight ? 'text-purple-700' : 'text-purple-400'}`} />
                             <span>{isExpanded ? 'Hide Payload' : 'Inspect'}</span>
                           </button>
 
                           <button
                             onClick={() => onNavigate(item.targetTab)}
-                            className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-slate-700 text-[11px] transition"
+                            className={`px-2.5 py-1 rounded border text-[11px] transition font-bold ${
+                              isLight ? 'bg-stone-900 hover:bg-stone-800 text-stone-50 border-stone-900' : 'bg-slate-900 hover:bg-slate-800 text-cyan-300 border-slate-700'
+                            }`}
                           >
                             Jump
                           </button>
@@ -854,27 +926,35 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
 
                       {/* Expanded Payload & Telemetry Detail Panel for Auditors */}
                       {isExpanded && (
-                        <div className="p-3 bg-slate-900/90 border-t border-slate-800 space-y-2 text-[11px] text-slate-300 animate-fade-in">
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 bg-slate-950 p-2.5 rounded-lg border border-slate-800/80">
+                        <div className={`p-3 border-t space-y-2 text-[11px] animate-fade-in ${
+                          isLight ? 'bg-stone-50 border-stone-200 text-stone-800' : 'bg-slate-900/90 border-slate-800 text-slate-300'
+                        }`}>
+                          <div className={`grid grid-cols-1 md:grid-cols-3 gap-2 p-2.5 rounded-lg border ${
+                            isLight ? 'bg-white border-stone-300' : 'bg-slate-950 border-slate-800/80'
+                          }`}>
                             <div>
-                              <span className="text-slate-500 text-[10px] block">METRIC PARAMETER</span>
-                              <strong className="text-amber-300">{item.metricName}</strong>
+                              <span className={`text-[10px] block ${isLight ? 'text-stone-500' : 'text-slate-500'}`}>METRIC PARAMETER</span>
+                              <strong className={isLight ? 'text-amber-800' : 'text-amber-300'}>{item.metricName}</strong>
                             </div>
                             <div>
-                              <span className="text-slate-500 text-[10px] block">READING VS CUTOFF</span>
-                              <span className="text-slate-200">{item.currentValue} (Limit: {item.thresholdValue})</span>
+                              <span className={`text-[10px] block ${isLight ? 'text-stone-500' : 'text-slate-500'}`}>READING VS CUTOFF</span>
+                              <span className={isLight ? 'text-stone-900' : 'text-slate-200'}>{item.currentValue} (Limit: {item.thresholdValue})</span>
                             </div>
                             <div>
-                              <span className="text-slate-500 text-[10px] block">SENSOR INSTRUMENT SOURCE</span>
-                              <span className="text-cyan-300">{item.sourceSensor}</span>
+                              <span className={`text-[10px] block ${isLight ? 'text-stone-500' : 'text-slate-500'}`}>SENSOR INSTRUMENT SOURCE</span>
+                              <span className={isLight ? 'text-cyan-800 font-bold' : 'text-cyan-300'}>{item.sourceSensor}</span>
                             </div>
                           </div>
 
-                          <p className="text-slate-300 leading-relaxed bg-slate-950 p-2 rounded border border-slate-800">
+                          <p className={`leading-relaxed p-2 rounded border ${
+                            isLight ? 'bg-white border-stone-300 text-stone-800' : 'bg-slate-950 border-slate-800 text-slate-300'
+                          }`}>
                             {item.description}
                           </p>
 
-                          <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono pt-1">
+                          <div className={`flex items-center justify-between text-[10px] font-mono pt-1 ${
+                            isLight ? 'text-stone-500' : 'text-slate-500'
+                          }`}>
                             <span>EVENT_GUID: {item.id}</span>
                             <span>TARGET_MODULE: {item.targetTab}</span>
                           </div>
@@ -1044,46 +1124,60 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
 
       {/* Metric Counters Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-1 hover:border-slate-700 transition">
-          <div className="text-slate-400 text-xs font-mono">Epigraphic Signal Peak</div>
-          <div className="text-2xl font-bold text-emerald-400 font-mono">z = -11,336</div>
-          <div className="text-xs text-slate-400 truncate">Meroitic Script (G-MER)</div>
+        <div className={`border rounded-xl p-4 space-y-1 transition shadow-sm ${
+          isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/80 border-slate-800 text-slate-100 hover:border-slate-700'
+        }`}>
+          <div className={`text-xs font-mono font-bold ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>Epigraphic Signal Peak</div>
+          <div className={`text-2xl font-black font-mono ${isLight ? 'text-emerald-700' : 'text-emerald-400'}`}>z = -11,336</div>
+          <div className={`text-xs font-mono truncate ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>Meroitic Script (G-MER)</div>
         </div>
-        <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-1 hover:border-slate-700 transition">
-          <div className="text-slate-400 text-xs font-mono">Boyajian Dip Significance</div>
-          <div className="text-2xl font-bold text-cyan-400 font-mono">Z² ≈ 60</div>
-          <div className="text-xs text-slate-400 truncate">24.5-Day Cycle (TESS G20)</div>
+        <div className={`border rounded-xl p-4 space-y-1 transition shadow-sm ${
+          isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/80 border-slate-800 text-slate-100 hover:border-slate-700'
+        }`}>
+          <div className={`text-xs font-mono font-bold ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>Boyajian Dip Significance</div>
+          <div className={`text-2xl font-black font-mono ${isLight ? 'text-cyan-700' : 'text-cyan-400'}`}>Z² ≈ 60</div>
+          <div className={`text-xs font-mono truncate ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>24.5-Day Cycle (TESS G20)</div>
         </div>
-        <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-1 hover:border-slate-700 transition">
-          <div className="text-slate-400 text-xs font-mono">Max Node Elongation</div>
-          <div className="text-2xl font-bold text-amber-400 font-mono">+214%</div>
-          <div className="text-xs text-slate-400 truncate">BLT Pulvini Baseline</div>
+        <div className={`border rounded-xl p-4 space-y-1 transition shadow-sm ${
+          isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/80 border-slate-800 text-slate-100 hover:border-slate-700'
+        }`}>
+          <div className={`text-xs font-mono font-bold ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>Max Node Elongation</div>
+          <div className={`text-2xl font-black font-mono ${isLight ? 'text-amber-700' : 'text-amber-400'}`}>+214%</div>
+          <div className={`text-xs font-mono truncate ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>BLT Pulvini Baseline</div>
         </div>
-        <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-1 hover:border-slate-700 transition">
-          <div className="text-slate-400 text-xs font-mono">FRB Catalog Ingested</div>
-          <div className="text-2xl font-bold text-purple-400 font-mono">4,539 Bursts</div>
-          <div className="text-xs text-slate-400 truncate">CHIME Catalog 2 (R1)</div>
+        <div className={`border rounded-xl p-4 space-y-1 transition shadow-sm ${
+          isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/80 border-slate-800 text-slate-100 hover:border-slate-700'
+        }`}>
+          <div className={`text-xs font-mono font-bold ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>FRB Catalog Ingested</div>
+          <div className={`text-2xl font-black font-mono ${isLight ? 'text-purple-700' : 'text-purple-400'}`}>4,539 Bursts</div>
+          <div className={`text-xs font-mono truncate ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>CHIME Catalog 2 (R1)</div>
         </div>
       </div>
 
       {/* Granular Date & Severity Filtering Control Bar */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-3 gap-3">
+      <div className={`p-5 rounded-2xl border space-y-4 shadow-sm transition-all ${
+        isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/90 border-slate-800 text-slate-100'
+      }`}>
+        <div className={`flex flex-col md:flex-row md:items-center justify-between border-b pb-3 gap-3 ${
+          isLight ? 'border-stone-200' : 'border-slate-800'
+        }`}>
           <div className="flex items-center space-x-2">
-            <Filter className="w-4 h-4 text-cyan-400" />
-            <h2 className="text-sm font-bold text-slate-100 font-mono uppercase tracking-wider">
+            <Filter className={`w-4 h-4 ${isLight ? 'text-stone-900' : 'text-cyan-400'}`} />
+            <h2 className="text-sm font-black font-mono uppercase tracking-wider">
               Granular Date Era &amp; Severity Range Controls
             </h2>
           </div>
 
           <div className="flex items-center space-x-3 text-xs font-mono">
-            <span className="text-slate-400">
-              Active Filters: <strong className="text-cyan-300">{filteredMissions.length}</strong> of {LAB_MISSIONS.length} Missions | <strong className="text-indigo-300">{filteredDomains.length}</strong> of {DATA_DOMAINS.length} Tracks
+            <span className={isLight ? 'text-stone-600' : 'text-slate-400'}>
+              Active Filters: <strong className={isLight ? 'text-stone-900 font-black' : 'text-cyan-300'}>{filteredMissions.length}</strong> of {LAB_MISSIONS.length} Missions | <strong className={isLight ? 'text-stone-900 font-black' : 'text-indigo-300'}>{filteredDomains.length}</strong> of {DATA_DOMAINS.length} Tracks
             </span>
             {isFiltered && (
               <button
                 onClick={handleResetFilters}
-                className="px-2.5 py-1 rounded-lg bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800 transition flex items-center space-x-1"
+                className={`px-2.5 py-1 rounded-lg border transition flex items-center space-x-1 ${
+                  isLight ? 'bg-rose-100 hover:bg-rose-200 text-rose-900 border-rose-300' : 'bg-rose-950/80 hover:bg-rose-900 text-rose-300 border-rose-800'
+                }`}
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Reset Filters</span>
@@ -1094,9 +1188,11 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs font-mono">
           {/* Era / Date Selector */}
-          <div className="space-y-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800">
-            <label className="text-slate-300 font-bold flex items-center space-x-1.5">
-              <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+          <div className={`space-y-2 p-3.5 rounded-xl border ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950 border-slate-800 text-slate-100'
+          }`}>
+            <label className="font-bold flex items-center space-x-1.5">
+              <Calendar className="w-3.5 h-3.5 text-cyan-600" />
               <span>Observation Era / Date Range</span>
             </label>
             <div className="grid grid-cols-2 gap-1.5 pt-1">
@@ -1112,10 +1208,12 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
                     setSelectedEra(era.id);
                     setUseCustomYearRange(false);
                   }}
-                  className={`px-2 py-1.5 rounded text-[11px] font-bold transition text-left ${
+                  className={`px-2 py-1.5 rounded text-[11px] font-bold transition text-left border ${
                     selectedEra === era.id && !useCustomYearRange
-                      ? 'bg-cyan-600 text-slate-950 border border-cyan-400'
-                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                      ? 'bg-stone-900 text-stone-50 border-stone-900'
+                      : isLight 
+                        ? 'bg-white hover:bg-stone-200 text-stone-800 border-stone-300' 
+                        : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border-slate-800'
                   }`}
                 >
                   {era.label}
@@ -1124,14 +1222,14 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
             </div>
 
             {/* Custom Year Inputs */}
-            <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
-              <div className="flex items-center justify-between text-[10px] text-slate-400">
+            <div className={`pt-2 border-t space-y-1.5 ${isLight ? 'border-stone-200' : 'border-slate-800/80'}`}>
+              <div className={`flex items-center justify-between text-[10px] ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>
                 <span>Custom Year Range Filter</span>
                 <input
                   type="checkbox"
                   checked={useCustomYearRange}
                   onChange={(e) => setUseCustomYearRange(e.target.checked)}
-                  className="rounded border-slate-700 text-cyan-500 focus:ring-0"
+                  className="rounded border-stone-400 text-stone-900 focus:ring-0"
                 />
               </div>
               {useCustomYearRange && (
@@ -1140,15 +1238,19 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
                     type="number"
                     value={minYear}
                     onChange={(e) => setMinYear(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-slate-200 text-[11px]"
+                    className={`w-full border rounded px-2 py-1 text-[11px] ${
+                      isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900 border-slate-800 text-slate-200'
+                    }`}
                     placeholder="Min Year"
                   />
-                  <span className="text-slate-500">–</span>
+                  <span className={isLight ? 'text-stone-400' : 'text-slate-500'}>–</span>
                   <input
                     type="number"
                     value={maxYear}
                     onChange={(e) => setMaxYear(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-slate-200 text-[11px]"
+                    className={`w-full border rounded px-2 py-1 text-[11px] ${
+                      isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900 border-slate-800 text-slate-200'
+                    }`}
                     placeholder="Max Year"
                   />
                 </div>
@@ -1157,13 +1259,15 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
           </div>
 
           {/* Severity Score Slider */}
-          <div className="space-y-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+          <div className={`space-y-2 p-3.5 rounded-xl border ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950 border-slate-800 text-slate-100'
+          }`}>
             <div className="flex items-center justify-between">
-              <label className="text-slate-300 font-bold flex items-center space-x-1.5">
-                <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <label className="font-bold flex items-center space-x-1.5">
+                <Zap className="w-3.5 h-3.5 text-amber-600" />
                 <span>Min Signal Severity Threshold</span>
               </label>
-              <span className="text-amber-300 font-bold">{minSeverity}%</span>
+              <span className="text-amber-600 font-bold">{minSeverity}%</span>
             </div>
 
             <input
@@ -1173,10 +1277,10 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
               step="5"
               value={minSeverity}
               onChange={(e) => setMinSeverity(Number(e.target.value))}
-              className="w-full accent-amber-400 cursor-pointer"
+              className="w-full accent-amber-500 cursor-pointer"
             />
 
-            <div className="flex justify-between text-[10px] text-slate-500">
+            <div className={`flex justify-between text-[10px] ${isLight ? 'text-stone-500' : 'text-slate-500'}`}>
               <span>0% (All Noise)</span>
               <span>40% (Moderate)</span>
               <span>80%+ (Extreme Outliers)</span>
@@ -1192,10 +1296,12 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
                 <button
                   key={s.level}
                   onClick={() => setMinSeverity(s.level)}
-                  className={`flex-1 py-1 rounded text-[10px] transition ${
+                  className={`flex-1 py-1 rounded text-[10px] transition font-bold ${
                     minSeverity === s.level
-                      ? 'bg-amber-500 text-slate-950 font-bold'
-                      : 'bg-slate-900 text-slate-400 hover:bg-slate-800'
+                      ? 'bg-stone-900 text-stone-50'
+                      : isLight 
+                        ? 'bg-white text-stone-700 hover:bg-stone-200 border border-stone-300' 
+                        : 'bg-slate-900 text-slate-400 hover:bg-slate-800'
                   }`}
                 >
                   {s.name}
@@ -1205,9 +1311,11 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
           </div>
 
           {/* Verdict Status Filter */}
-          <div className="space-y-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800 sm:col-span-2 lg:col-span-1">
-            <label className="text-slate-300 font-bold flex items-center space-x-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <div className={`space-y-2 p-3.5 rounded-xl border sm:col-span-2 lg:col-span-1 ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950 border-slate-800 text-slate-100'
+          }`}>
+            <label className="font-bold flex items-center space-x-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               <span>Verdict Adjudication Status</span>
             </label>
 
@@ -1221,10 +1329,12 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
                 <button
                   key={v.id}
                   onClick={() => setSelectedVerdict(v.id)}
-                  className={`px-2 py-1.5 rounded text-[11px] font-bold transition text-left ${
+                  className={`px-2 py-1.5 rounded text-[11px] font-bold transition text-left border ${
                     selectedVerdict === v.id
-                      ? 'bg-emerald-600 text-slate-950 border border-emerald-400'
-                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                      ? 'bg-stone-900 text-stone-50 border-stone-900'
+                      : isLight 
+                        ? 'bg-white hover:bg-stone-200 text-stone-800 border-stone-300' 
+                        : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border-slate-800'
                   }`}
                 >
                   {v.label}
@@ -1236,37 +1346,47 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
       </div>
 
       {/* 3-Layer Universal Anomaly Detector Architecture */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+      <div className={`p-6 rounded-2xl border space-y-6 shadow-sm transition-all ${
+        isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/90 border-slate-800 text-slate-100'
+      }`}>
+        <div className={`flex items-center justify-between border-b pb-4 ${
+          isLight ? 'border-stone-200' : 'border-slate-800'
+        }`}>
           <div>
-            <h2 className="text-lg font-bold text-slate-100 flex items-center space-x-2">
-              <ShieldAlert className="w-5 h-5 text-cyan-400" />
+            <h2 className="text-lg font-black flex items-center space-x-2">
+              <ShieldAlert className={`w-5 h-5 ${isLight ? 'text-stone-900' : 'text-cyan-400'}`} />
               <span>Universal 3-Layer Anomaly Detector Model</span>
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className={`text-xs ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>
               Rigorous scientific filter preventing false positives and ungrounded claims.
             </p>
           </div>
-          <span className="text-xs font-mono text-cyan-400 px-2.5 py-1 rounded bg-cyan-950/80 border border-cyan-800">
+          <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded border ${
+            isLight ? 'bg-stone-100 text-stone-900 border-stone-300' : 'bg-cyan-950/80 text-cyan-400 border-cyan-800'
+          }`}>
             FPR Calibration = 1.67%
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Layer 1 */}
-          <div className="bg-slate-950/60 border border-amber-900/40 rounded-xl p-5 space-y-3 relative">
+          <div className={`p-5 rounded-xl border space-y-3 relative ${
+            isLight ? 'bg-stone-50 border-amber-300 text-stone-900 shadow-sm' : 'bg-slate-950/60 border-amber-900/40 text-slate-100'
+          }`}>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold font-mono text-amber-400 px-2 py-0.5 rounded bg-amber-950 border border-amber-800">
+              <span className="text-xs font-bold font-mono text-amber-600 px-2 py-0.5 rounded bg-amber-100 border border-amber-300">
                 LAYER 1
               </span>
-              <CheckCircle2 className="w-4 h-4 text-amber-400" />
+              <CheckCircle2 className="w-4 h-4 text-amber-600" />
             </div>
-            <h3 className="font-bold text-slate-200 text-sm">Negative Control Engine</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-black text-sm">Negative Control Engine</h3>
+            <p className={`text-xs leading-relaxed ${isLight ? 'text-stone-700' : 'text-slate-400'}`}>
               Every incoming signal is subjected to Fisher-Yates shuffle nulls, known human hoaxes (Julia Set, Crabwood),
               and natural analogs (irrigation pivots, geological faulting).
             </p>
-            <div className="text-[11px] font-mono text-slate-300 bg-slate-900 p-2.5 rounded border border-slate-800">
+            <div className={`text-[11px] font-mono p-2.5 rounded border ${
+              isLight ? 'bg-white border-stone-300 text-stone-800' : 'bg-slate-900 border-slate-800 text-slate-300'
+            }`}>
               • 50+ Monte Carlo Permutations<br />
               • Instrument Systematics Filter<br />
               • False Positive Rate (FPR) Calibration
@@ -1274,18 +1394,22 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
           </div>
 
           {/* Layer 2 */}
-          <div className="bg-slate-950/60 border border-cyan-900/40 rounded-xl p-5 space-y-3 relative">
+          <div className={`p-5 rounded-xl border space-y-3 relative ${
+            isLight ? 'bg-stone-50 border-cyan-300 text-stone-900 shadow-sm' : 'bg-slate-950/60 border-cyan-900/40 text-slate-100'
+          }`}>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold font-mono text-cyan-400 px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800">
+              <span className="text-xs font-bold font-mono text-cyan-700 px-2 py-0.5 rounded bg-cyan-100 border border-cyan-300">
                 LAYER 2
               </span>
-              <Cpu className="w-4 h-4 text-cyan-400" />
+              <Cpu className="w-4 h-4 text-cyan-600" />
             </div>
-            <h3 className="font-bold text-slate-200 text-sm">Signal Detection & Extraction</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-black text-sm">Signal Detection & Extraction</h3>
+            <p className={`text-xs leading-relaxed ${isLight ? 'text-stone-700' : 'text-slate-400'}`}>
               Domain-specialized extraction pipelines process raw high-dimensional bitstreams, satellite matrices, and time-series vectors.
             </p>
-            <div className="text-[11px] font-mono text-slate-300 bg-slate-900 p-2.5 rounded border border-slate-800">
+            <div className={`text-[11px] font-mono p-2.5 rounded border ${
+              isLight ? 'bg-white border-stone-300 text-stone-800' : 'bg-slate-900 border-slate-800 text-slate-300'
+            }`}>
               • CCAT (Canny/Hough/Box-counting)<br />
               • symbolseq (H(X), Cond-H, IC)<br />
               • astro_probe & BFAST/SATLAS
@@ -1293,18 +1417,22 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
           </div>
 
           {/* Layer 3 */}
-          <div className="bg-slate-950/60 border border-purple-900/40 rounded-xl p-5 space-y-3 relative">
+          <div className={`p-5 rounded-xl border space-y-3 relative ${
+            isLight ? 'bg-stone-50 border-purple-300 text-stone-900 shadow-sm' : 'bg-slate-950/60 border-purple-900/40 text-slate-100'
+          }`}>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold font-mono text-purple-400 px-2 py-0.5 rounded bg-purple-950 border border-purple-800">
+              <span className="text-xs font-bold font-mono text-purple-700 px-2 py-0.5 rounded bg-purple-100 border border-purple-300">
                 LAYER 3
               </span>
-              <Activity className="w-4 h-4 text-purple-400" />
+              <Activity className="w-4 h-4 text-purple-600" />
             </div>
-            <h3 className="font-bold text-slate-200 text-sm">Claim Adjudication</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="font-black text-sm">Claim Adjudication</h3>
+            <p className={`text-xs leading-relaxed ${isLight ? 'text-stone-700' : 'text-slate-400'}`}>
               Final mathematical verdict assignment based on z-score distance from shuffle nulls and physical cross-correlation.
             </p>
-            <div className="text-[11px] font-mono text-slate-300 bg-slate-900 p-2.5 rounded border border-slate-800">
+            <div className={`text-[11px] font-mono p-2.5 rounded border ${
+              isLight ? 'bg-white border-stone-300 text-stone-800' : 'bg-slate-900 border-slate-800 text-slate-300'
+            }`}>
               • SEQUENCE_STRUCTURE (Confirmed)<br />
               • CLAIM_FAILS_NULL (Disproven)<br />
               • UNDERDETERMINED (Needs data)
@@ -1314,34 +1442,44 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
       </div>
 
       {/* Core Philosophy Rules */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-4">
-        <h2 className="text-md font-bold text-slate-200 flex items-center space-x-2">
-          <FileText className="w-4 h-4 text-cyan-400" />
+      <div className={`p-6 rounded-2xl border space-y-4 shadow-sm transition-all ${
+        isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/80 border-slate-800 text-slate-100'
+      }`}>
+        <h2 className="text-md font-black flex items-center space-x-2">
+          <FileText className={`w-4 h-4 ${isLight ? 'text-stone-900' : 'text-cyan-400'}`} />
           <span>Core Methodological Axioms & Forbidden Terms</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-          <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1.5">
-            <div className="font-bold text-cyan-300 font-mono">1. Structure ≠ Message</div>
-            <p className="text-slate-400">
+          <div className={`p-3.5 rounded-xl border space-y-1.5 ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950/70 border-slate-800 text-slate-100'
+          }`}>
+            <div className={`font-bold font-mono ${isLight ? 'text-cyan-800' : 'text-cyan-300'}`}>1. Structure ≠ Message</div>
+            <p className={isLight ? 'text-stone-600' : 'text-slate-400'}>
               Periodicity or low entropy proves structural coupling (a physical relationship), never intentional messaging or extraterrestrial origin.
             </p>
           </div>
-          <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1.5">
-            <div className="font-bold text-emerald-300 font-mono">2. Negative Control Rule</div>
-            <p className="text-slate-400">
+          <div className={`p-3.5 rounded-xl border space-y-1.5 ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950/70 border-slate-800 text-slate-100'
+          }`}>
+            <div className={`font-bold font-mono ${isLight ? 'text-emerald-800' : 'text-emerald-300'}`}>2. Negative Control Rule</div>
+            <p className={isLight ? 'text-stone-600' : 'text-slate-400'}>
               A signal is only an anomaly if mathematically distinguished from randomized noise, human hoaxes, and natural analogs.
             </p>
           </div>
-          <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1.5">
-            <div className="font-bold text-amber-300 font-mono">3. Forbidden Phrases Filter</div>
-            <p className="text-slate-400">
+          <div className={`p-3.5 rounded-xl border space-y-1.5 ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950/70 border-slate-800 text-slate-100'
+          }`}>
+            <div className={`font-bold font-mono ${isLight ? 'text-amber-800' : 'text-amber-300'}`}>3. Forbidden Phrases Filter</div>
+            <p className={isLight ? 'text-stone-600' : 'text-slate-400'}>
               System logs warnings for sensational terms: &quot;decoded&quot;, &quot;confirms extraterrestrials&quot;, &quot;99% decrypted&quot;.
             </p>
           </div>
-          <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1.5">
-            <div className="font-bold text-purple-300 font-mono">4. Missing Data Honesty</div>
-            <p className="text-slate-400">
-              When data is unreachable (e.g. CDLI Proto-Elamite server drop), status is explicitly marked as <code className="text-rose-400 font-mono">NEVER_ATTEMPTED</code>.
+          <div className={`p-3.5 rounded-xl border space-y-1.5 ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-900' : 'bg-slate-950/70 border-slate-800 text-slate-100'
+          }`}>
+            <div className={`font-bold font-mono ${isLight ? 'text-purple-800' : 'text-purple-300'}`}>4. Missing Data Honesty</div>
+            <p className={isLight ? 'text-stone-600' : 'text-slate-400'}>
+              When data is unreachable (e.g. CDLI Proto-Elamite server drop), status is explicitly marked as <code className="text-rose-600 font-mono">NEVER_ATTEMPTED</code>.
             </p>
           </div>
         </div>
@@ -1350,12 +1488,14 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
       {/* Four Research Tracks Showcase */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-100">Research Domains Taxonomy (4 Tracks)</h2>
-          <span className="text-xs text-slate-400 font-mono">Showing {filteredDomains.length} of {DATA_DOMAINS.length} Domains</span>
+          <h2 className={`text-lg font-black ${isLight ? 'text-stone-900' : 'text-slate-100'}`}>Research Domains Taxonomy (4 Tracks)</h2>
+          <span className={`text-xs font-mono ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>Showing {filteredDomains.length} of {DATA_DOMAINS.length} Domains</span>
         </div>
 
         {filteredDomains.length === 0 ? (
-          <div className="p-8 text-center bg-slate-900/60 border border-slate-800 rounded-xl text-slate-400 text-xs font-mono">
+          <div className={`p-8 text-center border rounded-xl text-xs font-mono ${
+            isLight ? 'bg-white border-stone-300 text-stone-600' : 'bg-slate-900/60 border-slate-800 text-slate-400'
+          }`}>
             No research domains match the current date / severity filter settings.
           </div>
         ) : (
@@ -1363,47 +1503,63 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
             {filteredDomains.map((domain) => (
               <div 
                 key={domain.id} 
-                className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-xl p-5 space-y-4 transition group"
+                className={`p-5 rounded-xl border space-y-4 transition group shadow-sm ${
+                  isLight 
+                    ? 'bg-white border-stone-300 hover:border-stone-400 text-stone-900' 
+                    : 'bg-slate-900/90 border-slate-800 hover:border-slate-700 text-slate-100'
+                }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">
+                    <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded border ${
+                      isLight ? 'bg-stone-100 text-stone-900 border-stone-300' : 'bg-indigo-950 text-indigo-300 border-indigo-800'
+                    }`}>
                       {domain.code}
                     </span>
                     {domain.yearRange && (
-                      <span className="text-[10px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                      <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                        isLight ? 'bg-stone-50 text-stone-600 border-stone-300' : 'bg-slate-950 text-slate-400 border-slate-800'
+                      }`}>
                         {domain.yearRange}
                       </span>
                     )}
                   </div>
-                  <span className={`text-[11px] font-mono px-2 py-0.5 rounded ${
-                    domain.verdict === 'STRUCTURE_SIGNAL' ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' :
-                    domain.verdict === 'SEQUENCE_STRUCTURE' ? 'bg-cyan-950 text-cyan-300 border border-cyan-800' :
-                    'bg-slate-800 text-slate-400 border border-slate-700'
+                  <span className={`text-[11px] font-mono px-2 py-0.5 rounded font-bold border ${
+                    domain.verdict === 'STRUCTURE_SIGNAL' 
+                      ? isLight ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-emerald-950 text-emerald-300 border-emerald-800'
+                      : domain.verdict === 'SEQUENCE_STRUCTURE' 
+                        ? isLight ? 'bg-cyan-100 text-cyan-900 border-cyan-300' : 'bg-cyan-950 text-cyan-300 border-cyan-800'
+                        : isLight ? 'bg-stone-100 text-stone-700 border-stone-300' : 'bg-slate-800 text-slate-400 border-slate-700'
                   }`}>
                     {domain.verdict}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-slate-100 text-base group-hover:text-cyan-300 transition">
+                  <h3 className={`font-bold text-base transition ${
+                    isLight ? 'text-stone-900 group-hover:text-stone-700' : 'text-slate-100 group-hover:text-cyan-300'
+                  }`}>
                     {domain.title}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1">{domain.description}</p>
+                  <p className={`text-xs mt-1 ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>{domain.description}</p>
                 </div>
 
                 <div className="space-y-2 text-xs">
                   <div className="flex flex-wrap gap-1.5">
                     {domain.keyHighlights.map((hl, idx) => (
-                      <span key={idx} className="bg-slate-800/80 text-slate-300 px-2 py-0.5 rounded font-mono text-[11px] border border-slate-700">
+                      <span key={idx} className={`px-2 py-0.5 rounded font-mono text-[11px] border ${
+                        isLight ? 'bg-stone-50 text-stone-800 border-stone-300' : 'bg-slate-800/80 text-slate-300 border-slate-700'
+                      }`}>
                         • {hl}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono">
-                  <span>Severity Index: <strong className="text-amber-300">{domain.severityScore ?? 50}%</strong></span>
+                <div className={`pt-2 border-t flex items-center justify-between text-xs font-mono ${
+                  isLight ? 'border-stone-200 text-stone-600' : 'border-slate-800/80 text-slate-400'
+                }`}>
+                  <span>Severity Index: <strong className={isLight ? 'text-amber-700 font-bold' : 'text-amber-300'}>{domain.severityScore ?? 50}%</strong></span>
                   <button
                     onClick={() => {
                       if (domain.track === 'G-Series') onNavigate('epigraphy');
@@ -1411,7 +1567,9 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
                       else if (domain.track === 'R-Series') onNavigate('geophysics');
                       else onNavigate('mengines');
                     }}
-                    className="text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 font-sans font-semibold"
+                    className={`flex items-center space-x-1 font-sans font-bold transition ${
+                      isLight ? 'text-stone-900 hover:text-stone-700' : 'text-cyan-400 hover:text-cyan-300'
+                    }`}
                   >
                     <span>Explore Domain</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1424,25 +1582,31 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
       </div>
 
       {/* Active Missions Summary Table */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <div className={`p-6 rounded-2xl border space-y-4 shadow-sm transition-all ${
+        isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/90 border-slate-800 text-slate-100'
+      }`}>
         <div className="flex items-center justify-between">
-          <h2 className="text-md font-bold text-slate-100 flex items-center space-x-2">
-            <GitCommit className="w-4 h-4 text-purple-400" />
+          <h2 className="text-md font-black flex items-center space-x-2">
+            <GitCommit className={`w-4 h-4 ${isLight ? 'text-stone-900' : 'text-purple-400'}`} />
             <span>Active ANOMALISTICS Mission Log &amp; Adjudications</span>
           </h2>
-          <span className="text-xs text-slate-400 font-mono">
-            Filtered Missions: <strong className="text-cyan-300">{filteredMissions.length}</strong> / {LAB_MISSIONS.length}
+          <span className={`text-xs font-mono ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>
+            Filtered Missions: <strong className={isLight ? 'text-stone-900 font-bold' : 'text-cyan-300'}>{filteredMissions.length}</strong> / {LAB_MISSIONS.length}
           </span>
         </div>
 
         {filteredMissions.length === 0 ? (
-          <div className="p-8 text-center bg-slate-950 border border-slate-800 rounded-xl text-slate-400 text-xs font-mono">
+          <div className={`p-8 text-center border rounded-xl text-xs font-mono ${
+            isLight ? 'bg-stone-50 border-stone-300 text-stone-600' : 'bg-slate-950 border-slate-800 text-slate-400'
+          }`}>
             No missions found matching the selected Era / Date / Severity filter criteria.
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-950 text-slate-400 font-mono uppercase text-[10px] border-b border-slate-800">
+            <table className={`w-full text-left text-xs ${isLight ? 'text-stone-800' : 'text-slate-300'}`}>
+              <thead className={`font-mono uppercase text-[10px] border-b ${
+                isLight ? 'bg-stone-100 text-stone-700 border-stone-300' : 'bg-slate-950 text-slate-400 border-slate-800'
+              }`}>
                 <tr>
                   <th className="py-2.5 px-3">Mission ID</th>
                   <th className="py-2.5 px-3">Era / Year</th>
@@ -1453,24 +1617,28 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
                   <th className="py-2.5 px-3">Verdict Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 font-mono">
+              <tbody className={`divide-y font-mono ${
+                isLight ? 'divide-stone-200' : 'divide-slate-800/60'
+              }`}>
                 {filteredMissions.map((m) => (
-                  <tr key={m.id} className="hover:bg-slate-800/40 transition">
-                    <td className="py-2.5 px-3 font-bold text-cyan-400">{m.code}</td>
-                    <td className="py-2.5 px-3 text-slate-400">{m.yearRange || m.year || 'N/A'}</td>
-                    <td className="py-2.5 px-3 font-sans text-slate-200 font-medium">{m.title}</td>
-                    <td className="py-2.5 px-3 text-slate-400">{m.targetObject}</td>
-                    <td className="py-2.5 px-3 font-bold text-amber-300">{m.severityScore ? `${m.severityScore}%` : 'N/A'}</td>
-                    <td className="py-2.5 px-3 text-purple-300">{m.zScoreOrMetric}</td>
+                  <tr key={m.id} className={`transition ${
+                    isLight ? 'hover:bg-stone-50' : 'hover:bg-slate-800/40'
+                  }`}>
+                    <td className={`py-2.5 px-3 font-bold ${isLight ? 'text-stone-900' : 'text-cyan-400'}`}>{m.code}</td>
+                    <td className={`py-2.5 px-3 ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>{m.yearRange || m.year || 'N/A'}</td>
+                    <td className={`py-2.5 px-3 font-sans font-semibold ${isLight ? 'text-stone-900' : 'text-slate-200'}`}>{m.title}</td>
+                    <td className={`py-2.5 px-3 ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>{m.targetObject}</td>
+                    <td className={`py-2.5 px-3 font-bold ${isLight ? 'text-amber-700' : 'text-amber-300'}`}>{m.severityScore ? `${m.severityScore}%` : 'N/A'}</td>
+                    <td className={`py-2.5 px-3 font-bold ${isLight ? 'text-purple-800' : 'text-purple-300'}`}>{m.zScoreOrMetric}</td>
                     <td className="py-2.5 px-3">
-                      <span className={`px-2 py-0.5 rounded text-[10px] ${
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
                         m.status === 'STRUCTURE_SIGNAL' || m.status === 'SEQUENCE_STRUCTURE' || m.status === 'DIP_STRUCTURE'
-                          ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                          ? isLight ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-emerald-950 text-emerald-300 border-emerald-800'
                           : m.status === 'CLAIM_FAILS_NULL'
-                          ? 'bg-rose-950 text-rose-300 border border-rose-800'
+                          ? isLight ? 'bg-rose-100 text-rose-900 border-rose-300' : 'bg-rose-950 text-rose-300 border-rose-800'
                           : m.status === 'UNDERDETERMINED'
-                          ? 'bg-amber-950 text-amber-300 border border-amber-800'
-                          : 'bg-slate-800 text-slate-400'
+                          ? isLight ? 'bg-amber-100 text-amber-900 border-amber-300' : 'bg-amber-950 text-amber-300 border-amber-800'
+                          : isLight ? 'bg-stone-100 text-stone-700 border-stone-300' : 'bg-slate-800 text-slate-400'
                       }`}>
                         {m.status}
                       </span>

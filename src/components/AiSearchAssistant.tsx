@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Search, Sparkles, ExternalLink, RefreshCw, Send, Brain, ShieldAlert } from 'lucide-react';
 import { SearchGroundedResponse, HighThinkingResponse } from '../types';
+import { useTheme } from '../ThemeContext';
 
 export const AiSearchAssistant: React.FC = () => {
+  const { theme, themeId } = useTheme();
+  const isLight = themeId === 'IVORY_MONOCHROME';
   const [activeSubTab, setActiveSubTab] = useState<'search' | 'thinking'>('search');
 
   // Search Grounded state
@@ -78,29 +81,33 @@ export const AiSearchAssistant: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in font-mono">
       {/* Header Banner */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-3">
-        <div className="flex items-center space-x-2 text-cyan-400 font-mono text-xs">
-          <Sparkles className="w-4 h-4" />
+      <div className={`p-6 md:p-8 rounded-2xl border shadow-sm space-y-3 transition-all ${
+        isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/90 border-slate-800 text-slate-100'
+      }`}>
+        <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider">
+          <Sparkles className={`w-4 h-4 ${isLight ? 'text-stone-900' : 'text-cyan-400'}`} />
           <span>Server-Side Gemini AI Engine Integration</span>
         </div>
-        <h1 className="text-2xl font-bold text-slate-100">
+        <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wider">
           AI Research Grounding &amp; High Thinking Adjudicator
         </h1>
-        <p className="text-slate-300 text-sm leading-relaxed max-w-4xl">
-          Powered by Gemini API server routes. Toggle between real-time Google Search Grounding with <code className="text-cyan-300 font-mono">gemini-3.5-flash</code> 
-          and Deep Adjudication Reasoning with <code className="text-purple-300 font-mono">gemini-3.1-pro-preview</code> (ThinkingLevel.HIGH).
+        <p className={`text-xs md:text-sm font-sans leading-relaxed max-w-4xl ${isLight ? 'text-stone-700' : 'text-slate-300'}`}>
+          Powered by Gemini API server routes. Toggle between real-time Google Search Grounding with <code className="font-mono font-bold text-cyan-700">gemini-3.5-flash</code> 
+          and Deep Adjudication Reasoning with <code className="font-mono font-bold text-purple-700">gemini-3.1-pro-preview</code> (ThinkingLevel.HIGH).
         </p>
 
         {/* Subtab Toggle */}
-        <div className="pt-2 flex space-x-3">
+        <div className="pt-2 flex flex-wrap gap-2">
           <button
             onClick={() => setActiveSubTab('search')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 shadow-sm ${
               activeSubTab === 'search'
-                ? 'bg-cyan-600 text-slate-950 border border-cyan-400 shadow-lg'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                ? 'bg-stone-900 text-stone-50 border border-stone-900'
+                : isLight
+                  ? 'bg-stone-100 text-stone-800 hover:bg-stone-200 border border-stone-300'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
             }`}
           >
             <Search className="w-3.5 h-3.5" />
@@ -108,14 +115,16 @@ export const AiSearchAssistant: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveSubTab('thinking')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 shadow-sm ${
               activeSubTab === 'thinking'
-                ? 'bg-purple-600 text-slate-950 border border-purple-400 shadow-lg'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                ? 'bg-stone-900 text-stone-50 border border-stone-900'
+                : isLight
+                  ? 'bg-stone-100 text-stone-800 hover:bg-stone-200 border border-stone-300'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
             }`}
           >
             <Brain className="w-3.5 h-3.5" />
-            <span>High Thinking Mode (gemini-3.1-pro-preview)</span>
+            <span>High Thinking Reasoner (gemini-3.1-pro)</span>
           </button>
         </div>
       </div>

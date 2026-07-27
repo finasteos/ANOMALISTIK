@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Layers, Play, RefreshCw, CheckCircle2, AlertTriangle, ShieldAlert, Sparkles, HelpCircle } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 interface AdjudicationResult {
   sampleName: string;
@@ -40,6 +41,9 @@ const PRESET_SAMPLES = [
 ];
 
 export const AdjudicationSimulator: React.FC = () => {
+  const { theme, themeId } = useTheme();
+  const isLight = themeId === 'IVORY_MONOCHROME';
+
   const [sampleName, setSampleName] = useState(PRESET_SAMPLES[0].name);
   const [sequence, setSequence] = useState(PRESET_SAMPLES[0].seq);
   const [loading, setLoading] = useState(false);
@@ -84,19 +88,21 @@ export const AdjudicationSimulator: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in font-mono">
       {/* Header Banner */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-3">
-        <div className="flex items-center space-x-2 text-indigo-400 font-mono text-xs">
-          <Layers className="w-4 h-4" />
+      <div className={`p-6 md:p-8 rounded-2xl border shadow-sm space-y-3 transition-all ${
+        isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/90 border-slate-800 text-slate-100'
+      }`}>
+        <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider">
+          <Layers className={`w-4 h-4 ${isLight ? 'text-stone-900' : 'text-indigo-400'}`} />
           <span>Interactive Metrology Bench • Layer 1 &amp; Layer 2 Simulator</span>
         </div>
-        <h1 className="text-2xl font-bold text-slate-100">
+        <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wider">
           Live Signal Adjudication Bench
         </h1>
-        <p className="text-slate-300 text-sm leading-relaxed max-w-4xl">
+        <p className={`text-xs md:text-sm font-sans leading-relaxed max-w-4xl ${isLight ? 'text-stone-700' : 'text-slate-300'}`}>
           Test any custom string, bitstream, or epigraphic token sequence. The engine runs 50 Fisher-Yates 
-          Monte Carlo permutations to establish the <span className="text-cyan-300 font-mono">shuffle null</span>, 
+          Monte Carlo permutations to establish the <span className="font-mono font-bold text-emerald-600">shuffle null</span>, 
           computes Shannon Entropy H(X), Conditional Entropy H(Y|X), Index of Coincidence (IC), and calculates the exact Z-score distance.
         </p>
       </div>

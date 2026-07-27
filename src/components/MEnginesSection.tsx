@@ -15,6 +15,7 @@ import {
 import { Cpu, Activity, ArrowRightLeft, ShieldCheck, Sparkles, Layers, Zap, Play, Pause, RefreshCw, BarChart2, Filter, Calendar, Sliders, GitCompare, Split } from 'lucide-react';
 import { M_ENGINES } from '../data/labData';
 import { MEngine } from '../types';
+import { useTheme } from '../ThemeContext';
 
 interface EntropyPoint {
   time: string;
@@ -95,6 +96,8 @@ const generateInitialFluxData = (engineId: string, eventPreset: string = 'LIVE')
 };
 
 export const MEnginesSection: React.FC = () => {
+  const { theme, themeId } = useTheme();
+  const isLight = themeId === 'IVORY_MONOCHROME';
   const [selectedEngine, setSelectedEngine] = useState<MEngine>(M_ENGINES[0]);
   const [eventPreset, setEventPreset] = useState<string>('LIVE'); // 'LIVE' | 'MAY_2024_SOLAR' | 'DEC_2023_FRB' | 'HISTORICAL_1H'
   const [fluxData, setFluxData] = useState<EntropyPoint[]>(() => generateInitialFluxData(M_ENGINES[0].id, 'LIVE'));

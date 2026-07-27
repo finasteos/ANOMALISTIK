@@ -27,6 +27,7 @@ import {
   ReferenceLine 
 } from 'recharts';
 import { LAB_MISSIONS } from '../data/labData';
+import { useTheme } from '../ThemeContext';
 
 // Signal definition for the matrix
 interface SignalDefinition {
@@ -177,6 +178,8 @@ const generateCrossCorrCurve = (r: number, lagOpt: number) => {
 };
 
 export const GeophysicsAstroSection: React.FC = () => {
+  const { theme, themeId } = useTheme();
+  const isLight = themeId === 'IVORY_MONOCHROME';
   const [selectedMission, setSelectedMission] = useState(LAB_MISSIONS[0]);
 
   // Correlation Matrix state
@@ -247,34 +250,38 @@ export const GeophysicsAstroSection: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in font-mono">
       {/* Header Banner */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-3">
-        <div className="flex items-center space-x-2 text-cyan-400 font-mono text-xs">
-          <Activity className="w-4 h-4" />
+      <div className={`p-6 md:p-8 rounded-2xl border shadow-sm space-y-3 transition-all ${
+        isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/90 border-slate-800 text-slate-100'
+      }`}>
+        <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider">
+          <Activity className={`w-4 h-4 ${isLight ? 'text-stone-900' : 'text-cyan-400'}`} />
           <span>Track R-Series • Geophysics, Heliophysics &amp; Astrophysics</span>
         </div>
-        <h1 className="text-2xl font-bold text-slate-100">
+        <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wider">
           Infravisible Geophysical Fields &amp; Cosmic Transients
         </h1>
-        <p className="text-slate-300 text-sm leading-relaxed max-w-4xl">
+        <p className={`text-xs md:text-sm font-sans leading-relaxed max-w-4xl ${isLight ? 'text-stone-700' : 'text-slate-300'}`}>
           Integrates real-time 1Hz INTERMAGNET vector magnetometers, EMAG2v3 crustal magnetic grids, GOCE gravity models, 
           IRIS TA infrasound arrays, NOAA DSCOVR/ACE solar wind plasma, and CHIME FRB radiotelescope catalogs.
         </p>
       </div>
 
       {/* NEW: Cross-Signal Correlation Matrix Visualization */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between border-b border-slate-800 pb-4 gap-4">
+      <div className={`p-6 rounded-2xl border shadow-sm space-y-6 ${
+        isLight ? 'bg-white border-stone-300 text-stone-900' : 'bg-slate-900/90 border-slate-800 text-slate-100'
+      }`}>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between border-b border-stone-200 pb-4 gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-purple-400 font-mono text-xs mb-1">
-              <Sliders className="w-4 h-4" />
+            <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider mb-1">
+              <Sliders className="w-4 h-4 text-purple-600" />
               <span>Multi-Stream Statistical Coupling Matrix</span>
             </div>
-            <h2 className="text-lg font-bold text-slate-100">
+            <h2 className="text-lg font-black uppercase tracking-wide">
               Anomalous Signals Cross-Correlation &amp; Information Matrix
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className={`text-xs font-sans mt-0.5 ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>
               Quantifies pairwise Pearson r, Spearman rank, Mutual Information $I(X;Y)$, and time-lagged cross-coherence across 8 sensor channels.
             </p>
           </div>

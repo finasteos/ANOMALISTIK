@@ -41,11 +41,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="flex items-center space-x-2.5 cursor-pointer group" 
               onClick={() => setActiveTab('overview')}
             >
-              <div className={`w-9 h-9 rounded-lg bg-stone-900 p-0.5 flex items-center justify-center shadow-md group-hover:scale-105 transition`}>
-                <div className="w-full h-full bg-stone-900 rounded-[7px] flex items-center justify-center font-mono font-black text-xs text-stone-100">
-                  <span>AN</span>
-                </div>
-              </div>
               <div>
                 <div className="flex items-center space-x-2">
                   <span className={`font-black text-lg tracking-wider ${isLight ? 'text-stone-900' : 'text-slate-100'} uppercase font-mono`}>
