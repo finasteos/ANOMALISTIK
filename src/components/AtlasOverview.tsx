@@ -531,6 +531,88 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
 
   return (
     <div className="space-y-8 animate-fade-in">
+      {/* SUPARAYS Inspired Foundational Hero Banner */}
+      <div className={`relative overflow-hidden rounded-2xl border p-8 md:p-10 shadow-sm flex flex-col items-center text-center space-y-6 transition-all ${
+        isLight
+          ? 'bg-white border-stone-300 text-stone-900'
+          : 'bg-slate-900/90 border-slate-800 text-slate-100'
+      }`}>
+        {/* Eyebrow Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <div className={`inline-flex items-center space-x-2 px-3.5 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase border ${
+            isLight ? 'bg-stone-100 text-stone-900 border-stone-300' : 'bg-cyan-950 text-cyan-300 border-cyan-800'
+          }`}>
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>Lab Engine &amp; Data Hub</span>
+          </div>
+        </div>
+
+        {/* SUPARAYS Main Large Display Header */}
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-widest uppercase font-mono leading-none">
+          UNIVERSAL ENTROPY ATLAS
+        </h1>
+
+        {/* Primary Slogan */}
+        <p className={`text-sm sm:text-lg md:text-xl font-mono max-w-2xl font-semibold ${isLight ? 'text-stone-700' : 'text-slate-300'}`}>
+          Multimodal Empirical Structure &amp; Universal Entropy Engine
+        </p>
+
+        {/* Inter-spaced tracked uppercase domain listing */}
+        <div className={`py-3 px-4 border-y max-w-4xl w-full rounded-lg ${isLight ? 'border-stone-200 bg-stone-50/50' : 'border-slate-800 bg-slate-950/50'}`}>
+          <span className={`block text-[10px] font-mono tracking-widest uppercase mb-1 font-bold ${isLight ? 'text-stone-500' : 'text-slate-400'}`}>
+            FOURTEEN LAB SENSES &amp; CHANNEL DOMAINS
+          </span>
+          <p className={`text-xs md:text-sm font-mono tracking-wider leading-relaxed font-bold ${isLight ? 'text-stone-800' : 'text-cyan-300'}`}>
+            EPIGRAPHY · GEOPHYSICS · HELIOPHYSICS · BIOPHYSICS · ASTROPHYSICS · RADIO · ACOUSTICS · REMOTE SENSING · ENTROPY · SPECTROSCOPY · MAGNETICS · THERMAL · KINEMATICS · SETI
+          </p>
+        </div>
+
+        {/* Subtitle Slogan */}
+        <p className={`text-xs sm:text-sm max-w-2xl font-mono leading-relaxed ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>
+          From ancient undeciphered scripts to fast radio bursts — 165+ empirical anomaly datasets and counting.
+        </p>
+
+        {/* Action Buttons */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <button
+            onClick={() => onNavigate('simulator')}
+            className={`px-4 py-2.5 rounded-xl font-bold font-mono text-xs transition shadow-md flex items-center space-x-2 ${
+              isLight
+                ? 'bg-stone-900 hover:bg-stone-800 text-stone-50 border border-stone-900'
+                : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-cyan-500/20'
+            }`}
+          >
+            <Activity className="w-4 h-4" />
+            <span>Launch Signal Adjudicator</span>
+          </button>
+          <button
+            onClick={() => {
+              const el = document.getElementById('project-tracking-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className={`px-4 py-2.5 rounded-xl font-bold font-mono text-xs border transition flex items-center space-x-2 ${
+              isLight
+                ? 'bg-stone-100 hover:bg-stone-200 text-stone-900 border-stone-300'
+                : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
+            }`}
+          >
+            <GitCommit className="w-4 h-4 text-emerald-600" />
+            <span>View Project Tracking &amp; Tasks</span>
+          </button>
+          <button
+            onClick={() => onNavigate('mengines')}
+            className={`px-4 py-2.5 rounded-xl font-bold font-mono text-xs border transition flex items-center space-x-2 ${
+              isLight
+                ? 'bg-stone-100 hover:bg-stone-200 text-stone-900 border-stone-300'
+                : 'bg-indigo-900/60 hover:bg-indigo-800/80 text-indigo-200 border-indigo-700/60'
+            }`}
+          >
+            <Cpu className="w-4 h-4" />
+            <span>M-Engine Correlation Pipelines</span>
+          </button>
+        </div>
+      </div>
+
       {/* REAL-TIME THRESHOLD ALERT NOTIFICATION BANNER */}
       {activeAlert && (
         <div className={`relative overflow-hidden rounded-2xl p-5 border-2 shadow-lg animate-pulse-subtle transition-all ${
@@ -967,101 +1049,6 @@ export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
             )}
           </div>
         )}
-      </div>
-
-      {/* SUPARAYS Inspired Foundational Hero Banner */}
-      <div className={`relative overflow-hidden rounded-2xl border p-8 md:p-10 shadow-sm flex flex-col items-center text-center space-y-6 transition-all ${
-        isLight
-          ? 'bg-white border-stone-300 text-stone-900'
-          : 'bg-slate-900/90 border-slate-800 text-slate-100'
-      }`}>
-        {/* Eyebrow Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <div className={`inline-flex items-center space-x-2 px-3.5 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase border ${
-            isLight ? 'bg-stone-100 text-stone-900 border-stone-300' : 'bg-cyan-950 text-cyan-300 border-cyan-800'
-          }`}>
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>ANOMALISTICS • Universal Entropy Atlas &amp; Lab Engine</span>
-          </div>
-
-          <a
-            href="https://github.com/wawawee/ANOMALISTICS"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-mono border transition ${
-              isLight ? 'bg-stone-100 hover:bg-stone-200 text-stone-800 border-stone-300' : 'bg-purple-950 text-purple-300 border-purple-800'
-            }`}
-          >
-            <Github className="w-3.5 h-3.5" />
-            <span>wawawee/ANOMALISTICS</span>
-            <ExternalLink className="w-3 h-3 opacity-60" />
-          </a>
-        </div>
-
-        {/* SUPARAYS Main Large Display Header */}
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-widest uppercase font-mono leading-none">
-          ANOMALISTICS
-        </h1>
-
-        {/* Primary Slogan */}
-        <p className={`text-sm sm:text-lg md:text-xl font-mono max-w-2xl font-semibold ${isLight ? 'text-stone-700' : 'text-slate-300'}`}>
-          More senses. The same glasses. • See the invisible. Measure the unknown.
-        </p>
-
-        {/* Inter-spaced tracked uppercase domain listing */}
-        <div className={`py-3 px-4 border-y max-w-4xl w-full rounded-lg ${isLight ? 'border-stone-200 bg-stone-50/50' : 'border-slate-800 bg-slate-950/50'}`}>
-          <span className={`block text-[10px] font-mono tracking-widest uppercase mb-1 font-bold ${isLight ? 'text-stone-500' : 'text-slate-400'}`}>
-            FOURTEEN LAB SENSES &amp; CHANNEL DOMAINS
-          </span>
-          <p className={`text-xs md:text-sm font-mono tracking-wider leading-relaxed font-bold ${isLight ? 'text-stone-800' : 'text-cyan-300'}`}>
-            EPIGRAPHY · GEOPHYSICS · HELIOPHYSICS · BIOPHYSICS · ASTROPHYSICS · RADIO · ACOUSTICS · REMOTE SENSING · ENTROPY · SPECTROSCOPY · MAGNETICS · THERMAL · KINEMATICS · SETI
-          </p>
-        </div>
-
-        {/* Subtitle Slogan */}
-        <p className={`text-xs sm:text-sm max-w-2xl font-mono leading-relaxed ${isLight ? 'text-stone-600' : 'text-slate-400'}`}>
-          From ancient undeciphered scripts to fast radio bursts — 165+ empirical anomaly datasets and counting.
-        </p>
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <button
-            onClick={() => onNavigate('simulator')}
-            className={`px-4 py-2.5 rounded-xl font-bold font-mono text-xs transition shadow-md flex items-center space-x-2 ${
-              isLight
-                ? 'bg-stone-900 hover:bg-stone-800 text-stone-50 border border-stone-900'
-                : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-cyan-500/20'
-            }`}
-          >
-            <Activity className="w-4 h-4" />
-            <span>Launch Signal Adjudicator</span>
-          </button>
-          <button
-            onClick={() => {
-              const el = document.getElementById('project-tracking-section');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className={`px-4 py-2.5 rounded-xl font-bold font-mono text-xs border transition flex items-center space-x-2 ${
-              isLight
-                ? 'bg-stone-100 hover:bg-stone-200 text-stone-900 border-stone-300'
-                : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
-            }`}
-          >
-            <GitCommit className="w-4 h-4 text-emerald-600" />
-            <span>View Project Tracking &amp; Tasks</span>
-          </button>
-          <button
-            onClick={() => onNavigate('mengines')}
-            className={`px-4 py-2.5 rounded-xl font-bold font-mono text-xs border transition flex items-center space-x-2 ${
-              isLight
-                ? 'bg-stone-100 hover:bg-stone-200 text-stone-900 border-stone-300'
-                : 'bg-indigo-900/60 hover:bg-indigo-800/80 text-indigo-200 border-indigo-700/60'
-            }`}
-          >
-            <Cpu className="w-4 h-4" />
-            <span>M-Engine Correlation Pipelines</span>
-          </button>
-        </div>
       </div>
 
       {/* Embedded Project Tracking & Milestone Management System */}

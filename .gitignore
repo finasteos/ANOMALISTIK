@@ -1,13 +1,8 @@
 node_modules/
+build/
 dist/
-.env
-.lint-cache.json
-
-# Local ingest staging (sources live in raw/ after hash)
-_ingest/
-
-# Secrets / deps
-.env
-node_modules/
-dist/
-.agent-wiki/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
