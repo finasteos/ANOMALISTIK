@@ -255,6 +255,169 @@ const SpatialDomeMesaCanvas: React.FC<SpatialCanvasProps> = ({
   );
 };
 
+// 3D Radiometric Infrared Portal & Navajo Geometry Canvas Visualizer (Mission G31)
+interface InfraredPortalCanvasProps {
+  portalDiameterFt: number;
+  thermalDepressionC: number;
+  infraredWavelengthUm: number;
+  navajoAlignmentPct: number;
+}
+
+const InfraredPortalCanvas: React.FC<InfraredPortalCanvasProps> = ({
+  portalDiameterFt,
+  thermalDepressionC,
+  infraredWavelengthUm,
+  navajoAlignmentPct
+}) => {
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId: number;
+    let phase = 0;
+
+    const render = () => {
+      phase += 0.035;
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // FLIR Night Sky Background (Dark Indigo / Ironbow thermal)
+      const bgGrad = ctx.createRadialGradient(w * 0.5, h * 0.5, 20, w * 0.5, h * 0.5, w * 0.6);
+      bgGrad.addColorStop(0, '#0f172a');
+      bgGrad.addColorStop(0.7, '#090d16');
+      bgGrad.addColorStop(1, '#020617');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Grid coordinate lines
+      ctx.strokeStyle = 'rgba(51, 65, 85, 0.25)';
+      ctx.lineWidth = 1;
+      for (let x = 40; x < w; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = 30; y < h; y += 30) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      const centerX = w * 0.5;
+      const centerY = h * 0.5;
+      const radiusPx = (portalDiameterFt / 50) * (h * 0.38);
+
+      // 1. Concentric FLIR Thermal Radiometric Contours (Cold Negative Depression Core)
+      for (let r = radiusPx; r > 10; r -= 12) {
+        const norm = r / radiusPx;
+        const alpha = 0.15 + (1 - norm) * 0.6;
+        const pulseOffset = Math.sin(phase * 2 + norm * 5) * 4;
+
+        ctx.strokeStyle = `rgba(168, 85, 247, ${alpha})`; // Thermal Purple/Magenta
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(centerX, centerY, r + pulseOffset, (r + pulseOffset) * 0.88, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // 2. Negative Thermal Core Fill (Cold Vortex: Cyan / Deep Violet)
+      const coreGrad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, radiusPx);
+      coreGrad.addColorStop(0, 'rgba(6, 182, 212, 0.85)'); // -22C Cold Core (Cyan)
+      coreGrad.addColorStop(0.4, 'rgba(147, 51, 234, 0.45)'); // Violet Transition
+      coreGrad.addColorStop(0.8, 'rgba(236, 72, 153, 0.2)'); // Pink Fringe
+      coreGrad.addColorStop(1, 'rgba(15, 23, 42, 0)');
+      ctx.fillStyle = coreGrad;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radiusPx, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 3. Navajo Sand-Painting Threshold Geometry Overlays
+      if (navajoAlignmentPct > 0) {
+        const geomAlpha = navajoAlignmentPct / 100;
+        ctx.strokeStyle = `rgba(245, 158, 11, ${geomAlpha * 0.9})`; // Sacred Amber/Ochre
+        ctx.lineWidth = 1.5;
+
+        // Four Sacred Cardinal Crosshairs (North, South, East, West Peaks)
+        const crossExtent = radiusPx * 1.35;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(centerX - crossExtent, centerY);
+        ctx.lineTo(centerX + crossExtent, centerY);
+        ctx.moveTo(centerX, centerY - crossExtent);
+        ctx.lineTo(centerX, centerY + crossExtent);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Navajo Dual Yei Guardian Brackets
+        const bracketAngle = Math.PI / 4;
+        for (let i = 0; i < 4; i++) {
+          const ang = phase * 0.2 + i * (Math.PI / 2);
+          const bx = centerX + Math.cos(ang) * (radiusPx * 1.15);
+          const by = centerY + Math.sin(ang) * (radiusPx * 1.15);
+
+          ctx.fillStyle = '#f59e0b';
+          ctx.beginPath();
+          ctx.arc(bx, by, 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeRect(bx - 6, by - 6, 12, 12);
+        }
+
+        // Center Sacred Spiraling Vortex glyph
+        ctx.strokeStyle = `rgba(52, 211, 153, ${geomAlpha})`;
+        ctx.beginPath();
+        for (let a = 0; a < Math.PI * 4; a += 0.1) {
+          const spiralR = (a / (Math.PI * 4)) * (radiusPx * 0.5);
+          const sx = centerX + Math.cos(a + phase) * spiralR;
+          const sy = centerY + Math.sin(a + phase) * spiralR;
+          if (a === 0) ctx.moveTo(sx, sy);
+          else ctx.lineTo(sx, sy);
+        }
+        ctx.stroke();
+      }
+
+      // 4. Real-Time Telemetry Annotations on Canvas
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 10px monospace';
+      ctx.fillText(`FLIR THERMAL RADIOMETRY • LWIR ${infraredWavelengthUm.toFixed(1)} µm`, 20, 25);
+      
+      ctx.fillStyle = '#f43f5e';
+      ctx.fillText(`COLD CORE DEPRESSION: ${thermalDepressionC.toFixed(1)}°C (ΔT)`, 20, 42);
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText(`NAVAJO ICONOGRAPHY CONCORDANCE: ${navajoAlignmentPct}% (Z = -9.2)`, 20, 59);
+
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillText(`PORTAL SPAN: ${portalDiameterFt.toFixed(1)} ft (${(portalDiameterFt * 0.3048).toFixed(1)} m)`, w - 240, 25);
+
+      animId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => cancelAnimationFrame(animId);
+  }, [portalDiameterFt, thermalDepressionC, infraredWavelengthUm, navajoAlignmentPct]);
+
+  return (
+    <div className="w-full bg-slate-950 rounded-xl border border-slate-800 p-2 overflow-hidden">
+      <canvas 
+        ref={canvasRef} 
+        width={720} 
+        height={320} 
+        className="w-full h-[320px] rounded-lg block"
+      />
+    </div>
+  );
+};
+
 // Signal definition for the matrix
 interface SignalDefinition {
   id: string;
@@ -402,7 +565,7 @@ const generateCrossCorrCurve = (r: number, lagOpt: number) => {
 export const GeophysicsAstroSection: React.FC = () => {
   const { theme, themeId } = useTheme();
   const isLight = themeId === 'IVORY_MONOCHROME';
-  const [activeTab, setActiveTab] = useState<'CORRELATION_MATRIX' | 'SPATIAL_DOME_3271' | 'BLACK_HOLE_COSMOLOGY' | 'APOLLO_17_LUNAR' | 'SETI_ELLIPSOID_SN1987A'>('CORRELATION_MATRIX');
+  const [activeTab, setActiveTab] = useState<'CORRELATION_MATRIX' | 'SPATIAL_DOME_3271' | 'BLACK_HOLE_COSMOLOGY' | 'APOLLO_17_LUNAR' | 'SETI_ELLIPSOID_SN1987A' | 'INFRARED_PORTAL_NAVAJO'>('CORRELATION_MATRIX');
   const [selectedMission, setSelectedMission] = useState(LAB_MISSIONS[0]);
 
   // Tab 1: Correlation Matrix state
@@ -416,6 +579,13 @@ export const GeophysicsAstroSection: React.FC = () => {
   const [foldingPeriodDays, setFoldingPeriodDays] = useState<number>(2.45); // days
   const [dipDepthPct, setDipDepthPct] = useState<number>(1.85); // % optical flux drop
   const [astroJitterNoisePct, setAstroJitterNoisePct] = useState<number>(0.25); // % stellar baseline noise
+
+  // Tab 6: 31-Foot Infrared Portal & Navajo Iconography (Mission G31) State
+  const [portalDiameterFt, setPortalDiameterFt] = useState<number>(31.0);
+  const [thermalDepressionC, setThermalDepressionC] = useState<number>(-22.5);
+  const [infraredWavelengthUm, setInfraredWavelengthUm] = useState<number>(10.6); // 8-14 um LWIR band
+  const [navajoAlignmentPct, setNavajoAlignmentPct] = useState<number>(94);
+  const [flirGainDb, setFlirGainDb] = useState<number>(18.5);
 
   // Tab 2: 3,271 ft Spatial Dome & Skinwalker Mesa State (#5, #4)
   const [mesaSubTab, setMesaSubTab] = useState<'SWARM_SIM' | 'DRILLING_TELEMETRY' | 'METALLURGY_QUANTUM' | 'ARCHAEOLOGY_AERIAL'>('SWARM_SIM');
@@ -465,6 +635,49 @@ export const GeophysicsAstroSection: React.FC = () => {
       altitudeProfile
     };
   }, [altitudeFt, swarmSize, rfShieldIntensityDb]);
+
+  // Calculation for Mission G31 Infrared Portal & Navajo Geometry
+  const portalResults = useMemo(() => {
+    // Inverted Blackbody Radiometric Flux (W/m2) = sigma * (T_core^4 - T_ambient^4)
+    // Baseline ambient T = 14 C (287.15 K), Core T = 14 + thermalDepressionC
+    const tAmbientK = 287.15;
+    const tCoreK = tAmbientK + thermalDepressionC;
+    const sigma = 5.670374e-8;
+    const radiometricFluxW = Number((sigma * (Math.pow(tCoreK, 4) - Math.pow(tAmbientK, 4))).toFixed(1));
+
+    // FLIR Microbolometer Artifact Rejection Ratio
+    const flirNullRejectionPct = Number((99.8 - (40 - flirGainDb) * 0.04).toFixed(1));
+
+    // Navajo Sacred Sand Painting Z-Score Isomorphism
+    const isomorphismZScore = '-9.2';
+
+    // Thermal Cross-Section Profile (-25 ft to +25 ft)
+    const thermalCrossSection = [];
+    const radiusFt = portalDiameterFt / 2.0;
+    for (let r = -25; r <= 25; r += 2) {
+      const distFromCenter = Math.abs(r);
+      let tempC = 14.0;
+      if (distFromCenter <= radiusFt) {
+        // Cold core Gaussian well
+        const wellFactor = Math.exp(-Math.pow(distFromCenter / (radiusFt * 0.6), 2));
+        tempC = 14.0 + (thermalDepressionC * wellFactor);
+      }
+      thermalCrossSection.push({
+        radiusFt: r,
+        tempC: Number(tempC.toFixed(1)),
+        ambientBaseline: 14.0,
+        fluxIntensity: Number((100 - Math.abs(tempC - 14.0) * 3).toFixed(1))
+      });
+    }
+
+    return {
+      tCoreK: Number(tCoreK.toFixed(1)),
+      radiometricFluxW,
+      flirNullRejectionPct,
+      isomorphismZScore,
+      thermalCrossSection
+    };
+  }, [portalDiameterFt, thermalDepressionC, infraredWavelengthUm, flirGainDb]);
 
   // Calculations for 7.2 M_sun Black Hole & Einstein-Cartan Torsion Cosmology (#1)
   const cosmologyResults = useMemo(() => {
@@ -742,9 +955,192 @@ export const GeophysicsAstroSection: React.FC = () => {
           <Camera className="w-4 h-4" />
           <span>Apollo 17 Blue Lights (#20)</span>
         </button>
+
+        <button
+          onClick={() => setActiveTab('INFRARED_PORTAL_NAVAJO')}
+          className={`flex-1 min-w-[160px] py-2 px-3 rounded-xl font-bold transition flex items-center justify-center space-x-1.5 ${
+            activeTab === 'INFRARED_PORTAL_NAVAJO'
+              ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-950/60'
+              : 'text-amber-400 hover:text-amber-200 hover:bg-slate-800'
+          }`}
+        >
+          <Flame className="w-4 h-4" />
+          <span>31-ft IR Portal &amp; Navajo (G31)</span>
+        </button>
       </div>
 
-      {activeTab === 'SETI_ELLIPSOID_SN1987A' ? (
+      {activeTab === 'INFRARED_PORTAL_NAVAJO' ? (
+        /* TAB: 31-FOOT INFRARED PORTAL & NAVAJO ICONOGRAPHY CONCORDANCE (MISSION G31) */
+        <div className="space-y-8 animate-fade-in font-mono">
+          {/* Header Banner */}
+          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-3">
+            <div className="flex items-center space-x-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
+              <Flame className="w-4 h-4 text-amber-400" />
+              <span>Spectral &amp; Archaeo-Spatial • 31-Foot Infrared Portal &amp; Navajo Iconography (Mission G31)</span>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-100 uppercase tracking-wide">
+              31-Foot Infrared Portal &amp; Indigenous Navajo Geometry Concordance
+            </h1>
+            <p className="text-slate-300 text-xs font-sans leading-relaxed max-w-4xl">
+              Thermal radiometric imaging of a hovering 31-foot symmetrical cold-core anomaly in the low atmosphere. 
+              Correlates radiometric depression contours against indigenous Navajo sacred sand-painting geometry and 1,000-year petroglyph coordinates (<code className="font-mono text-amber-300">Z = -9.2</code>).
+            </p>
+          </div>
+
+          {/* KPI Metrics */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div className="p-3.5 rounded-xl border bg-slate-950/80 border-slate-800 space-y-1">
+              <span className="text-[10px] text-slate-400 uppercase font-bold">Portal Diameter</span>
+              <div className="text-lg font-black text-amber-400">
+                {portalDiameterFt.toFixed(1)} ft
+              </div>
+              <div className="text-[10px] text-slate-500">{(portalDiameterFt * 0.3048).toFixed(1)} m Circular Span</div>
+            </div>
+
+            <div className="p-3.5 rounded-xl border bg-slate-950/80 border-slate-800 space-y-1">
+              <span className="text-[10px] text-slate-400 uppercase font-bold">Thermal Depression (ΔT)</span>
+              <div className="text-lg font-black text-cyan-400">
+                {thermalDepressionC.toFixed(1)}°C
+              </div>
+              <div className="text-[10px] text-cyan-300 font-bold">Cold Core: {(14.0 + thermalDepressionC).toFixed(1)}°C</div>
+            </div>
+
+            <div className="p-3.5 rounded-xl border bg-slate-950/80 border-slate-800 space-y-1">
+              <span className="text-[10px] text-slate-400 uppercase font-bold">Inverted Thermal Flux</span>
+              <div className="text-lg font-black text-rose-400">
+                {portalResults.radiometricFluxW} W/m²
+              </div>
+              <div className="text-[10px] text-slate-500">Negative Radiometric Well</div>
+            </div>
+
+            <div className="p-3.5 rounded-xl border bg-slate-950/80 border-slate-800 space-y-1">
+              <span className="text-[10px] text-slate-400 uppercase font-bold">Navajo Isomorphism Score</span>
+              <div className="text-lg font-black text-emerald-400">
+                {navajoAlignmentPct}% (Z = -9.2)
+              </div>
+              <div className="text-[10px] text-emerald-300 font-bold">Passed Poisson Null</div>
+            </div>
+          </div>
+
+          {/* Interactive Controls & 2D Canvas */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4 text-xs">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <span className="text-xs font-bold uppercase text-amber-400">FLIR &amp; Spatial Parameters</span>
+                <span className="text-[10px] text-slate-400">Mission G31</span>
+              </div>
+
+              {/* Portal Diameter Slider */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-bold">Portal Diameter</span>
+                  <span className="text-amber-300 font-bold">{portalDiameterFt.toFixed(1)} ft</span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="50"
+                  step="1"
+                  value={portalDiameterFt}
+                  onChange={(e) => setPortalDiameterFt(Number(e.target.value))}
+                  className="w-full accent-amber-400 cursor-pointer"
+                />
+                <span className="text-[10px] text-slate-500">Measured FLIR anomaly span: 31.0 ft</span>
+              </div>
+
+              {/* Thermal Depression Slider */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-bold">Core Thermal Depression</span>
+                  <span className="text-cyan-300 font-bold">{thermalDepressionC.toFixed(1)}°C</span>
+                </div>
+                <input
+                  type="range"
+                  min="-40"
+                  max="-5"
+                  step="0.5"
+                  value={thermalDepressionC}
+                  onChange={(e) => setThermalDepressionC(Number(e.target.value))}
+                  className="w-full accent-cyan-400 cursor-pointer"
+                />
+                <span className="text-[10px] text-slate-500">Negative radiometric core relative to ambient (14°C)</span>
+              </div>
+
+              {/* Navajo Alignment Slider */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-bold">Navajo Geometry Overlay</span>
+                  <span className="text-emerald-300 font-bold">{navajoAlignmentPct}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value={navajoAlignmentPct}
+                  onChange={(e) => setNavajoAlignmentPct(Number(e.target.value))}
+                  className="w-full accent-emerald-400 cursor-pointer"
+                />
+                <span className="text-[10px] text-slate-500">Four Peaks cardinal crosshairs &amp; dual Yei brackets</span>
+              </div>
+
+              {/* FLIR Sensor Gain */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-bold">FLIR Microbolometer Gain</span>
+                  <span className="text-purple-300 font-bold">{flirGainDb.toFixed(1)} dB</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="40"
+                  step="0.5"
+                  value={flirGainDb}
+                  onChange={(e) => setFlirGainDb(Number(e.target.value))}
+                  className="w-full accent-purple-400 cursor-pointer"
+                />
+                <span className="text-[10px] text-slate-500">Microbolometer dead-pixel artifact rejection: {portalResults.flirNullRejectionPct}%</span>
+              </div>
+            </div>
+
+            {/* 2D Radiometric Canvas & Cross-Section Plot */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <span className="text-xs font-bold uppercase text-slate-100">Live Thermal Radiometric &amp; Geometry Canvas</span>
+                  <span className="text-[10px] text-amber-400 font-bold">LWIR {infraredWavelengthUm.toFixed(1)} µm</span>
+                </div>
+                <InfraredPortalCanvas
+                  portalDiameterFt={portalDiameterFt}
+                  thermalDepressionC={thermalDepressionC}
+                  infraredWavelengthUm={infraredWavelengthUm}
+                  navajoAlignmentPct={navajoAlignmentPct}
+                />
+              </div>
+
+              {/* Radiometric Temperature Cross-Section Chart */}
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <span className="text-xs font-bold uppercase text-slate-100">Radiometric Temperature Profile: Distance from Center (ft) vs Temp (°C)</span>
+                  <span className="text-[10px] text-cyan-300">Ambient Baseline: 14.0°C</span>
+                </div>
+                <div className="h-44 w-full pt-1">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={portalResults.thermalCrossSection} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                      <XAxis dataKey="radiusFt" stroke="#64748b" label={{ value: 'Distance from Portal Center (ft)', position: 'insideBottom', offset: -5, fontSize: 10, fill: '#64748b' }} />
+                      <YAxis stroke="#64748b" domain={[-35, 20]} tick={{ fontSize: 10 }} label={{ value: 'Radiometric Temp (°C)', angle: -90, position: 'insideLeft', fontSize: 10 }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '11px', fontFamily: 'monospace' }} />
+                      <ReferenceLine y={14.0} stroke="#f59e0b" strokeDasharray="2 2" label={{ value: 'Ambient 14°C', fill: '#f59e0b', fontSize: 9 }} />
+                      <Area type="monotone" dataKey="tempC" name="Radiometric Temp (°C)" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.2} strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : activeTab === 'SETI_ELLIPSOID_SN1987A' ? (
         /* TAB: SETI ELLIPSOID SN 1987A LIGHTCURVE PROCESSOR (MISSION G30) */
         <div className="space-y-8 animate-fade-in font-mono">
           {/* Header Banner */}
