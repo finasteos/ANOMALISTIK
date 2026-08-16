@@ -11,6 +11,8 @@ import { DataVerificationSection } from './components/DataVerificationSection';
 import { ThemeProvider, useTheme } from './ThemeContext';
 import { Menu } from 'lucide-react';
 
+import { PatternExplorerSection } from './components/PatternExplorerSection';
+
 function AppContent() {
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
@@ -47,6 +49,7 @@ function AppContent() {
       <div className="flex-1 flex flex-col lg:pl-64 transition-all duration-300">
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {activeTab === 'overview' && <AtlasOverview onNavigate={setActiveTab} />}
+          {activeTab === 'pattern-explorer' && <PatternExplorerSection />}
           {activeTab === 'epigraphy' && <EpigraphySection />}
           {activeTab === 'mengines' && <MEnginesSection />}
           {activeTab === 'biophysics' && <BiophysicsSection />}

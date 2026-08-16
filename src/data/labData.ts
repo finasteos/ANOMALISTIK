@@ -258,6 +258,18 @@ export const BIOPHYSICAL_MARKERS: BiophysicalMarker[] = [
     caseStudies: ['Edmonton, Alberta (1999)'],
     hoaxReplicationDifficulty: 'Requires high heat',
     description: 'Soil beneath formation shows mineralogical thermal transformation despite surface vegetation showing no combustion.'
+  },
+  {
+    id: 'sterile-gamma-necrosis',
+    name: 'Sterile Gamma & Microwave Deep Tissue Necrosis',
+    category: 'Cellular',
+    mechanism: 'Directed high-energy gamma radiation spikes and 1.6 GHz microwave heating causing acute cellular lysis without microbial infection.',
+    metric: 'Histopathological cell lysis with 0.00% bacterial/viral colony count.',
+    anomalousBaseline: 'Rapid localized tissue necrosis requiring surgical debridement following gamma bursts',
+    naturalBaseline: '0% necrosis without infectious pathogen or physical blunt trauma',
+    caseStudies: ['Skinwalker Ranch Field Research Team (2020–2024)', 'Uinta Basin Historical Veterinary Records'],
+    hoaxReplicationDifficulty: 'Impossible with planks',
+    description: 'Acute localized cellular destruction verified sterile by histopathology, directly linked to anomalous gamma dosimetry and 1.6 GHz field saturation.'
   }
 ];
 
@@ -457,6 +469,62 @@ export const LAB_MISSIONS: LabMission[] = [
     year: 2026,
     yearRange: 'May–July 2026',
     severityScore: 90
+  },
+  {
+    id: 'g31-ir-portal',
+    code: 'G31',
+    title: '31-Foot Infrared Portal & Navajo Iconography Concordance',
+    domain: 'Spectral & Archaeo-Spatial',
+    targetObject: 'Skinwalker Triangle Low-Atmosphere / Mesa Ridge',
+    methodology: 'High-resolution thermal radiometric imaging, multi-band optical IR sensors, and Navajo sand painting geometric overlay.',
+    status: 'STRUCTURE_SIGNAL',
+    zScoreOrMetric: 'z = -9.2 (Symmetrical Thermal Radiance Contour at 31 ft)',
+    summary: 'Detected a 31-foot hovering symmetrical infrared "blob" invisible to naked eye, displaying geometry matching indigenous Navajo portal sand paintings and 1,000-yr petroglyph coordinates.',
+    year: 2026,
+    yearRange: '2024–2026',
+    severityScore: 95
+  },
+  {
+    id: 'g32-tesla-fdr',
+    code: 'G32',
+    title: '1942 FDR Secret War Effort & Tesla Archive Reconstitution',
+    domain: 'Epigraphy & Archival Forensics',
+    targetObject: '1942 FDR Presidential Letter & Belgrade Tesla Museum Files',
+    methodology: 'FOIA document forensics, archival redaction analysis, and high-voltage scalar wave parametric modeling.',
+    status: 'SEQUENCE_STRUCTURE',
+    zScoreOrMetric: 'Document Authenticity Verified (FDR-Tesla 1942 Correspondence)',
+    summary: 'Corroborated 1942 White House directive to Nikola Tesla regarding classified war efforts prior to museum access obstruction in Belgrade.',
+    year: 2026,
+    yearRange: '1942 / 2026',
+    severityScore: 86
+  },
+  {
+    id: 'g33-irad-audit',
+    code: 'G33',
+    title: 'IR&D Defense Prime Privatization Audit & Title 10/50 Map',
+    domain: 'Institutional & Forensic Intelligence',
+    targetObject: 'Defense Contractor IR&D Accounting & Special Access Programs (SAPs)',
+    methodology: 'IR&D budget flow modeling, patent tracking, and Title 10 vs Title 50 jurisdictional firewall analysis.',
+    status: 'STRUCTURE_SIGNAL',
+    zScoreOrMetric: 'IR&D Statutory Shielding Index: 100% Non-FOIA-able',
+    summary: 'Models the institutional mechanism ("the antibodies") divesting legacy UAP materials into private defense primes (Lockheed, Northrop) under IR&D protections to prevent Congressional and public oversight.',
+    year: 2026,
+    yearRange: '2019–2026',
+    severityScore: 94
+  },
+  {
+    id: 'g34-macro-entanglement',
+    code: 'G34',
+    title: '1:33 AM Multi-State EMP & Macroscopic Quantum Entanglement',
+    domain: 'Quantum Electrodynamics & Non-Locality',
+    targetObject: 'Alabama Chicken Coop Arduino & Utah Jeep Telemetry Nodes',
+    methodology: 'Microsecond-synchronized multi-state RF transient capture (2 & 5 MHz), microcontroller forensics, and Bell-state non-local correlation.',
+    status: 'STRUCTURE_SIGNAL',
+    zScoreOrMetric: 'Synchronicity Delta Δt < 100ms across 1,500+ miles (p < 10⁻⁸)',
+    summary: 'Coordinated EMP surge destroying microcontroller and supercharging battery in Alabama simultaneously with instrument blowout in Utah, proving non-local reactive targeting.',
+    year: 2026,
+    yearRange: '2022–2026',
+    severityScore: 96
   }
 ];
 

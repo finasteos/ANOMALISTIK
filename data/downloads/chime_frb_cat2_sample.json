@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="The CHIME/FRB public data portal is being rebuilt. Access published CHIME/FRB datasets through their permanent archives."
+    />
+    <meta name="theme-color" content="#071014" />
+    <title>CHIME/FRB — Public data</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#datasets">Skip to datasets</a>
+
+    <div class="sky" aria-hidden="true">
+      <div class="sky__grid"></div>
+      <div class="sky__glow"></div>
+      <span class="star star--one"></span>
+      <span class="star star--two"></span>
+      <span class="star star--three"></span>
+    </div>
+
+    <header class="masthead shell">
+      <a class="brand" href="#top" aria-label="CHIME/FRB home">
+        <span>CHIME/FRB</span>
+      </a>
+    </header>
+
+    <main id="top" class="parking shell">
+      <section class="notice" aria-labelledby="page-title">
+        <p class="eyebrow">Public data portal</p>
+        <h1 id="page-title">We’ll be back soon.</h1>
+        <p class="notice__copy">
+          The CHIME/FRB public website is temporarily unavailable while we
+          rebuild it on new infrastructure. In the meantime, our published
+          catalog datasets remain available through their permanent archives
+          below.
+        </p>
+        <a class="datasets-button" href="#datasets">
+          Catalogs <span aria-hidden="true">↓</span>
+        </a>
+      </section>
+
+      <section id="datasets" class="datasets" aria-labelledby="datasets-title">
+        <div class="datasets__heading">
+          <h2 id="datasets-title">Catalog datasets</h2>
+          <p>Permanent archive and citation records</p>
+        </div>
+
+        <div class="dataset-list">
+          <article class="dataset">
+            <div class="dataset__meta">
+              <span>01</span>
+              <time datetime="2021">2021</time>
+            </div>
+            <div class="dataset__description">
+              <p>FRB catalog</p>
+              <h3>Catalog 1</h3>
+              <span
+                >The first CHIME/FRB catalog of burst detections and measured
+                properties.</span
+              >
+            </div>
+            <div class="dataset__links">
+              <a
+                class="archive-link"
+                href="https://www.canfar.net/storage/list/AstroDataCitationDOI/CISTI.CANFAR/21.0007/data"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <small>Dataset record</small>
+                CISTI.CANFAR/21.0007 <span aria-hidden="true">↗</span>
+              </a>
+              <a
+                class="paper-link"
+                href="https://arxiv.org/abs/2106.04352"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Publication <span aria-hidden="true">↗</span></a
+              >
+            </div>
+          </article>
+
+          <article class="dataset dataset--amber">
+            <div class="dataset__meta">
+              <span>02</span>
+              <time datetime="2023">2023</time>
+            </div>
+            <div class="dataset__description">
+              <p>Repeating sources</p>
+              <h3>Repeaters Catalog</h3>
+              <span
+                >Burst and source properties for repeating fast radio burst
+                sources.</span
+              >
+            </div>
+            <div class="dataset__links">
+              <a
+                class="archive-link"
+                href="https://www.canfar.net/storage/vault/list/AstroDataCitationDOI/CISTI.CANFAR/23.0004/data"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <small>Dataset record</small>
+                CISTI.CANFAR/23.0004 <span aria-hidden="true">↗</span>
+              </a>
+              <a
+                class="paper-link"
+                href="https://ui.adsabs.harvard.edu/abs/2023arXiv230108762T/abstract"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Publication <span aria-hidden="true">↗</span></a
+              >
+            </div>
+          </article>
+
+          <article class="dataset dataset--amber">
+            <div class="dataset__meta">
+              <span>03</span>
+              <time datetime="2024">2024</time>
+            </div>
+            <div class="dataset__description">
+              <p>Baseband observations</p>
+              <h3>Baseband Catalog 1</h3>
+              <span
+                >High-time-resolution morphology and polarization
+                measurements.</span
+              >
+            </div>
+            <div class="dataset__links">
+              <a
+                class="archive-link"
+                href="https://doi.org/10.11570/23.0029"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <small>Dataset DOI</small>
+                10.11570/23.0029 <span aria-hidden="true">↗</span>
+              </a>
+              <a
+                class="paper-link"
+                href="https://ui.adsabs.harvard.edu/abs/2024ApJ...969..145T/abstract"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Publication <span aria-hidden="true">↗</span></a
+              >
+            </div>
+          </article>
+
+          <article class="dataset">
+            <div class="dataset__meta">
+              <span>04</span>
+              <time datetime="2025">2025</time>
+            </div>
+            <div class="dataset__description">
+              <p>FRB catalog</p>
+              <h3>Catalog 2</h3>
+              <span
+                >An expanded public sample of bursts and derived
+                measurements.</span
+              >
+            </div>
+            <div class="dataset__links">
+              <a
+                class="archive-link"
+                href="https://www.canfar.net/storage/list/AstroDataCitationDOI/CISTI.CANFAR/25.0066/data"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <small>Dataset record</small>
+                CISTI.CANFAR/25.0066 <span aria-hidden="true">↗</span>
+              </a>
+              <a
+                class="paper-link"
+                href="https://arxiv.org/abs/2601.09399"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Publication <span aria-hidden="true">↗</span></a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer shell">
+      <p>CHIME/FRB Collaboration</p>
+      <div class="footer__links">
+        <a
+          href="https://chime-frb-open-data.github.io/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Documentation <span aria-hidden="true">↗</span></a
+        >
+        <a
+          href="https://chime-experiment.ca/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          CHIME Experiment <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -80,6 +80,48 @@ export const AiSearchAssistant: React.FC = () => {
     }
   };
 
+  // Research Prompt Arsenal Presets
+  const PRESET_RESEARCH_PROMPTS = [
+    {
+      id: 'metamaterials',
+      label: '⚡ Bi-Zn Hyperbolic Metamaterials (0.1–10 THz)',
+      search: 'What are the experimental dispersion characteristics of layered Bismuth-Zinc metamaterials in the 0.1 to 10 THz band, specifically regarding negative refractive index and Casimir force repulsion?',
+      thinking: 'Evaluate the physical feasibility of creating an evanescent wave amplification waveguide using alternating sub-micron layers of Bismuth and Zinc. Calculate whether the effective permittivity tensor allows Type II hyperbolic dispersion at 1.6 THz, and determine the maximum theoretical diamagnetic levitation pressure under a 5 Tesla magnetic field pulse.',
+      domain: 'Plasmonics & Metamaterials'
+    },
+    {
+      id: 'frey_effect',
+      label: '📡 1.6 GHz Bio-Thermal & Frey Auditory Effect',
+      search: 'What is the empirical Specific Absorption Rate (SAR) depth profile for 1.6 GHz pulsed microwave radiation in human cranial tissue and its relationship to the thermoelastic Frey effect?',
+      thinking: 'Derive the acoustic thermoelastic pressure wave equation P = (Gamma * alpha * E) / tau for a 1.610 GHz RF pulse train with 100 microsecond pulse width. Explain why the acoustic frequency peaks in the human auditory range (8-15 kHz) and calculate the minimum SAR required to trigger micro-vascular thermal damage in human epidermal tissue.',
+      domain: 'Biophysics & RF Metrology'
+    },
+    {
+      id: 'skinwalker_mesa',
+      label: '🏛️ Skinwalker Mesa Cold War & Metal Forensics',
+      search: 'What are the latest archaeological and metallurgical findings from the Skinwalker Ranch Mesa excavations, including the 1964 Jefferson nickel, industrial core drilling, and high-altitude radiation surveys?',
+      thinking: 'Synthesize the multi-spectral sensor data from the Skinwalker Ranch Mesa anomalies. Contrast the Cold War defense radar testing hypothesis with physical ground-truth artifacts (1964 nickel depth dating, 1.625 GHz RF emissions, anomalous gamma-ray spikes, and micro-concentric soil voids) and apply Layer 1 negative controls.',
+      domain: 'Forensic Archaeo-Metrology'
+    },
+    {
+      id: 'torsion_cosmology',
+      label: '🌌 7.2 M_sun Torsion & Primordial Singularity',
+      search: 'What is the gravitational wave and observational evidence for a 7.2 solar mass black hole or primordial torsion singularity in recent LIGO/Virgo and DESI datasets?',
+      thinking: 'Evaluate the mathematical formulation of Einstein-Cartan-Sciama-Kibble (ECSK) gravitational theory with spacetime torsion for a 7.2 solar mass astrophysical object. Assess whether spin-torsion coupling prevents singularity collapse and generates observable frame-dragging anomalies in adjacent electromagnetic wavefronts.',
+      domain: 'Astrophysics & Torsion Cosmology'
+    }
+  ];
+
+  const loadPromptPreset = (p: typeof PRESET_RESEARCH_PROMPTS[0]) => {
+    setSearchQuery(p.search);
+    setThinkingPrompt(p.thinking);
+    setThinkingDomain(p.domain);
+    setSearchResponse(null);
+    setThinkingResponse(null);
+    setSearchError(null);
+    setThinkingError(null);
+  };
+
   return (
     <div className="space-y-8 animate-fade-in font-mono">
       {/* Header Banner */}
@@ -126,6 +168,30 @@ export const AiSearchAssistant: React.FC = () => {
             <Brain className="w-3.5 h-3.5" />
             <span>High Thinking Reasoner (gemini-3.1-pro)</span>
           </button>
+        </div>
+      </div>
+
+      {/* 1-Click Research Prompt Arsenal */}
+      <div className="space-y-2">
+        <label className="text-xs font-bold text-slate-300 font-mono uppercase tracking-wider flex items-center space-x-2">
+          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <span>1-Click High-Impact Research Presets</span>
+        </label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+          {PRESET_RESEARCH_PROMPTS.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => loadPromptPreset(p)}
+              className="p-2.5 rounded-xl text-left bg-slate-900/90 border border-slate-800 hover:border-slate-700 hover:bg-slate-800 transition space-y-1 group"
+            >
+              <div className="text-[11px] font-bold text-slate-200 group-hover:text-cyan-300 transition line-clamp-1">
+                {p.label}
+              </div>
+              <div className="text-[9px] text-slate-500 font-mono uppercase">
+                {p.domain}
+              </div>
+            </button>
+          ))}
         </div>
       </div>
 

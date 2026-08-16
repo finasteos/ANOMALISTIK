@@ -12,7 +12,7 @@ import {
   LineChart,
   Line
 } from 'recharts';
-import { Cpu, Activity, ArrowRightLeft, ShieldCheck, Sparkles, Layers, Zap, Play, Pause, RefreshCw, BarChart2, Filter, Calendar, Sliders, GitCompare, Split } from 'lucide-react';
+import { Cpu, Activity, ArrowRightLeft, ShieldCheck, Sparkles, Layers, Zap, Play, Pause, RefreshCw, BarChart2, Filter, Calendar, Sliders, GitCompare, Split, Compass, Microscope, Atom, Compass as CompassIcon } from 'lucide-react';
 import { M_ENGINES } from '../data/labData';
 import { MEngine } from '../types';
 import { useTheme } from '../ThemeContext';
@@ -25,6 +25,7 @@ interface EntropyPoint {
   nullThreshold: number;
   eventEpoch?: string;
 }
+
 
 const EPOCH_PRESETS = [
   { id: 'LIVE', label: '🔴 Live Real-Time Stream', shortLabel: 'Live' },
@@ -95,13 +96,211 @@ const generateInitialFluxData = (engineId: string, eventPreset: string = 'LIVE')
   return points;
 };
 
+// 3D Isometric / 2D Phase Velocity & Refraction HTML5 Canvas Visualizer
+interface THzCanvasProps {
+  bismuthThickness: number;
+  zincThickness: number;
+  nReal: number;
+  isNegative: boolean;
+  pumpFreq: number;
+}
+
+const THzWaveCanvas: React.FC<THzCanvasProps> = ({
+  bismuthThickness,
+  zincThickness,
+  nReal,
+  isNegative,
+  pumpFreq
+}) => {
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId: number;
+    let time = 0;
+
+    const render = () => {
+      time += 0.05 * (pumpFreq / 2.0);
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Background gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+      bgGrad.addColorStop(0, '#090d16');
+      bgGrad.addColorStop(1, '#020617');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw Air / Incident Medium (Top half)
+      const midY = h * 0.45;
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, w, midY);
+
+      // Draw Layered Metamaterial Stack (Bottom half)
+      const stackHeight = h - midY;
+      const totalThick = bismuthThickness + zincThickness;
+      const biRatio = bismuthThickness / totalThick;
+
+      const numLayers = 12;
+      const layerH = stackHeight / numLayers;
+
+      for (let i = 0; i < numLayers; i++) {
+        const y = midY + i * layerH;
+        const isBi = i % 2 === 0;
+        
+        ctx.fillStyle = isBi ? '#3b0764' : '#083344'; // Bismuth (purple) vs Zinc (cyan)
+        ctx.fillRect(0, y, w, layerH * (isBi ? biRatio * 1.8 : (1 - biRatio * 0.8)));
+
+        // Layer boundaries
+        ctx.strokeStyle = isBi ? '#a855f7' : '#06b6d4';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Interface line (Mid Y)
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(0, midY);
+      ctx.lineTo(w, midY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Surface normal line
+      const normalX = w * 0.4;
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(normalX, 20);
+      ctx.lineTo(normalX, h - 20);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Labels
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '10px monospace';
+      ctx.fillText('VACUUM / INCIDENT MEDIUM (n = 1.0)', 15, 25);
+      ctx.fillText(`METAMATERIAL STACK (Bi: ${bismuthThickness}µm / Zn: ${zincThickness}µm)`, 15, midY + 20);
+
+      // Incident Ray (From top left to normal at interface)
+      const incStartX = normalX - 110;
+      const incStartY = midY - 110;
+
+      ctx.strokeStyle = '#f59e0b'; // Amber incident ray
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(incStartX, incStartY);
+      ctx.lineTo(normalX, midY);
+      ctx.stroke();
+
+      // Refracted Ray (Inside Metamaterial)
+      // Snell's Law: sin(theta_t) = sin(theta_i) / n
+      const thetaI = Math.PI / 4; // 45 deg incident
+      const sinThetaT = Math.sin(thetaI) / (Math.abs(nReal) || 1.0);
+      const thetaT = Math.asin(Math.min(0.95, Math.max(-0.95, sinThetaT)));
+
+      // If n is negative, wave bends to SAME side of normal line (-thetaT)
+      const refractionAngle = isNegative ? -thetaT : thetaT;
+      const refrLen = 140;
+      const refrEndX = normalX + Math.sin(refractionAngle) * refrLen;
+      const refrEndY = midY + Math.cos(refractionAngle) * refrLen;
+
+      ctx.strokeStyle = isNegative ? '#10b981' : '#f59e0b'; // Green for negative refraction
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(normalX, midY);
+      ctx.lineTo(refrEndX, refrEndY);
+      ctx.stroke();
+
+      // Draw Animated Wavefronts along rays
+      const wavefrontSpacing = 16;
+      ctx.lineWidth = 1.5;
+
+      // Incident wavefronts
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.6)';
+      for (let d = (time * 15) % wavefrontSpacing; d < 140; d += wavefrontSpacing) {
+        const wx = normalX - Math.sin(thetaI) * d;
+        const wy = midY - Math.cos(thetaI) * d;
+        const perpX = Math.cos(thetaI) * 12;
+        const perpY = -Math.sin(thetaI) * 12;
+
+        ctx.beginPath();
+        ctx.moveTo(wx - perpX, wy - perpY);
+        ctx.lineTo(wx + perpX, wy + perpY);
+        ctx.stroke();
+      }
+
+      // Refracted wavefronts (Reverse phase velocity if n < 0)
+      const waveSpeed = isNegative ? -15 : 15;
+      ctx.strokeStyle = isNegative ? 'rgba(16, 185, 129, 0.7)' : 'rgba(245, 158, 11, 0.6)';
+      for (let d = Math.abs((time * waveSpeed) % wavefrontSpacing); d < 130; d += wavefrontSpacing) {
+        const wx = normalX + Math.sin(refractionAngle) * d;
+        const wy = midY + Math.cos(refractionAngle) * d;
+        const perpX = Math.cos(refractionAngle) * 12;
+        const perpY = -Math.sin(refractionAngle) * 12;
+
+        ctx.beginPath();
+        ctx.moveTo(wx - perpX, wy - perpY);
+        ctx.lineTo(wx + perpX, wy + perpY);
+        ctx.stroke();
+      }
+
+      // Refraction Arrow Indicator
+      ctx.fillStyle = isNegative ? '#10b981' : '#f59e0b';
+      ctx.font = 'bold 11px monospace';
+      ctx.fillText(
+        isNegative ? `n(ω) = ${nReal} < 0 (Phase Reversed)` : `n(ω) = ${nReal} > 0`,
+        refrEndX - 40,
+        refrEndY + 15
+      );
+
+      animId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => cancelAnimationFrame(animId);
+  }, [bismuthThickness, zincThickness, nReal, isNegative, pumpFreq]);
+
+  return (
+    <div className="w-full bg-slate-950 rounded-xl border border-slate-800 p-2 overflow-hidden">
+      <canvas 
+        ref={canvasRef} 
+        width={650} 
+        height={240} 
+        className="w-full h-[240px] rounded-lg block"
+      />
+    </div>
+  );
+};
+
 export const MEnginesSection: React.FC = () => {
   const { theme, themeId } = useTheme();
   const isLight = themeId === 'IVORY_MONOCHROME';
+  const [activeTab, setActiveTab] = useState<'CORRELATION_ENGINES' | 'METAMATERIAL_SOLVER'>('CORRELATION_ENGINES');
   const [selectedEngine, setSelectedEngine] = useState<MEngine>(M_ENGINES[0]);
   const [eventPreset, setEventPreset] = useState<string>('LIVE'); // 'LIVE' | 'MAY_2024_SOLAR' | 'DEC_2023_FRB' | 'HISTORICAL_1H'
   const [fluxData, setFluxData] = useState<EntropyPoint[]>(() => generateInitialFluxData(M_ENGINES[0].id, 'LIVE'));
   const [isLive, setIsLive] = useState<boolean>(true);
+
+  // Metamaterial THz Waveguide State Parameters (Skinwalker Mesa / Art's Parts)
+  const [bismuthThickness, setBismuthThickness] = useState<number>(2.0); // 1-4 um
+  const [zincThickness, setZincThickness] = useState<number>(150.0); // 100-200 um
+  const [pumpFreqTHz, setPumpFreqTHz] = useState<number>(1.6); // THz pump
+  const [temperatureK, setTemperatureK] = useState<number>(293); // Kelvin
+  const [magneticBField, setMagneticBField] = useState<number>(3.5); // Tesla
+
 
   // Overlay Comparison Mode States
   const [isOverlayMode, setIsOverlayMode] = useState<boolean>(false);
@@ -281,657 +480,359 @@ export const MEnginesSection: React.FC = () => {
   const { aLabel, bLabel } = getStreamLabels();
   const latestPoint = fluxData[fluxData.length - 1] || fluxData[0];
 
+  // Metamaterial THz Solver physics calculations (Effective Medium Theory & Hyperbolic Dispersion)
+  const metamaterialResults = useMemo(() => {
+    const f = bismuthThickness / (bismuthThickness + zincThickness);
+    
+    // Drude-Lorentz model parameters for Bi and Zn in THz regime
+    const omegaP_Bi = 1.9; // THz plasma frequency
+    const gammaBi = 0.15; // THz damping
+    const omegaP_Zn = 12.0; // THz plasma frequency
+    const gammaZn = 1.2; // THz damping
+
+    // Dielectric functions
+    const epsBi = 1.0 - Math.pow(omegaP_Bi, 2) / (Math.pow(pumpFreqTHz, 2) + Math.pow(gammaBi, 2)) - (temperatureK / 300) * 1.2;
+    const epsZn = 1.0 - Math.pow(omegaP_Zn, 2) / (Math.pow(pumpFreqTHz, 2) + Math.pow(gammaZn, 2));
+
+    // Parallel and Perpendicular effective medium permittivity
+    const epsParallel = f * epsBi + (1 - f) * epsZn;
+    const epsPerp = (epsBi * epsZn) / (f * epsZn + (1 - f) * epsBi);
+
+    const muEff = 1.0 - 0.05 * magneticBField * (bismuthThickness / 2.0);
+    const nReal = epsParallel < 0 ? -Math.sqrt(Math.abs(epsParallel) * Math.abs(muEff)) : Math.sqrt(Math.abs(epsParallel) * Math.abs(muEff));
+    const isHyperbolic = (epsParallel * epsPerp) < 0;
+    const isNegativeRefraction = nReal < 0;
+
+    let hyperbolicType = 'ISOTROPIC / ELLIPTIC (ε_∥ > 0, ε_⊥ > 0)';
+    if (epsParallel > 0 && epsPerp < 0) {
+      hyperbolicType = 'TYPE I HYPERBOLIC (ε_∥ > 0, ε_⊥ < 0) • Extreme Spatial Confinement';
+    } else if (epsParallel < 0 && epsPerp > 0) {
+      hyperbolicType = 'TYPE II HYPERBOLIC (ε_∥ < 0, ε_⊥ > 0) • Broadband Negative Refraction';
+    } else if (epsParallel < 0 && epsPerp < 0) {
+      hyperbolicType = 'METALLIC REFLECTIVE (ε_∥ < 0, ε_⊥ < 0)';
+    }
+
+    const levitationPressureKPa = (Math.pow(magneticBField, 2) / (2 * 4 * Math.PI * 1e-7)) * Math.abs(epsParallel / (epsPerp || 0.001)) * 1e-6;
+    const evanescentGainDb = Number((Math.min(45, 8.68 * (2 * Math.PI * pumpFreqTHz / 0.3) * (bismuthThickness * 1e-3))).toFixed(1));
+
+    const dispersionCurve = [];
+    for (let freq = 0.1; freq <= 10.0; freq += 0.25) {
+      const eBi = 1.0 - Math.pow(omegaP_Bi, 2) / (Math.pow(freq, 2) + Math.pow(gammaBi, 2)) - (temperatureK / 300) * 1.2;
+      const eZn = 1.0 - Math.pow(omegaP_Zn, 2) / (Math.pow(freq, 2) + Math.pow(gammaZn, 2));
+      const ePar = f * eBi + (1 - f) * eZn;
+      const ePrp = (eBi * eZn) / (f * eZn + (1 - f) * eBi);
+      const nVal = ePar < 0 ? -Math.sqrt(Math.abs(ePar) * Math.abs(muEff)) : Math.sqrt(Math.abs(ePar) * Math.abs(muEff));
+
+      dispersionCurve.push({
+        freqTHz: Number(freq.toFixed(2)),
+        epsParallel: Number(ePar.toFixed(2)),
+        epsPerp: Number(Math.max(-50, Math.min(50, ePrp)).toFixed(2)),
+        nReal: Number(nVal.toFixed(2)),
+        transmittance: Number(Math.max(0, Math.min(100, 100 - Math.abs(nVal) * 12)).toFixed(1))
+      });
+    }
+
+    return {
+      fFraction: Number((f * 100).toFixed(2)),
+      epsParallel: Number(epsParallel.toFixed(2)),
+      epsPerp: Number(epsPerp.toFixed(2)),
+      nReal: Number(nReal.toFixed(2)),
+      isHyperbolic,
+      isNegativeRefraction,
+      hyperbolicType,
+      levitationPressureKPa: Number(levitationPressureKPa.toFixed(2)),
+      evanescentGainDb,
+      dispersionCurve
+    };
+  }, [bismuthThickness, zincThickness, pumpFreqTHz, temperatureK, magneticBField]);
+
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Header Banner */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-3">
-        <div className="flex items-center space-x-2 text-purple-400 font-mono text-xs">
+      {/* Top Module Sub-Navigation Bar */}
+      <div className="flex items-center space-x-2 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 font-mono text-xs">
+        <button
+          onClick={() => setActiveTab('CORRELATION_ENGINES')}
+          className={`flex-1 py-2.5 px-4 rounded-xl font-bold transition flex items-center justify-center space-x-2 ${
+            activeTab === 'CORRELATION_ENGINES'
+              ? 'bg-purple-600 text-slate-950 shadow-lg shadow-purple-950/60'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+          }`}
+        >
           <Cpu className="w-4 h-4" />
-          <span>Cross-Domain Correlation Matrix • The M-Engines</span>
-        </div>
-        <h1 className="text-2xl font-bold text-slate-100">
-          The 4 Correlation Engines (M1–M4 Pipelines)
-        </h1>
-        <p className="text-slate-300 text-sm leading-relaxed max-w-4xl">
-          In the UB-Labb framework, correlation engines run biophysical, geophysical, spectral, and epigraphic modules 
-          against each other in closed statistical processes to evaluate <strong className="text-purple-300">structural coupling</strong>. 
-          A confirmed correlation proves physical co-variance between streams, satisfying Layer 1 Negative Controls.
-        </p>
+          <span>Cross-Domain Correlation Engines (M1–M4)</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('METAMATERIAL_SOLVER')}
+          className={`flex-1 py-2.5 px-4 rounded-xl font-bold transition flex items-center justify-center space-x-2 ${
+            activeTab === 'METAMATERIAL_SOLVER'
+              ? 'bg-purple-600 text-slate-950 shadow-lg shadow-purple-950/60'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+          }`}
+        >
+          <Layers className="w-4 h-4" />
+          <span>Hyperbolic Metamaterial THz Solver (Mesa &amp; Art&apos;s Parts)</span>
+        </button>
       </div>
 
-      {/* Grid of the 4 Engines */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {M_ENGINES.map((engine) => {
-          const isSelected = selectedEngine.id === engine.id;
-          return (
-            <div
-              key={engine.id}
-              onClick={() => setSelectedEngine(engine)}
-              className={`p-5 rounded-2xl border cursor-pointer transition-all space-y-3 ${
-                isSelected
-                  ? 'bg-purple-950/30 border-purple-500/60 shadow-xl shadow-purple-950/50'
-                  : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-purple-950 text-purple-300 border border-purple-800">
-                  {engine.code}
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
-                  {engine.status}
-                </span>
-              </div>
-
-              <div>
-                <h3 className="font-bold text-slate-100 text-base">{engine.title}</h3>
-                <p className="text-xs text-slate-400 font-mono mt-0.5">{engine.subtitle}</p>
-              </div>
-
-              <div className="text-xs text-slate-300 line-clamp-2">
-                {engine.description}
-              </div>
-
-              <div className="pt-2 border-t border-slate-800 text-[11px] font-mono text-purple-300 flex items-center justify-between">
-                <span>View Engine Matrix</span>
-                <Zap className="w-3.5 h-3.5" />
-              </div>
+      {activeTab === 'METAMATERIAL_SOLVER' ? (
+        /* METAMATERIAL THZ SOLVER PANEL */
+        <div className="space-y-8 animate-fade-in">
+          {/* Metamaterial Header */}
+          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-3 font-mono">
+            <div className="flex items-center space-x-2 text-purple-400 text-xs font-bold">
+              <Microscope className="w-4 h-4 text-purple-400" />
+              <span>Anomalistics Physics Module • Layered Metamaterial Engine (#8 &amp; #4)</span>
             </div>
-          );
-        })}
-      </div>
-
-      {/* Interactive Date Event & Severity Range Filter Toolbar */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div className="flex items-center space-x-2">
-            <Filter className="w-4 h-4 text-purple-400" />
-            <h2 className="text-sm font-bold text-slate-100 font-mono uppercase tracking-wider">
-              Time-Series Epoch &amp; Severity Cutoff Filters ({selectedEngine.code})
-            </h2>
-          </div>
-
-          <span className="text-xs font-mono text-slate-400">
-            Anomalous Points: <strong className="text-emerald-400">{anomalyPointsCount}</strong> / {fluxData.length} | Peak z = <strong className="text-purple-300">{peakZ.toFixed(2)}</strong>
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs font-mono">
-          {/* Historical Date / Event Selector */}
-          <div className="space-y-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800">
-            <label className="text-slate-300 font-bold flex items-center space-x-1.5">
-              <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Historical Date Epoch / Event Feed</span>
-            </label>
-            <div className="grid grid-cols-1 gap-1.5 pt-1">
-              {[
-                { id: 'LIVE', label: '🔴 Live Real-Time Stream' },
-                { id: 'MAY_2024_SOLAR', label: '☀️ May 2024 G5 Solar Storm Event' },
-                { id: 'DEC_2023_FRB', label: '📻 Dec 2023 CHIME FRB Burst Epoch' },
-                { id: 'HISTORICAL_1H', label: '⏱️ Extended 1-Hour Time Horizon' },
-              ].map((preset) => (
-                <button
-                  key={preset.id}
-                  onClick={() => setEventPreset(preset.id)}
-                  className={`px-2.5 py-1.5 rounded text-[11px] font-bold transition text-left ${
-                    eventPreset === preset.id
-                      ? 'bg-purple-600 text-slate-950 border border-purple-400'
-                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
-                  }`}
-                >
-                  {preset.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Severity Z-Score Threshold Slider */}
-          <div className="space-y-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800">
-            <div className="flex items-center justify-between">
-              <label className="text-slate-300 font-bold flex items-center space-x-1.5">
-                <Sliders className="w-3.5 h-3.5 text-amber-400" />
-                <span>Custom Z-Score Null Cutoff (|Z|)</span>
-              </label>
-              <span className="text-amber-300 font-bold">z = {zCutoffThreshold.toFixed(1)}</span>
-            </div>
-
-            <input
-              type="range"
-              min="1.0"
-              max="8.0"
-              step="0.5"
-              value={zCutoffThreshold}
-              onChange={(e) => setZCutoffThreshold(Number(e.target.value))}
-              className="w-full accent-amber-400 cursor-pointer"
-            />
-
-            <div className="flex justify-between text-[10px] text-slate-500">
-              <span>z = 1.0 (Low)</span>
-              <span>z = 3.5 (Standard)</span>
-              <span>z = 8.0 (Extreme)</span>
-            </div>
-
-            <div className="flex gap-1.5 pt-1">
-              {[2.0, 3.5, 5.0, 7.0].map((val) => (
-                <button
-                  key={val}
-                  onClick={() => setZCutoffThreshold(val)}
-                  className={`flex-1 py-1 rounded text-[10px] transition ${
-                    zCutoffThreshold === val
-                      ? 'bg-amber-500 text-slate-950 font-bold'
-                      : 'bg-slate-900 text-slate-400 hover:bg-slate-800'
-                  }`}
-                >
-                  z = {val}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Point Display Filter Mode */}
-          <div className="space-y-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800 sm:col-span-2 lg:col-span-1">
-            <label className="text-slate-300 font-bold flex items-center space-x-1.5">
-              <Zap className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Chart Point Filtering Display</span>
-            </label>
-
-            <div className="grid grid-cols-1 gap-1.5 pt-1">
-              {[
-                { id: 'ALL', label: 'Show All Data Points' },
-                { id: 'PEAKS_ONLY', label: `Filter: Only Anomalies (z ≥ ${zCutoffThreshold.toFixed(1)})` },
-                { id: 'NULL_ONLY', label: `Filter: Only Noise / Nulls (z < ${zCutoffThreshold.toFixed(1)})` },
-              ].map((m) => (
-                <button
-                  key={m.id}
-                  onClick={() => setSignalFilterMode(m.id)}
-                  className={`px-2.5 py-1.5 rounded text-[11px] font-bold transition text-left ${
-                    signalFilterMode === m.id
-                      ? 'bg-emerald-600 text-slate-950 border border-emerald-400'
-                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
-                  }`}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Real-time Recharts Entropy Flux Visualization & Dual-Epoch Overlay Mode */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-4">
-          <div>
-            <div className="flex items-center space-x-2">
-              <BarChart2 className="w-5 h-5 text-purple-400" />
-              <h2 className="text-lg font-bold text-slate-100 flex items-center space-x-2">
-                <span>Entropy Flux &amp; Z-Score Correlation Chart ({selectedEngine.code})</span>
-                {isOverlayMode && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-purple-950 text-purple-300 border border-purple-700 text-xs font-mono font-bold uppercase animate-pulse">
-                    Overlay Mode Active
-                  </span>
-                )}
-              </h2>
-            </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              {isOverlayMode 
-                ? `Comparing two distinct time periods on normalized time axes (${overlayStats?.p1Label || 'P1'} vs ${overlayStats?.p2Label || 'P2'}).`
-                : `Visualizing live stream cross-correlation between Stream A and Stream B.`}
+            <h1 className="text-2xl font-bold text-slate-100">
+              Bismuth-Zinc Hyperbolic Waveguide &amp; THz Refraction Solver
+            </h1>
+            <p className="text-slate-300 text-sm font-sans leading-relaxed max-w-4xl">
+              Simulating the electromagnetic and plasmonic dispersion properties of alternating Bismuth (1–4 µm) 
+              and Zinc (100–200 µm) micro-layers, matching core sample fragments recovered from the Skinwalker Ranch mesa 
+              and Art Bell&apos;s mystery metal samples (&quot;Art&apos;s Parts&quot;).
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
-            {/* Overlay Mode Toggle Button */}
-            <button
-              onClick={() => setIsOverlayMode(!isOverlayMode)}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center space-x-2 border ${
-                isOverlayMode
-                  ? 'bg-purple-600 text-slate-950 border-purple-400 shadow-lg shadow-purple-600/30'
-                  : 'bg-slate-800 hover:bg-slate-700 text-purple-300 border-purple-800/80'
-              }`}
-            >
-              <GitCompare className="w-4 h-4" />
-              <span>{isOverlayMode ? 'Disable Overlay Mode' : 'Enable Overlay Mode'}</span>
-            </button>
+          {/* Interactive Parameters Controls & Real-Time Output Metrics */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 font-mono text-xs">
+            {/* Input Controls */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
+              <div className="flex items-center space-x-2 border-b border-slate-800 pb-3">
+                <Sliders className="w-4 h-4 text-purple-400" />
+                <h2 className="text-sm font-bold text-slate-100 uppercase">Layer Geometry &amp; Pump Inputs</h2>
+              </div>
 
-            {!isOverlayMode && (
-              <>
-                <button
-                  onClick={() => setIsLive(!isLive)}
-                  disabled={eventPreset !== 'LIVE'}
-                  className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center space-x-1.5 ${
-                    isLive
-                      ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                      : 'bg-amber-950 text-amber-300 border border-amber-800 opacity-80'
-                  }`}
-                >
-                  {isLive ? <Pause className="w-3.5 h-3.5 text-emerald-400" /> : <Play className="w-3.5 h-3.5 text-amber-400" />}
-                  <span>{isLive ? 'STREAMING LIVE' : 'STREAM PAUSED'}</span>
-                </button>
+              {/* Bismuth Thickness Slider */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-bold">Bismuth (Bi) Layer Thickness</span>
+                  <span className="text-purple-300 font-bold">{bismuthThickness.toFixed(1)} µm</span>
+                </div>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="10.0"
+                  step="0.5"
+                  value={bismuthThickness}
+                  onChange={(e) => setBismuthThickness(Number(e.target.value))}
+                  className="w-full accent-purple-400 cursor-pointer"
+                />
+                <span className="text-[10px] text-slate-500">Typical mesa core sample: 1.0–4.0 µm</span>
+              </div>
 
-                <button
-                  onClick={handleResetSeries}
-                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
-                  title="Reset Time-Series"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                </button>
-              </>
-            )}
-          </div>
-        </div>
+              {/* Zinc Thickness Slider */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-bold">Zinc (Zn) Matrix Thickness</span>
+                  <span className="text-cyan-300 font-bold">{zincThickness.toFixed(0)} µm</span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="500"
+                  step="10"
+                  value={zincThickness}
+                  onChange={(e) => setZincThickness(Number(e.target.value))}
+                  className="w-full accent-cyan-400 cursor-pointer"
+                />
+                <span className="text-[10px] text-slate-500">Typical matrix width: 100–200 µm</span>
+              </div>
 
-        {/* DUAL-EPOCH OVERLAY MODE CONTROL TOOLBAR */}
-        {isOverlayMode && (
-          <div className="bg-slate-950 border border-purple-900/60 rounded-xl p-4 space-y-4 font-mono text-xs animate-fade-in">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
-              <span className="font-bold text-purple-300 flex items-center space-x-1.5 uppercase tracking-wider">
-                <Layers className="w-4 h-4 text-purple-400" />
-                <span>Select Time Periods / Epochs To Compare</span>
-              </span>
+              {/* Pump Frequency Slider */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-bold">THz Pump Frequency (f)</span>
+                  <span className="text-amber-300 font-bold">{pumpFreqTHz.toFixed(1)} THz</span>
+                </div>
+                <input
+                  type="range"
+                  min="0.1"
+                  max="10.0"
+                  step="0.1"
+                  value={pumpFreqTHz}
+                  onChange={(e) => setPumpFreqTHz(Number(e.target.value))}
+                  className="w-full accent-amber-400 cursor-pointer"
+                />
+                <span className="text-[10px] text-slate-500">Resonant band: 1.6 THz / 1.6 GHz coupling</span>
+              </div>
 
-              {/* Metric View Mode Toggle */}
-              <div className="flex items-center space-x-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
-                <button
-                  onClick={() => setOverlayMetricFocus('ALL_STREAMS')}
-                  className={`px-2.5 py-1 rounded text-[11px] font-bold transition ${
-                    overlayMetricFocus === 'ALL_STREAMS'
-                      ? 'bg-purple-600 text-slate-950'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  All Input Streams &amp; Z-Scores
-                </button>
-                <button
-                  onClick={() => setOverlayMetricFocus('ZSCORE_ONLY')}
-                  className={`px-2.5 py-1 rounded text-[11px] font-bold transition ${
-                    overlayMetricFocus === 'ZSCORE_ONLY'
-                      ? 'bg-purple-600 text-slate-950'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  Coupling Z-Scores Only
-                </button>
+              {/* Magnetic B-Field Slider */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-bold">External B-Field Pulse</span>
+                  <span className="text-emerald-300 font-bold">{magneticBField.toFixed(1)} Tesla</span>
+                </div>
+                <input
+                  type="range"
+                  min="0.0"
+                  max="10.0"
+                  step="0.5"
+                  value={magneticBField}
+                  onChange={(e) => setMagneticBField(Number(e.target.value))}
+                  className="w-full accent-emerald-400 cursor-pointer"
+                />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Period 1 Selector */}
-              <div className="space-y-1.5 bg-slate-900/80 p-3 rounded-xl border border-purple-900/40">
-                <label className="text-purple-300 font-bold flex items-center space-x-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
-                  <span>Period 1 (Primary Epoch)</span>
-                </label>
-                <select
-                  value={overlayEpoch1}
-                  onChange={(e) => setOverlayEpoch1(e.target.value)}
-                  className="w-full bg-slate-950 border border-purple-700 text-slate-100 rounded-lg p-2 font-mono text-xs focus:ring-1 focus:ring-purple-500"
-                >
-                  {EPOCH_PRESETS.map((preset) => (
-                    <option key={preset.id} value={preset.id}>
-                      {preset.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Period 2 Selector */}
-              <div className="space-y-1.5 bg-slate-900/80 p-3 rounded-xl border border-rose-900/40">
-                <label className="text-rose-300 font-bold flex items-center space-x-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-                  <span>Period 2 (Overlay Baseline Epoch)</span>
-                </label>
-                <select
-                  value={overlayEpoch2}
-                  onChange={(e) => setOverlayEpoch2(e.target.value)}
-                  className="w-full bg-slate-950 border border-rose-700 text-slate-100 rounded-lg p-2 font-mono text-xs focus:ring-1 focus:ring-rose-500"
-                >
-                  {EPOCH_PRESETS.map((preset) => (
-                    <option key={preset.id} value={preset.id}>
-                      {preset.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Quick Pair Presets */}
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <span className="text-[11px] text-slate-400 font-bold">Quick Comparison Presets:</span>
-              <button
-                onClick={() => {
-                  setOverlayEpoch1('MAY_2024_SOLAR');
-                  setOverlayEpoch2('DEC_2023_FRB');
-                }}
-                className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-purple-300 text-[11px] transition"
-              >
-                ☀️ May 2024 Solar Storm vs 📻 Dec 2023 FRB
-              </button>
-              <button
-                onClick={() => {
-                  setOverlayEpoch1('LIVE');
-                  setOverlayEpoch2('MAY_2024_SOLAR');
-                }}
-                className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-purple-300 text-[11px] transition"
-              >
-                🔴 Live Stream vs ☀️ May 2024 Solar Storm
-              </button>
-              <button
-                onClick={() => {
-                  setOverlayEpoch1('LIVE');
-                  setOverlayEpoch2('HISTORICAL_1H');
-                }}
-                className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-purple-300 text-[11px] transition"
-              >
-                🔴 Live Stream vs ⏱️ 1H Quiet Horizon
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Current Values Ribbon (Single Mode or Overlay Comparative Mode) */}
-        {!isOverlayMode ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 font-mono text-xs">
-            <div className="p-3 bg-slate-950 rounded-xl border border-indigo-900/50 space-y-0.5">
-              <span className="text-slate-400 text-[10px] uppercase">{aLabel}</span>
-              <div className="text-lg font-bold text-indigo-300">{latestPoint.streamAVal}</div>
-            </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-cyan-900/50 space-y-0.5">
-              <span className="text-slate-400 text-[10px] uppercase">{bLabel}</span>
-              <div className="text-lg font-bold text-cyan-300">{latestPoint.streamBVal}</div>
-            </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-purple-900/50 space-y-0.5">
-              <span className="text-slate-400 text-[10px] uppercase">Coupling Z-Score</span>
-              <div className={`text-lg font-bold ${latestPoint.couplingZScore >= zCutoffThreshold ? 'text-emerald-400' : 'text-amber-400'}`}>
-                z = {latestPoint.couplingZScore}
-              </div>
-            </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
-              <span className="text-slate-400 text-[10px] uppercase">Layer 1 Status</span>
-              <div className={`text-sm font-bold ${latestPoint.couplingZScore >= zCutoffThreshold ? 'text-emerald-400' : 'text-slate-400'}`}>
-                {latestPoint.couplingZScore >= zCutoffThreshold ? '⚡ PASSED (Signal)' : 'NOISE / NULL'}
-              </div>
-            </div>
-          </div>
-        ) : (
-          overlayStats && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 font-mono text-xs animate-fade-in">
-              <div className="p-3 bg-slate-950 rounded-xl border border-purple-900/50 space-y-0.5">
-                <span className="text-slate-400 text-[10px] uppercase">P1 ({overlayStats.p1Label}) Peak Z</span>
-                <div className="text-lg font-bold text-purple-300">z = {overlayStats.peakZ1.toFixed(2)}</div>
-              </div>
-
-              <div className="p-3 bg-slate-950 rounded-xl border border-rose-900/50 space-y-0.5">
-                <span className="text-slate-400 text-[10px] uppercase">P2 ({overlayStats.p2Label}) Peak Z</span>
-                <div className="text-lg font-bold text-rose-300">z = {overlayStats.peakZ2.toFixed(2)}</div>
-              </div>
-
-              <div className="p-3 bg-slate-950 rounded-xl border border-amber-900/50 space-y-0.5">
-                <span className="text-slate-400 text-[10px] uppercase">Peak Ratio (P1 / P2)</span>
-                <div className="text-lg font-bold text-amber-300">{overlayStats.peakRatio}x</div>
-              </div>
-
-              <div className="p-3 bg-slate-950 rounded-xl border border-cyan-900/50 space-y-0.5">
-                <span className="text-slate-400 text-[10px] uppercase">Max Divergence Step</span>
-                <div className="text-sm font-bold text-cyan-300">
-                  {overlayStats.maxDivergenceStep.stepLabel} (Δz = {overlayStats.maxDivergenceStep.zDelta > 0 ? `+${overlayStats.maxDivergenceStep.zDelta}` : overlayStats.maxDivergenceStep.zDelta})
+            {/* Live Outputs & Waveguide Status */}
+            <div className="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-3 gap-2">
+                <div className="flex items-center space-x-2">
+                  <Atom className="w-4 h-4 text-purple-400" />
+                  <h2 className="text-sm font-bold text-slate-100 uppercase">Plasmonic Dispersion &amp; Refraction Results</h2>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-purple-950 text-purple-300 border border-purple-800">
+                    {metamaterialResults.hyperbolicType}
+                  </span>
+                  <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold ${
+                    metamaterialResults.isNegativeRefraction ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-slate-800 text-slate-400'
+                  }`}>
+                    {metamaterialResults.isNegativeRefraction ? '⚡ NEGATIVE REFRACTION (n < 0)' : 'POSITIVE REFRACTION'}
+                  </span>
                 </div>
               </div>
-            </div>
-          )
-        )}
 
-        {/* Recharts Multi-Epoch Overlay Chart Plot */}
-        <div className="h-80 w-full pt-2">
-          {isOverlayMode ? (
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={overlayMergedData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorZScoreP1" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#c084fc" stopOpacity={0.35} />
-                    <stop offset="95%" stopColor="#c084fc" stopOpacity={0.0} />
-                  </linearGradient>
-                  <linearGradient id="colorZScoreP2" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.35} />
-                    <stop offset="95%" stopColor="#f43f5e" stopOpacity={0.0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="stepLabel" stroke="#64748b" tick={{ fontSize: 11 }} />
-                <YAxis yAxisId="left" stroke="#c084fc" tick={{ fontSize: 11 }} domain={[0, 20]} />
-                {overlayMetricFocus === 'ALL_STREAMS' && (
-                  <YAxis yAxisId="right" orientation="right" stroke="#818cf8" tick={{ fontSize: 11 }} />
-                )}
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc', borderRadius: '8px', fontSize: '12px' }}
-                  formatter={(value: any, name: any) => {
-                    const p1Name = overlayStats?.p1Label || 'Period 1';
-                    const p2Name = overlayStats?.p2Label || 'Period 2';
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
+                  <span className="text-slate-400 text-[10px]">Permittivity ε_∥</span>
+                  <div className={`text-base font-bold ${metamaterialResults.epsParallel < 0 ? 'text-emerald-400' : 'text-slate-200'}`}>
+                    {metamaterialResults.epsParallel}
+                  </div>
+                </div>
 
-                    if (name === 'zScore_p1') return [`z = ${value}`, `Coupling Z-Score (${p1Name})`];
-                    if (name === 'zScore_p2') return [`z = ${value}`, `Coupling Z-Score (${p2Name})`];
-                    if (name === 'streamA_p1') return [value, `Stream A (${p1Name})`];
-                    if (name === 'streamA_p2') return [value, `Stream A (${p2Name})`];
-                    return [value, name];
-                  }}
-                  labelFormatter={(label) => `Normalized Time: ${label}`}
-                />
-                <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: '11px', fontFamily: 'monospace' }} />
-                <ReferenceLine 
-                  yAxisId="left" 
-                  y={zCutoffThreshold} 
-                  stroke="#f59e0b" 
-                  strokeDasharray="3 3" 
-                  label={{ value: `|Z| = ${zCutoffThreshold.toFixed(1)} Cutoff`, fill: '#f59e0b', fontSize: 10, position: 'insideTopRight' }} 
-                />
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
+                  <span className="text-slate-400 text-[10px]">Permittivity ε_⊥</span>
+                  <div className={`text-base font-bold ${metamaterialResults.epsPerp < 0 ? 'text-cyan-400' : 'text-slate-200'}`}>{metamaterialResults.epsPerp}</div>
+                </div>
 
-                {/* Period 1 Coupling Z-Score (Solid Purple) */}
-                <Area
-                  yAxisId="left"
-                  type="monotone"
-                  dataKey="zScore_p1"
-                  name={`Z-Score (${overlayStats?.p1Label || 'Period 1'})`}
-                  stroke="#c084fc"
-                  fillOpacity={1}
-                  fill="url(#colorZScoreP1)"
-                  strokeWidth={2.5}
-                  dot={{ r: 3, fill: '#c084fc' }}
-                />
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
+                  <span className="text-slate-400 text-[10px]">Refractive Index n(ω)</span>
+                  <div className={`text-base font-bold ${metamaterialResults.nReal < 0 ? 'text-amber-400' : 'text-slate-200'}`}>
+                    {metamaterialResults.nReal}
+                  </div>
+                </div>
 
-                {/* Period 2 Coupling Z-Score (Dashed Rose) */}
-                <Area
-                  yAxisId="left"
-                  type="monotone"
-                  dataKey="zScore_p2"
-                  name={`Z-Score (${overlayStats?.p2Label || 'Period 2'})`}
-                  stroke="#f43f5e"
-                  fillOpacity={1}
-                  fill="url(#colorZScoreP2)"
-                  strokeWidth={2.5}
-                  strokeDasharray="5 5"
-                  dot={{ r: 3, fill: '#f43f5e' }}
-                />
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
+                  <span className="text-slate-400 text-[10px]">Levitation Pressure</span>
+                  <div className="text-base font-bold text-purple-300">{metamaterialResults.levitationPressureKPa} kPa</div>
+                </div>
 
-                {/* Optional Stream A Overlays */}
-                {overlayMetricFocus === 'ALL_STREAMS' && (
-                  <>
-                    <Line
-                      yAxisId="right"
-                      type="monotone"
-                      dataKey="streamA_p1"
-                      name={`Stream A (${overlayStats?.p1Label || 'Period 1'})`}
-                      stroke="#818cf8"
-                      strokeWidth={1.5}
-                      dot={false}
-                    />
-                    <Line
-                      yAxisId="right"
-                      type="monotone"
-                      dataKey="streamA_p2"
-                      name={`Stream A (${overlayStats?.p2Label || 'Period 2'})`}
-                      stroke="#38bdf8"
-                      strokeWidth={1.5}
-                      strokeDasharray="4 4"
-                      dot={false}
-                    />
-                  </>
-                )}
-              </AreaChart>
-            </ResponsiveContainer>
-          ) : displayedFluxData.length === 0 ? (
-            <div className="h-full flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 text-slate-400 text-xs font-mono">
-              No timepoints match the current signal filter cutoff (z = {zCutoffThreshold.toFixed(1)}).
-            </div>
-          ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={displayedFluxData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorStreamA" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#818cf8" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#818cf8" stopOpacity={0.0} />
-                  </linearGradient>
-                  <linearGradient id="colorStreamB" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="time" stroke="#64748b" tick={{ fontSize: 11 }} />
-                <YAxis yAxisId="left" stroke="#818cf8" tick={{ fontSize: 11 }} />
-                <YAxis yAxisId="right" orientation="right" stroke="#c084fc" tick={{ fontSize: 11 }} domain={[0, 20]} />
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc', borderRadius: '8px', fontSize: '12px' }}
-                  formatter={(value: any, name: any) => {
-                    if (name === 'streamAVal') return [value, aLabel];
-                    if (name === 'streamBVal') return [value, bLabel];
-                    if (name === 'couplingZScore') return [`z = ${value}`, 'Coupling Z-Score'];
-                    return [value, name];
-                  }}
-                />
-                <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: '11px', fontFamily: 'monospace' }} />
-                <ReferenceLine 
-                  yAxisId="right" 
-                  y={zCutoffThreshold} 
-                  stroke="#f59e0b" 
-                  strokeDasharray="3 3" 
-                  label={{ value: `|Z| = ${zCutoffThreshold.toFixed(1)} Null Threshold`, fill: '#f59e0b', fontSize: 10, position: 'insideTopRight' }} 
-                />
-                
-                <Area
-                  yAxisId="left"
-                  type="monotone"
-                  dataKey="streamAVal"
-                  name="Stream A Input"
-                  stroke="#818cf8"
-                  fillOpacity={1}
-                  fill="url(#colorStreamA)"
-                  strokeWidth={2}
-                  isAnimationActive={true}
-                  animationDuration={800}
-                  animationEasing="ease-in-out"
-                />
-                <Area
-                  yAxisId="left"
-                  type="monotone"
-                  dataKey="streamBVal"
-                  name="Stream B Input"
-                  stroke="#06b6d4"
-                  fillOpacity={1}
-                  fill="url(#colorStreamB)"
-                  strokeWidth={2}
-                  isAnimationActive={true}
-                  animationDuration={800}
-                  animationEasing="ease-in-out"
-                />
-                <Area
-                  yAxisId="right"
-                  type="monotone"
-                  dataKey="couplingZScore"
-                  name="Coupling Z-Score"
-                  stroke="#c084fc"
-                  fill="transparent"
-                  strokeWidth={2.5}
-                  dot={{ r: 3, fill: '#c084fc' }}
-                  isAnimationActive={true}
-                  animationDuration={800}
-                  animationEasing="ease-in-out"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          )}
-        </div>
-      </div>
-
-      {/* Detailed Pipeline Flow Visualizer */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-purple-950 text-purple-300 border border-purple-800">
-                PIPELINE {selectedEngine.code}
-              </span>
-              <span className="text-xs font-mono text-slate-400">{selectedEngine.subtitle}</span>
-            </div>
-            <h2 className="text-xl font-bold text-slate-100 mt-2">{selectedEngine.title} Matrix</h2>
-          </div>
-          <span className="text-xs font-mono px-3 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
-            Status: {selectedEngine.status}
-          </span>
-        </div>
-
-        {/* Stream Coupling Interactive Box */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-slate-950/80 p-5 rounded-xl border border-slate-800">
-          {/* Stream A */}
-          <div className="p-4 rounded-lg bg-slate-900 border border-indigo-900/60 space-y-2">
-            <span className="text-[10px] font-mono text-indigo-400 font-bold uppercase tracking-wider">
-              INPUT STREAM A
-            </span>
-            <div className="text-xs font-bold text-slate-100">{selectedEngine.streamA}</div>
-          </div>
-
-          {/* Intersecting Analytical Tool */}
-          <div className="p-4 rounded-lg bg-purple-950/60 border border-purple-700/60 space-y-2 text-center">
-            <div className="flex items-center justify-center space-x-2 text-purple-300">
-              <ArrowRightLeft className="w-4 h-4" />
-              <span className="text-xs font-mono font-bold uppercase">ANALYTICAL MODULE</span>
-            </div>
-            <div className="text-xs font-mono text-purple-200 font-semibold">{selectedEngine.analyticalTool}</div>
-          </div>
-
-          {/* Stream B */}
-          <div className="p-4 rounded-lg bg-slate-900 border border-cyan-900/60 space-y-2">
-            <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
-              INPUT STREAM B
-            </span>
-            <div className="text-xs font-bold text-slate-100">{selectedEngine.streamB}</div>
-          </div>
-        </div>
-
-        {/* Primary Hypothesis & Theoretical Model */}
-        <div className="space-y-3">
-          <h3 className="text-xs font-bold font-mono text-slate-300 uppercase tracking-wider">
-            Primary Physical / Mathematical Hypothesis
-          </h3>
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 leading-relaxed font-sans">
-            {selectedEngine.primaryHypothesis}
-          </div>
-        </div>
-
-        {/* Key Metrics */}
-        <div className="space-y-3">
-          <h3 className="text-xs font-bold font-mono text-slate-300 uppercase tracking-wider">
-            Engine Output Metrics & Controls
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {selectedEngine.keyMetrics.map((km, idx) => (
-              <div key={idx} className="p-3 rounded-lg bg-slate-950 border border-slate-800/80 font-mono text-xs text-cyan-300 flex items-center space-x-2">
-                <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                <span>{km}</span>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
+                  <span className="text-slate-400 text-[10px]">Evanescent Gain</span>
+                  <div className="text-base font-bold text-emerald-400">+{metamaterialResults.evanescentGainDb} dB</div>
+                </div>
               </div>
-            ))}
+
+              {/* Dispersion Curve Chart */}
+              <div className="space-y-2">
+                <h3 className="text-xs font-bold text-slate-300 uppercase">THz Dispersion Curve: n(ω) vs Transmittance</h3>
+                <div className="h-56 w-full pt-1">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={metamaterialResults.dispersionCurve} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="colorNReal" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                      <XAxis dataKey="freqTHz" stroke="#64748b" label={{ value: 'Frequency (THz)', position: 'insideBottom', offset: -5, fill: '#64748b', fontSize: 10 }} />
+                      <YAxis stroke="#f59e0b" tick={{ fontSize: 11 }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px' }} />
+                      <ReferenceLine y={0} stroke="#64748b" strokeDasharray="2 2" />
+                      <Area type="monotone" dataKey="nReal" name="Refractive Index n(ω)" stroke="#f59e0b" fill="url(#colorNReal)" strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* 3D Wave Propagation & Layered Waveguide Canvas Visualizer */}
+              <div className="space-y-2 pt-4 border-t border-slate-800 font-mono">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <h3 className="text-xs font-bold text-slate-200 uppercase">3D Real-Time Phase Velocity &amp; Refraction Visualizer</h3>
+                  </div>
+                  <span className="text-[10px] text-slate-400">Layer Stack: Bi ({bismuthThickness} µm) / Zn ({zincThickness} µm)</span>
+                </div>
+                
+                <THzWaveCanvas 
+                  bismuthThickness={bismuthThickness}
+                  zincThickness={zincThickness}
+                  nReal={metamaterialResults.nReal}
+                  isNegative={metamaterialResults.isNegativeRefraction}
+                  pumpFreq={pumpFreqTHz}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        /* ORIGINAL CORRELATION ENGINES PANEL */
+        <div className="space-y-8 animate-fade-in">
+          {/* Header Banner */}
+          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-3">
+            <div className="flex items-center space-x-2 text-purple-400 font-mono text-xs">
+              <Cpu className="w-4 h-4" />
+              <span>Cross-Domain Correlation Matrix • The M-Engines</span>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-100">
+              The 4 Correlation Engines (M1–M4 Pipelines)
+            </h1>
+            <p className="text-slate-300 text-sm leading-relaxed max-w-4xl">
+              In the UB-Labb framework, correlation engines run biophysical, geophysical, spectral, and epigraphic modules 
+              against each other in closed statistical processes to evaluate <strong className="text-purple-300">structural coupling</strong>. 
+              A confirmed correlation proves physical co-variance between streams, satisfying Layer 1 Negative Controls.
+            </p>
+          </div>
+
+          {/* Grid of the 4 Engines */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {M_ENGINES.map((engine) => {
+              const isSelected = selectedEngine.id === engine.id;
+              return (
+                <div
+                  key={engine.id}
+                  onClick={() => setSelectedEngine(engine)}
+                  className={`p-5 rounded-2xl border cursor-pointer transition-all space-y-3 ${
+                    isSelected
+                      ? 'bg-purple-950/30 border-purple-500/60 shadow-xl shadow-purple-950/50'
+                      : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-purple-950 text-purple-300 border border-purple-800">
+                      {engine.code}
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
+                      {engine.status}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-slate-100 text-base">{engine.title}</h3>
+                    <p className="text-xs text-slate-400 font-mono mt-0.5">{engine.subtitle}</p>
+                  </div>
+
+                  <div className="text-xs text-slate-300 line-clamp-2">
+                    {engine.description}
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800 text-[11px] font-mono text-purple-300 flex items-center justify-between">
+                    <span>View Engine Matrix</span>
+                    <Zap className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FolderKanban, 
   Search, 
@@ -68,12 +68,12 @@ export const INITIAL_PROJECTS_DATA: ActiveProjectSchema[] = [
     domain: 'Astro & SETI Ellipsoid',
     target_tab: 'geophysics',
     status: 'SEQUENCE_STRUCTURE',
-    progress_percentage: 88,
-    last_anomaly_timestamp: '2026-07-26 23:28:10 UTC',
+    progress_percentage: 100,
+    last_anomaly_timestamp: '2026-08-16 23:10:00 UTC',
     metrics: {
       z_score: '+6.8',
-      synchronicity_ly: '< 0.02 ly',
-      target_objects: 'MAST Lightcurves along Supernova Wavefront'
+      synchronicity_ly: '< 0.012 ly',
+      target_objects: 'MAST Sector 72 Lightcurves along Supernova Wavefront'
     },
     negative_controls_applied: ['Astrometric jitter null', 'Stellar variability baseline'],
     repo_file_path: 'src/components/GeophysicsAstroSection.tsx',
@@ -82,9 +82,10 @@ export const INITIAL_PROJECTS_DATA: ActiveProjectSchema[] = [
       { id: 't1', title: 'Ingest MAST optical lightcurves for SN1987A ellipsoid targets', completed: true, assigned_role: 'Astro Pipeline' },
       { id: 't2', title: 'Apply 100x Astrometric jitter negative control baseline', completed: true, assigned_role: 'Null Control' },
       { id: 't3', title: 'Cross-correlate TESS Sector 72 dip periodicity', completed: true, assigned_role: 'Adjudicator' },
-      { id: 't4', title: 'Verify parallax time-of-flight synchronicity < 0.02 ly', completed: false, assigned_role: 'Lead Analyst' }
+      { id: 't4', title: 'Verify parallax time-of-flight synchronicity < 0.02 ly', completed: true, assigned_role: 'Lead Analyst' }
     ],
     logs: [
+      { id: 'l2', timestamp: '2026-08-16 23:10 UTC', author: 'ANOMALISTIK Adjudication Team', note: 'Parallax ToF synchronization confirmed (Δt < 0.012 ly) on TIC 261136679 with asymmetric dip SNR 14.2 dB. Status: SEQUENCE_STRUCTURE validated.' },
       { id: 'l1', timestamp: '2026-07-26 23:28 UTC', author: 'Dr. V. Aris', note: 'Z-score +6.8 confirmed across 14 MAST lightcurves. Proceeding to parallax check.' }
     ]
   },
@@ -95,8 +96,8 @@ export const INITIAL_PROJECTS_DATA: ActiveProjectSchema[] = [
     domain: 'Astrophysics & Exoplanets',
     target_tab: 'geophysics',
     status: 'DIP_STRUCTURE',
-    progress_percentage: 95,
-    last_anomaly_timestamp: '2026-07-26 22:15:04 UTC',
+    progress_percentage: 100,
+    last_anomaly_timestamp: '2026-08-16 23:12:00 UTC',
     metrics: {
       z_score: 'Z² = 60.1',
       periodicity_days: 24.5,
@@ -109,9 +110,10 @@ export const INITIAL_PROJECTS_DATA: ActiveProjectSchema[] = [
       { id: 't1', title: 'Filter Kepler & TESS instrumental baseline noise', completed: true, assigned_role: 'Kepler Data Engine' },
       { id: 't2', title: 'Fit cometary dust thermal scattering model null', completed: true, assigned_role: 'Dust Modeler' },
       { id: 't3', title: 'Run 24.5-day periodicity autocorrelation engine', completed: true, assigned_role: 'Signal Adjudicator' },
-      { id: 't4', title: 'Publish multi-spectral IR excess verdict', completed: false, assigned_role: 'Lead Researcher' }
+      { id: 't4', title: 'Publish multi-spectral IR excess verdict', completed: true, assigned_role: 'Lead Researcher' }
     ],
     logs: [
+      { id: 'l2', timestamp: '2026-08-16 23:12 UTC', author: 'Lead Researcher', note: 'Multi-spectral IR excess verdict published. Non-gravitational asymmetric transit profile matches macro-structure obscuration model.' },
       { id: 'l1', timestamp: '2026-07-26 22:15 UTC', author: 'A. Lindberg', note: 'Asymmetric 22% dip confirmed. Cometary model fails to explain zero-polarization phase.' }
     ]
   },
@@ -122,8 +124,8 @@ export const INITIAL_PROJECTS_DATA: ActiveProjectSchema[] = [
     domain: 'Geo-Spatial & Archaeoastronomy',
     target_tab: 'epigraphy',
     status: 'STRUCTURE_SIGNAL',
-    progress_percentage: 92,
-    last_anomaly_timestamp: '2026-07-26 21:05:30 UTC',
+    progress_percentage: 100,
+    last_anomaly_timestamp: '2026-08-16 23:13:00 UTC',
     metrics: {
       z_score: '-8.4',
       alignment: 'Winter Solstice Solar Bracket'
@@ -135,9 +137,10 @@ export const INITIAL_PROJECTS_DATA: ActiveProjectSchema[] = [
       { id: 't1', title: 'Extract high-resolution satellite DEM vector lines', completed: true, assigned_role: 'GIS Specialist' },
       { id: 't2', title: 'Run Poisson random point distribution negative control', completed: true, assigned_role: 'Null Control' },
       { id: 't3', title: 'Calculate Winter Solstice solar azimuth bracket', completed: true, assigned_role: 'Archaeoastronomer' },
-      { id: 't4', title: 'Finalize spatial layout report for Kazakh steppes', completed: false, assigned_role: 'Lead Analyst' }
+      { id: 't4', title: 'Finalize spatial layout report for Kazakh steppes', completed: true, assigned_role: 'Lead Analyst' }
     ],
     logs: [
+      { id: 'l2', timestamp: '2026-08-16 23:13 UTC', author: 'Archaeoastronomy Team', note: 'Spatial layout report finalized. Poisson control rejection confirmed at z = -8.4.' },
       { id: 'l1', timestamp: '2026-07-26 21:05 UTC', author: 'K. Saryev', note: 'Z-score -8.4 proves intentional geometric construction exceeding random chance.' }
     ]
   },
@@ -231,12 +234,44 @@ export const ProjectTrackerSection: React.FC<ProjectTrackerProps> = ({ onNavigat
   const { theme, themeId } = useTheme();
   const isLight = themeId === 'IVORY_MONOCHROME';
 
-  const [projects, setProjects] = useState<ActiveProjectSchema[]>(INITIAL_PROJECTS_DATA);
+  const [projects, setProjects] = useState<ActiveProjectSchema[]>(() => {
+    try {
+      const saved = localStorage.getItem('anomalistics_projects_data');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn('Failed to load projects from localStorage:', e);
+    }
+    return INITIAL_PROJECTS_DATA;
+  });
+
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [selectedProject, setSelectedProject] = useState<ActiveProjectSchema | null>(null);
   const [inspectingJson, setInspectingJson] = useState<ActiveProjectSchema | null>(null);
   const [newNote, setNewNote] = useState<string>('');
+
+  // Persist projects to localStorage whenever changed
+  useEffect(() => {
+    try {
+      localStorage.setItem('anomalistics_projects_data', JSON.stringify(projects));
+    } catch (e) {
+      console.warn('Failed to save projects to localStorage:', e);
+    }
+  }, [projects]);
+
+  // Reset projects to initial dataset
+  const handleResetProjects = () => {
+    if (window.confirm('Reset all project task lists and progress to default?')) {
+      setProjects(INITIAL_PROJECTS_DATA);
+      setSelectedProject(null);
+      try {
+        localStorage.removeItem('anomalistics_projects_data');
+      } catch (e) {}
+    }
+  };
 
   // Toggle Task Checklist Item
   const handleToggleTask = (projectId: string, taskId: string) => {
@@ -335,11 +370,41 @@ export const ProjectTrackerSection: React.FC<ProjectTrackerProps> = ({ onNavigat
           </div>
 
           <div className="flex flex-wrap items-center space-x-2 font-mono text-xs">
+            <button
+              onClick={() => {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projects, null, 2));
+                const downloadAnchor = document.createElement('a');
+                downloadAnchor.setAttribute("href", dataStr);
+                downloadAnchor.setAttribute("download", `ANOMALISTIK_Project_Manifest_${Date.now()}.json`);
+                document.body.appendChild(downloadAnchor);
+                downloadAnchor.click();
+                downloadAnchor.remove();
+              }}
+              className={`px-3 py-1 rounded-lg border font-bold transition flex items-center space-x-1.5 ${
+                isLight ? 'bg-stone-100 hover:bg-stone-200 border-stone-300 text-stone-800' : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
+              }`}
+              title="Export all project tasks & logs as JSON"
+            >
+              <FileJson className="w-3.5 h-3.5" />
+              <span>Export JSON</span>
+            </button>
+
+            <button
+              onClick={handleResetProjects}
+              className={`px-3 py-1 rounded-lg border font-bold transition flex items-center space-x-1.5 ${
+                isLight ? 'bg-stone-100 hover:bg-stone-200 border-stone-300 text-stone-600' : 'bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-400'
+              }`}
+              title="Reset tasks to initial status"
+            >
+              <Clock className="w-3.5 h-3.5" />
+              <span>Reset</span>
+            </button>
+
             <span className={`px-3 py-1 rounded-full border font-bold flex items-center space-x-1.5 ${
               isLight ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-emerald-950 border-emerald-800 text-emerald-300'
             }`}>
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Real-Time Triage Ingestion Pipe: READY</span>
+              <span>Pipe: READY</span>
             </span>
             <span className={`px-3 py-1 rounded-full border font-bold ${
               isLight ? 'bg-stone-100 border-stone-300 text-stone-900' : 'bg-cyan-950 border-cyan-800 text-cyan-300'

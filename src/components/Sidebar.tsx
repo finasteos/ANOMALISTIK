@@ -23,13 +23,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const navItems = [
     { id: 'overview', label: 'Atlas Overview', icon: Compass },
+    { id: 'pattern-explorer', label: 'Pattern Explorer', icon: Sparkles },
     { id: 'epigraphy', label: 'G-Series (Epigraphy)', icon: Binary },
     { id: 'mengines', label: 'M-Engines', icon: Cpu },
     { id: 'biophysics', label: 'Track A/B (Bio)', icon: Database },
     { id: 'geophysics', label: 'Track R (Geo/Astro)', icon: Activity },
     { id: 'simulator', label: 'Adjudicator', icon: Layers },
     { id: 'data-verification', label: 'Data Verification', icon: ShieldCheck },
-    { id: 'ai-assistant', label: 'AI Assist (Coming Soon)', icon: Sparkles },
+    { id: 'ai-assistant', label: 'AI Research Grounding', icon: Sparkles },
   ];
 
   const currentTheme = COLOR_THEMES[currentThemeId] || COLOR_THEMES.IVORY_MONOCHROME;

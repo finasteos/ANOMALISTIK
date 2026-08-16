@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { Layers, Play, RefreshCw, CheckCircle2, AlertTriangle, ShieldAlert, Sparkles, HelpCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Layers, Play, RefreshCw, CheckCircle2, AlertTriangle, ShieldAlert, Sparkles, HelpCircle, Upload, FileUp, Terminal, Activity, Zap } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
 import { LAB_MISSIONS } from '../data/labData';
-import { useEffect, useRef } from 'react';
-import { Terminal, Activity, Zap } from 'lucide-react';
 
 interface AdjudicationResult {
   sampleName: string;
@@ -28,6 +26,14 @@ const PRESET_SAMPLES = [
   {
     name: 'Linear A Libation Formula Fragment',
     seq: 'ASASARAMEASASARAMEASASARAMEASASARAMETA301TA301ASASARAMETA301ASASARAME',
+  },
+  {
+    name: 'Linear A Knossos Administrative Ledger (*120 / *130)',
+    seq: 'ADU120KL301130E301120KLADU120KL301130E301120KLKURO301ADU120KL301130E301120KL',
+  },
+  {
+    name: 'Skinwalker 1.6 GHz Narrowband Binary Pulse Stream',
+    seq: '110100111101001111010011110100111101001111010011110100111101001111010011',
   },
   {
     name: 'Rongorongo Tablet C Parallel Passage (Glyphs)',
@@ -83,6 +89,26 @@ export const AdjudicationSimulator: React.FC = () => {
     }
   };
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target?.result as string;
+      if (content) {
+        const cleaned = content.replace(/\r\n/g, '').replace(/\n/g, '').trim();
+        setSampleName(file.name.replace(/\.[^/.]+$/, ''));
+        setSequence(cleaned.slice(0, 10000));
+        setResult(null);
+        setError(null);
+      }
+    };
+    reader.readAsText(file);
+  };
+
   const loadPreset = (preset: { name: string; seq: string }) => {
     setSampleName(preset.name);
     setSequence(preset.seq);
@@ -114,11 +140,29 @@ export const AdjudicationSimulator: React.FC = () => {
       {/* Background Service Simulation */}
       <BackgroundMissionService />
 
-      {/* Preset Selector */}
+      {/* Preset & File Upload Selector */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-300 font-mono uppercase tracking-wider">
-          Load Reference Sample
-        </label>
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-bold text-slate-300 font-mono uppercase tracking-wider">
+            Load Reference Sample or Custom File
+          </label>
+          <div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              accept=".txt,.csv,.json,.dat"
+              className="hidden"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-purple-950 text-purple-300 hover:bg-purple-900 border border-purple-700 transition flex items-center space-x-1.5 shadow-sm"
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span>Upload File (.txt, .csv, .json)</span>
+            </button>
+          </div>
+        </div>
         <div className="flex flex-wrap gap-2">
           {PRESET_SAMPLES.map((p, idx) => (
             <button
