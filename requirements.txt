@@ -1,0 +1,22 @@
+# ANOMALISTIK — Python dependencies
+# Install: .venv/bin/pip install -r requirements.txt
+
+# Core data science
+numpy>=1.26
+pandas>=2.2
+pyarrow>=15.0
+
+# HTTP
+requests>=2.31
+
+# Astronomy / space physics
+astropy>=6.0
+astroquery>=0.4.7
+cdflib>=1.2
+
+# Seismic (EIDA / FDSN)
+obspy>=1.4
+
+# Optional: gravity / NetCDF
+# netCDF4>=1.7
+# eodag>=2.10  # for authenticated ESA product downloads

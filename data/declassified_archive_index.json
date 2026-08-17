@@ -1,0 +1,3043 @@
+{
+  "generated_at": "2026-08-17",
+  "total_archives": 5,
+  "total_files": 375,
+  "total_uncompressed_bytes": 17095514424,
+  "archives": [
+    {
+      "name": "UFOFiles-Release1.zip",
+      "archive_size_bytes": 2210680014,
+      "archive_size_mb": 2108.27,
+      "files": [
+        {
+          "path": "images/fbi-photo-a1.png",
+          "size_bytes": 94513,
+          "compressed_bytes": 93133,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/fbi-photo-a2.png",
+          "size_bytes": 98192,
+          "compressed_bytes": 97157,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/fbi-photo-a3.png",
+          "size_bytes": 94807,
+          "compressed_bytes": 94169,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/fbi-photo-a4.png",
+          "size_bytes": 96879,
+          "compressed_bytes": 95315,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/fbi-photo-a5.png",
+          "size_bytes": 89225,
+          "compressed_bytes": 88277,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/fbi-photo-a6.png",
+          "size_bytes": 80159,
+          "compressed_bytes": 79288,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/fbi-photo-a7.png",
+          "size_bytes": 88727,
+          "compressed_bytes": 87704,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/fbi-photo-a8.png",
+          "size_bytes": 87292,
+          "compressed_bytes": 86401,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/nasa-uap-vm1-apollo-12-1969.jpg",
+          "size_bytes": 2526206,
+          "compressed_bytes": 2504553,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "images/nasa-uap-vm2-apollo-12-1969.jpg",
+          "size_bytes": 2630734,
+          "compressed_bytes": 2590882,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "images/nasa-uap-vm3-apollo-12-1969.jpg",
+          "size_bytes": 2534744,
+          "compressed_bytes": 2512578,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "images/nasa-uap-vm4-apollo-12-1969.jpg",
+          "size_bytes": 2444608,
+          "compressed_bytes": 2418306,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "images/nasa-uap-vm5-apollo-12-1969.jpg",
+          "size_bytes": 2590279,
+          "compressed_bytes": 2550668,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "images/nasa-uap-vm6-apollo-17-1972.jpg",
+          "size_bytes": 1778754,
+          "compressed_bytes": 1755249,
+          "date_time": "2026-05-10",
+          "category": "Image",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "pdfs/059uap00011.pdf",
+          "size_bytes": 353927,
+          "compressed_bytes": 346550,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/059uap00012.pdf",
+          "size_bytes": 311767,
+          "compressed_bytes": 303949,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/059uap00013.pdf",
+          "size_bytes": 537719,
+          "compressed_bytes": 528029,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/18_100754_ General 1946-7_Vol_2.pdf",
+          "size_bytes": 5490014,
+          "compressed_bytes": 5438951,
+          "date_time": "2026-05-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/18_6369445_general_1948_vol_1.pdf",
+          "size_bytes": 5710514,
+          "compressed_bytes": 5653060,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/2024-04-30-composite-sketch.pdf",
+          "size_bytes": 90153,
+          "compressed_bytes": 78795,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/255_413270_UFO's_and_Defense_What_Should_we_Prepare_For.pdf",
+          "size_bytes": 10469841,
+          "compressed_bytes": 10395654,
+          "date_time": "2026-05-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/255_t_763_r1b_transcripts.pdf",
+          "size_bytes": 741263,
+          "compressed_bytes": 740348,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/331_120752_numeric_files_1944\u20131945_37153_german_armament_equipment_documents.pdf",
+          "size_bytes": 3654290,
+          "compressed_bytes": 3627373,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/341_110448_records_relating_to_the_collection_and_dissemination_of_intelligence_1948-1955-ts_cont_no.2_2-5300-2-5399.pdf",
+          "size_bytes": 6704691,
+          "compressed_bytes": 6702069,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/341_110677_numerical_file_5-2500.pdf",
+          "size_bytes": 43429200,
+          "compressed_bytes": 43439819,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/342_hs1-416511228_box186_319.1-flying-discs-1949.pdf",
+          "size_bytes": 42264882,
+          "compressed_bytes": 42075618,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/38_143685_box7_incident_summaries_1-100.pdf",
+          "size_bytes": 10061443,
+          "compressed_bytes": 9679758,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/38_143685_box7_incident_summaries_101-172.pdf",
+          "size_bytes": 12080726,
+          "compressed_bytes": 11789247,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/38_143685_box7_incident_summaries_173-233.pdf",
+          "size_bytes": 21590006,
+          "compressed_bytes": 21474739,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/59_214434_sp_16_7.18.1963.pdf",
+          "size_bytes": 621928,
+          "compressed_bytes": 613655,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/59_214434_sp_16_[7.18.1963].pdf",
+          "size_bytes": 621902,
+          "compressed_bytes": 613621,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-101634279_100-de-18221_serial_844.pdf",
+          "size_bytes": 516282,
+          "compressed_bytes": 513978,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-101634279_100-de-26505.pdf",
+          "size_bytes": 10078551,
+          "compressed_bytes": 10072085,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_1.pdf",
+          "size_bytes": 44898457,
+          "compressed_bytes": 44635275,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_10.pdf",
+          "size_bytes": 56452397,
+          "compressed_bytes": 56092474,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_2.pdf",
+          "size_bytes": 43322841,
+          "compressed_bytes": 43009776,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_3.pdf",
+          "size_bytes": 32652236,
+          "compressed_bytes": 32404319,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_4.pdf",
+          "size_bytes": 52555731,
+          "compressed_bytes": 52261328,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_5.pdf",
+          "size_bytes": 51932486,
+          "compressed_bytes": 51613236,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_6.pdf",
+          "size_bytes": 83376785,
+          "compressed_bytes": 82997146,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_7.pdf",
+          "size_bytes": 49748661,
+          "compressed_bytes": 49512649,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_8.pdf",
+          "size_bytes": 48638975,
+          "compressed_bytes": 48341433,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_section_9.pdf",
+          "size_bytes": 62657416,
+          "compressed_bytes": 62231114,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_serial_130.pdf",
+          "size_bytes": 14826573,
+          "compressed_bytes": 14646545,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_HS1-834228961_62-HQ-83894_Serial_153.pdf",
+          "size_bytes": 1241355,
+          "compressed_bytes": 1233790,
+          "date_time": "2026-05-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_serial_164.pdf",
+          "size_bytes": 22997104,
+          "compressed_bytes": 22882585,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_serial_220.pdf",
+          "size_bytes": 2796332,
+          "compressed_bytes": 2784918,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_serial_403.pdf",
+          "size_bytes": 1313336,
+          "compressed_bytes": 1309375,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_serial_438.pdf",
+          "size_bytes": 4231265,
+          "compressed_bytes": 4184720,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_serial_449.pdf",
+          "size_bytes": 5575468,
+          "compressed_bytes": 5528280,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/65_hs1-834228961_62-hq-83894_sub_a.pdf",
+          "size_bytes": 35572151,
+          "compressed_bytes": 35306025,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dos-uap-d1-cable-1-papua-new-guinea-january-1985.pdf",
+          "size_bytes": 136081,
+          "compressed_bytes": 130245,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dos-uap-d2-cable-2-kazakhstan-january-1994.pdf",
+          "size_bytes": 165809,
+          "compressed_bytes": 160355,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d10-mission-report-middle-east-may-2022.pdf",
+          "size_bytes": 646216,
+          "compressed_bytes": 630788,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d12-mission-report-iraq-may-2022.pdf",
+          "size_bytes": 649432,
+          "compressed_bytes": 638754,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d14-mission-report-iraq-may-2022.pdf",
+          "size_bytes": 476964,
+          "compressed_bytes": 460437,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d16-mission-report-syria-july-2022.pdf",
+          "size_bytes": 459207,
+          "compressed_bytes": 445832,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d18-mission-report-iraq-december-2022.pdf",
+          "size_bytes": 307252,
+          "compressed_bytes": 295215,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d19-mission-report-syria-february-21-2023.pdf",
+          "size_bytes": 538598,
+          "compressed_bytes": 516586,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d20-mission-report-southern-united-states-2020.pdf",
+          "size_bytes": 328837,
+          "compressed_bytes": 316663,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d23-mission-report-united-arab-emirates-october-2023.pdf",
+          "size_bytes": 751921,
+          "compressed_bytes": 733544,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d25-mission-report-greece-january-2024.pdf",
+          "size_bytes": 656063,
+          "compressed_bytes": 639169,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d27-mission-report-united-arab-emirates-october-2023.pdf",
+          "size_bytes": 663842,
+          "compressed_bytes": 644185,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d28-mission-report-east-china-sea-2024.pdf",
+          "size_bytes": 609347,
+          "compressed_bytes": 600271,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d3-mission-report-arabian-gulf-2020.pdf",
+          "size_bytes": 97669,
+          "compressed_bytes": 66683,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D32-Mission-Report,-Syria-October-2024.pdf",
+          "size_bytes": 623316,
+          "compressed_bytes": 609039,
+          "date_time": "2026-05-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d33-mission-report-greece-october-2023.pdf",
+          "size_bytes": 448900,
+          "compressed_bytes": 436660,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d35-mission-report-greece-october-2023.pdf",
+          "size_bytes": 420720,
+          "compressed_bytes": 408422,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d38-range-fouler-debrief-middle-east-may-2020.pdf",
+          "size_bytes": 213934,
+          "compressed_bytes": 212148,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "pdfs/dow-uap-d4-mission-report-arabian-gulf-2020.pdf",
+          "size_bytes": 14005,
+          "compressed_bytes": 9695,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d42-range-fouler-debrief-japan-2023.pdf",
+          "size_bytes": 273199,
+          "compressed_bytes": 267412,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "pdfs/dow-uap-d44-range-fouler-arabian-sea-october-2020.pdf",
+          "size_bytes": 269155,
+          "compressed_bytes": 262022,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "pdfs/dow-uap-d48-report-september-1996.pdf",
+          "size_bytes": 55188507,
+          "compressed_bytes": 54989250,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d49-launch-summary-february-2000.pdf",
+          "size_bytes": 15205250,
+          "compressed_bytes": 15028255,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d5-mission-report-arabian-gulf-2020.pdf",
+          "size_bytes": 14846,
+          "compressed_bytes": 10431,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d50-email-correspondence-indopacom-april-2025.pdf",
+          "size_bytes": 306895,
+          "compressed_bytes": 291480,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d51-email-correspondence-pacific-time-zone-march-2023.pdf",
+          "size_bytes": 70255,
+          "compressed_bytes": 66574,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d52-email-correspondance-na-august-2024.pdf",
+          "size_bytes": 61573,
+          "compressed_bytes": 58749,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d54-mission-report-mediterranean-sea-na.pdf",
+          "size_bytes": 13788,
+          "compressed_bytes": 9433,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d55-mission-report-syria-november-2016.pdf",
+          "size_bytes": 308981,
+          "compressed_bytes": 305683,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d56-range-fouler-debrief-arabian-sea-august-2020.pdf",
+          "size_bytes": 621258,
+          "compressed_bytes": 619244,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "pdfs/dow-uap-d57-mission-report-gulf-of-aden-september-2020.pdf",
+          "size_bytes": 179888,
+          "compressed_bytes": 177706,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d58-range-fouler-debrief-na-october-2020.pdf",
+          "size_bytes": 220416,
+          "compressed_bytes": 217486,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "pdfs/dow-uap-d6-mission-report-arabian-gulf-2020.pdf",
+          "size_bytes": 11454,
+          "compressed_bytes": 7751,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d60-mission-report-persian-gulf-august-2020.pdf",
+          "size_bytes": 457693,
+          "compressed_bytes": 449307,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d61-mission-report-persian-gulf-august-2020.pdf",
+          "size_bytes": 513712,
+          "compressed_bytes": 501992,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d62-mission-report-strait-of-hormuz-september-2020.pdf",
+          "size_bytes": 786350,
+          "compressed_bytes": 771356,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d63-mission-report-strait-of-hormuz-october-2020.pdf",
+          "size_bytes": 667958,
+          "compressed_bytes": 652356,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d64-mission-report-iran-november-2020.pdf",
+          "size_bytes": 591994,
+          "compressed_bytes": 578449,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d65-mission-report-persian-gulf-july-2020.pdf",
+          "size_bytes": 620171,
+          "compressed_bytes": 605644,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d7-mission-report-arabian-gulf-2020.pdf",
+          "size_bytes": 12199,
+          "compressed_bytes": 8406,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d74-mission-report-syria-november-2023.pdf",
+          "size_bytes": 706129,
+          "compressed_bytes": 668605,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d75-mission-report-gulf-of-aden-july-2024.pdf",
+          "size_bytes": 973869,
+          "compressed_bytes": 940077,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-d8-mission-report-djibouti-2025.pdf",
+          "size_bytes": 13667,
+          "compressed_bytes": 9238,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/dow-uap-pr20.pdf",
+          "size_bytes": 951956,
+          "compressed_bytes": 949511,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b1.pdf",
+          "size_bytes": 61618,
+          "compressed_bytes": 60244,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b10.pdf",
+          "size_bytes": 60481,
+          "compressed_bytes": 59088,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b11.pdf",
+          "size_bytes": 54890,
+          "compressed_bytes": 53550,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b12.pdf",
+          "size_bytes": 50901,
+          "compressed_bytes": 49559,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b13.pdf",
+          "size_bytes": 30362,
+          "compressed_bytes": 28898,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b14.pdf",
+          "size_bytes": 35505,
+          "compressed_bytes": 34069,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b15.pdf",
+          "size_bytes": 30253,
+          "compressed_bytes": 28784,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b16.pdf",
+          "size_bytes": 30820,
+          "compressed_bytes": 28983,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b17.pdf",
+          "size_bytes": 24517,
+          "compressed_bytes": 21677,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b18.pdf",
+          "size_bytes": 29202,
+          "compressed_bytes": 27763,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b19.pdf",
+          "size_bytes": 61110,
+          "compressed_bytes": 59712,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b2.pdf",
+          "size_bytes": 58919,
+          "compressed_bytes": 57544,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b20.pdf",
+          "size_bytes": 58501,
+          "compressed_bytes": 57148,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b21.pdf",
+          "size_bytes": 55809,
+          "compressed_bytes": 54474,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b22.pdf",
+          "size_bytes": 22404,
+          "compressed_bytes": 21013,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b23.pdf",
+          "size_bytes": 29002,
+          "compressed_bytes": 27536,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b24.pdf",
+          "size_bytes": 23941,
+          "compressed_bytes": 22533,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b3.pdf",
+          "size_bytes": 169680,
+          "compressed_bytes": 168767,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b4.pdf",
+          "size_bytes": 60589,
+          "compressed_bytes": 59213,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b5.pdf",
+          "size_bytes": 59529,
+          "compressed_bytes": 58118,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b6.pdf",
+          "size_bytes": 54321,
+          "compressed_bytes": 52973,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b7.pdf",
+          "size_bytes": 55645,
+          "compressed_bytes": 54292,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b8.pdf",
+          "size_bytes": 58219,
+          "compressed_bytes": 56755,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/fbi-photo-b9.pdf",
+          "size_bytes": 58649,
+          "compressed_bytes": 57260,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/nasa-uap-d1-apollo-12-transcript-1969.pdf",
+          "size_bytes": 324804,
+          "compressed_bytes": 317732,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "pdfs/nasa-uap-d2-apollo-17-transcript-1972.pdf",
+          "size_bytes": 956824,
+          "compressed_bytes": 945766,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "pdfs/nasa-uap-d4-apollo-11-technical-crew-debriefing-1969.pdf",
+          "size_bytes": 2181383,
+          "compressed_bytes": 2167695,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "pdfs/nasa-uap-d5-apollo-17-crew-debriefing-for-science-1973.pdf",
+          "size_bytes": 169623,
+          "compressed_bytes": 168173,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "pdfs/nasa-uap-d6-apollo-17-technical-crew-debriefing-1973.pdf",
+          "size_bytes": 196555,
+          "compressed_bytes": 193243,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "pdfs/nasa-uap-d7-skylab-technical-crew-debriefing-1973.pdf",
+          "size_bytes": 423027,
+          "compressed_bytes": 419212,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/Serial 5 Redacted_Redacted.pdf",
+          "size_bytes": 195784,
+          "compressed_bytes": 186610,
+          "date_time": "2026-05-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/serial-3_redacted.pdf",
+          "size_bytes": 262096,
+          "compressed_bytes": 255842,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/serial-4-redacted_redacted.pdf",
+          "size_bytes": 315751,
+          "compressed_bytes": 304515,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/usper-statement-redacted.pdf",
+          "size_bytes": 476247,
+          "compressed_bytes": 471130,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/western_us_event_slides_5.08.2026.pdf",
+          "size_bytes": 57674,
+          "compressed_bytes": 56206,
+          "date_time": "2026-05-11",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "videos/DOD_111688723.mp4",
+          "size_bytes": 6814452,
+          "compressed_bytes": 6751340,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111688762.mp4",
+          "size_bytes": 12752210,
+          "compressed_bytes": 12633411,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111688775.mp4",
+          "size_bytes": 3982264,
+          "compressed_bytes": 3804191,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111688809.mp4",
+          "size_bytes": 5300653,
+          "compressed_bytes": 5170359,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111688816.mp4",
+          "size_bytes": 27493716,
+          "compressed_bytes": 26996012,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111688825.mp4",
+          "size_bytes": 155885289,
+          "compressed_bytes": 152368811,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111688954.mp4",
+          "size_bytes": 15992674,
+          "compressed_bytes": 15173492,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111688964.mp4",
+          "size_bytes": 15445575,
+          "compressed_bytes": 15184084,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111688970.mp4",
+          "size_bytes": 644525,
+          "compressed_bytes": 572505,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111688997.mp4",
+          "size_bytes": 1834659,
+          "compressed_bytes": 1750354,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689005.mp4",
+          "size_bytes": 426911,
+          "compressed_bytes": 351880,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689011.mp4",
+          "size_bytes": 198248609,
+          "compressed_bytes": 196131627,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689022-1920x1080-9000k.mp4",
+          "size_bytes": 6625380,
+          "compressed_bytes": 6337823,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689030.mp4",
+          "size_bytes": 142686223,
+          "compressed_bytes": 142629517,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689044.mp4",
+          "size_bytes": 8543893,
+          "compressed_bytes": 8425360,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689051.mp4",
+          "size_bytes": 30707537,
+          "compressed_bytes": 29421297,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689057.mp4",
+          "size_bytes": 1708179,
+          "compressed_bytes": 1699079,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689082.mp4",
+          "size_bytes": 29392078,
+          "compressed_bytes": 28638515,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689083.mp4",
+          "size_bytes": 116787147,
+          "compressed_bytes": 115747963,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689090.mp4",
+          "size_bytes": 274712045,
+          "compressed_bytes": 271395251,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689115.mp4",
+          "size_bytes": 86775527,
+          "compressed_bytes": 86440123,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689123.mp4",
+          "size_bytes": 14908599,
+          "compressed_bytes": 14190168,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689133.mp4",
+          "size_bytes": 3005135,
+          "compressed_bytes": 2882305,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689142.mp4",
+          "size_bytes": 15963093,
+          "compressed_bytes": 14462374,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689167.mp4",
+          "size_bytes": 116761162,
+          "compressed_bytes": 115648903,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689168.mp4",
+          "size_bytes": 17266193,
+          "compressed_bytes": 15901405,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689232.mp4",
+          "size_bytes": 19126276,
+          "compressed_bytes": 17783536,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111689759.mp4",
+          "size_bytes": 9089058,
+          "compressed_bytes": 8948706,
+          "date_time": "2026-05-11",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        }
+      ]
+    },
+    {
+      "name": "UFOFiles-Release2.zip",
+      "archive_size_bytes": 5552331997,
+      "archive_size_mb": 5295.12,
+      "files": [
+        {
+          "path": "video_2605_DOD_111721758_DOD_111721758.mp4",
+          "size_bytes": 81701232,
+          "compressed_bytes": 81610350,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "CIA-UAP-D001_Intelligence_Information_Report_USSR_1973.pdf",
+          "size_bytes": 310822,
+          "compressed_bytes": 308063,
+          "date_time": "2026-05-26",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "DOE-UAP-D001_PANTEX_Image.pdf",
+          "size_bytes": 160186,
+          "compressed_bytes": 150673,
+          "date_time": "2026-05-26",
+          "category": "Document (PDF)",
+          "mapping": "Nuclear Site Forensics & Radiation Surveys (G31 / G33)"
+        },
+        {
+          "path": "DOE-UAP-D002_JamesTuck_Correspondence.pdf",
+          "size_bytes": 647402,
+          "compressed_bytes": 638039,
+          "date_time": "2026-05-26",
+          "category": "Document (PDF)",
+          "mapping": "Nuclear Site Forensics & Radiation Surveys (G31 / G33)"
+        },
+        {
+          "path": "DOE-UAP-D003_Pajarito_Astronomers.pdf",
+          "size_bytes": 89221,
+          "compressed_bytes": 84890,
+          "date_time": "2026-05-26",
+          "category": "Document (PDF)",
+          "mapping": "Nuclear Site Forensics & Radiation Surveys (G31 / G33)"
+        },
+        {
+          "path": "DOW-UAP-D017_General_Correspondence_Of_Sandia.pdf",
+          "size_bytes": 46520121,
+          "compressed_bytes": 46370536,
+          "date_time": "2026-05-26",
+          "category": "Document (PDF)",
+          "mapping": "Nuclear Site Forensics & Radiation Surveys (G31 / G33)"
+        },
+        {
+          "path": "ODNI-UAP-D001_USPER_Narrative_Senior_USIC.pdf",
+          "size_bytes": 29402,
+          "compressed_bytes": 27539,
+          "date_time": "2026-05-26",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "video_2605_DOD_111719709_DOD_111719709.mp4",
+          "size_bytes": 3097929,
+          "compressed_bytes": 2978375,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719715_DOD_111719715.mp4",
+          "size_bytes": 154578710,
+          "compressed_bytes": 151015747,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719718_DOD_111719718.mp4",
+          "size_bytes": 513733696,
+          "compressed_bytes": 508217251,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719723_DOD_111719723.mp4",
+          "size_bytes": 2765075,
+          "compressed_bytes": 2484500,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "video_2605_DOD_111719726_DOD_111719726.mp4",
+          "size_bytes": 61733262,
+          "compressed_bytes": 58873651,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "Apollo 17 Photogrammetry (#20)"
+        },
+        {
+          "path": "video_2605_DOD_111719730_DOD_111719730.mp4",
+          "size_bytes": 59014273,
+          "compressed_bytes": 55341024,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719732_DOD_111719732.mp4",
+          "size_bytes": 17633158,
+          "compressed_bytes": 17046694,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719736_DOD_111719736.mp4",
+          "size_bytes": 99366171,
+          "compressed_bytes": 95796663,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719739_DOD_111719739.mp4",
+          "size_bytes": 113393509,
+          "compressed_bytes": 109913400,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719741_DOD_111719741.mp4",
+          "size_bytes": 154390913,
+          "compressed_bytes": 152010708,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719746_DOD_111719746.mp4",
+          "size_bytes": 119593826,
+          "compressed_bytes": 116024822,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719752_DOD_111719752.mp4",
+          "size_bytes": 32239151,
+          "compressed_bytes": 31383609,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719795_DOD_111719795.mp4",
+          "size_bytes": 14381232,
+          "compressed_bytes": 14027232,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719799_DOD_111719799.mp4",
+          "size_bytes": 35570662,
+          "compressed_bytes": 31812668,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719800_DOD_111719800.mp4",
+          "size_bytes": 222778312,
+          "compressed_bytes": 215065778,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719804_DOD_111719804.mp4",
+          "size_bytes": 193680331,
+          "compressed_bytes": 190350546,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719807_DOD_111719807.mp4",
+          "size_bytes": 72994733,
+          "compressed_bytes": 72099577,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719809_DOD_111719809.mp4",
+          "size_bytes": 71521409,
+          "compressed_bytes": 67973214,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719813_DOD_111719813.mp4",
+          "size_bytes": 102195741,
+          "compressed_bytes": 98609078,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719823_DOD_111719823.mp4",
+          "size_bytes": 232010970,
+          "compressed_bytes": 228668285,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719828_DOD_111719828.mp4",
+          "size_bytes": 155089788,
+          "compressed_bytes": 151732250,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719833_DOD_111719833.mp4",
+          "size_bytes": 255197962,
+          "compressed_bytes": 242386963,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719835_DOD_111719835.mp4",
+          "size_bytes": 80311198,
+          "compressed_bytes": 76800832,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719847_DOD_111719847.mp4",
+          "size_bytes": 152414120,
+          "compressed_bytes": 149061310,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719850_DOD_111719850.mp4",
+          "size_bytes": 217729901,
+          "compressed_bytes": 214372241,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111719852_DOD_111719852.mp4",
+          "size_bytes": 3228019,
+          "compressed_bytes": 3009171,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720692_DOD_111720692.mp4",
+          "size_bytes": 1351938,
+          "compressed_bytes": 842734,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720693_DOD_111720693.mp4",
+          "size_bytes": 35502808,
+          "compressed_bytes": 34927881,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720696_DOD_111720696.mp4",
+          "size_bytes": 161102055,
+          "compressed_bytes": 157678653,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720698_DOD_111720698.mp4",
+          "size_bytes": 16383076,
+          "compressed_bytes": 15612904,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720700_DOD_111720700.mp4",
+          "size_bytes": 14730830,
+          "compressed_bytes": 14384683,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720720_DOD_111720720.mp4",
+          "size_bytes": 37545001,
+          "compressed_bytes": 37196833,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720731_DOD_111720731.mp4",
+          "size_bytes": 4876916,
+          "compressed_bytes": 4243711,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720752_DOD_111720752.mp4",
+          "size_bytes": 3874084,
+          "compressed_bytes": 3753995,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720765_DOD_111720765.mp4",
+          "size_bytes": 2341227,
+          "compressed_bytes": 1171016,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720775_DOD_111720775.mp4",
+          "size_bytes": 77406190,
+          "compressed_bytes": 73907969,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720809_DOD_111720809.mp4",
+          "size_bytes": 19004913,
+          "compressed_bytes": 18737522,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720822_DOD_111720822.mp4",
+          "size_bytes": 64242509,
+          "compressed_bytes": 60764458,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720827_DOD_111720827.mp4",
+          "size_bytes": 17681116,
+          "compressed_bytes": 17286262,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720830_DOD_111720830.mp4",
+          "size_bytes": 76485716,
+          "compressed_bytes": 72853437,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720843_DOD_111720843.mp4",
+          "size_bytes": 65464922,
+          "compressed_bytes": 61804284,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720856_DOD_111720856.mp4",
+          "size_bytes": 57305777,
+          "compressed_bytes": 53651159,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720857_DOD_111720857.mp4",
+          "size_bytes": 85350745,
+          "compressed_bytes": 81664599,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720858_DOD_111720858.mp4",
+          "size_bytes": 45120629,
+          "compressed_bytes": 41386880,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720861_DOD_111720861.mp4",
+          "size_bytes": 42727192,
+          "compressed_bytes": 39023029,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720883_DOD_111720883.mp4",
+          "size_bytes": 49585917,
+          "compressed_bytes": 46180135,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720884_DOD_111720884.mp4",
+          "size_bytes": 81014407,
+          "compressed_bytes": 77411025,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720886_DOD_111720886.mp4",
+          "size_bytes": 73606795,
+          "compressed_bytes": 70450363,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720890_DOD_111720890.mp4",
+          "size_bytes": 73016086,
+          "compressed_bytes": 69392138,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111720899_DOD_111720899.mp4",
+          "size_bytes": 68991496,
+          "compressed_bytes": 66053246,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111721693_DOD_111721693.mp4",
+          "size_bytes": 157246201,
+          "compressed_bytes": 156463031,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111721698_DOD_111721698.mp4",
+          "size_bytes": 261032899,
+          "compressed_bytes": 260891336,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111721711_DOD_111721711.mp4",
+          "size_bytes": 164893498,
+          "compressed_bytes": 164757810,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111721737_DOD_111721737.mp4",
+          "size_bytes": 416226493,
+          "compressed_bytes": 415795131,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111721747_DOD_111721747.mp4",
+          "size_bytes": 214071982,
+          "compressed_bytes": 213955917,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "video_2605_DOD_111721755_DOD_111721755.mp4",
+          "size_bytes": 33839454,
+          "compressed_bytes": 33829377,
+          "date_time": "2026-05-22",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        }
+      ]
+    },
+    {
+      "name": "UFOFiles-Release3.zip",
+      "archive_size_bytes": 5847523789,
+      "archive_size_mb": 5576.63,
+      "files": [
+        {
+          "path": "images/FBI-UAP-D014_Digital-Rendering_Incident-1-1_Western-US-Event_2023.jpg",
+          "size_bytes": 159866,
+          "compressed_bytes": 158479,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D015_Digital-Rendering_Incident-1-2_Western-US-Event_2023.jpg",
+          "size_bytes": 159943,
+          "compressed_bytes": 158547,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D016_Digital-Rendering_Incident-2-1_Western-US-Event_2023.jpg",
+          "size_bytes": 515380,
+          "compressed_bytes": 491811,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D017_Digital-Rendering_Incident-2-2_Western-US-Event_2023.jpg",
+          "size_bytes": 515758,
+          "compressed_bytes": 492195,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D018_Digital-Rendering_Incident-2-3_Western-US-Event_2023.jpg",
+          "size_bytes": 516279,
+          "compressed_bytes": 492749,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D019_Digital-Rendering_Incident-2-4_Western-US-Event_2023.jpg",
+          "size_bytes": 517724,
+          "compressed_bytes": 494196,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D020_Digital-Rendering_Incident-2-5_Western-US-Event_2023.jpg",
+          "size_bytes": 517863,
+          "compressed_bytes": 494323,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D021_Digital-Rendering_Incident-1-3_Western-US-Event_2023.jpg",
+          "size_bytes": 954999,
+          "compressed_bytes": 911222,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D022_Digital-Rendering_Incident-2-6_Western-US-Event_2023.jpg",
+          "size_bytes": 410345,
+          "compressed_bytes": 356382,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D023_Digital-Rendering_Incident-2-7_Western-US-Event_2023.jpg",
+          "size_bytes": 595554,
+          "compressed_bytes": 563005,
+          "date_time": "2026-06-12",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-002_Scientific-Advisory-Panel-on-Unidentified-Flying-Objects_Report_1952-1953.pdf",
+          "size_bytes": 10970538,
+          "compressed_bytes": 10911263,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-003-THE_CENTRAL_INTELLIGENCE_AGENCY_AND_OVERHEAD_RECONNAISSANCE-THE_U-2_AND_OXCART_PROGRAMS_1954-1974.pdf",
+          "size_bytes": 71686231,
+          "compressed_bytes": 71470656,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-004-CASE_17708_CLOSED_AND_DR_LEON_DAVIDSON.pdf",
+          "size_bytes": 838719,
+          "compressed_bytes": 836685,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-005-GERMAN_SCIENTISTS_ ARTICLE_ON_FLYING_DISCS.pdf",
+          "size_bytes": 985050,
+          "compressed_bytes": 969284,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-006_Sighting_of_Unconventional_Aircraft.pdf",
+          "size_bytes": 365384,
+          "compressed_bytes": 361978,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-007_Current_Status_of_Unidentified_Flying_Objects_UFO_Project.pdf",
+          "size_bytes": 496103,
+          "compressed_bytes": 490523,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-008_SPECULATIVE_PAPER_BY_N_KARDASHEV_AND_A_SAKHAROV.pdf",
+          "size_bytes": 291615,
+          "compressed_bytes": 288429,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-009-UNKNOWN-FLYING_OBJECTS_OBERVED_OVER_BUDAPEST.pdf",
+          "size_bytes": 22336,
+          "compressed_bytes": 20210,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-010_REPORT_ON_CONVERSATIONS_WITH_SOVIET_SCIENTISTS_ON_SUBJECT_OF_UNIDENTIFIED_FLYING_OBJECTS_IS_THE_USSR.pdf",
+          "size_bytes": 2973625,
+          "compressed_bytes": 2972013,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-011-The_Sary_Shagan_Weapons_Testing_Range.pdf",
+          "size_bytes": 315012,
+          "compressed_bytes": 309964,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-012-Combatting_Fatigue_in_Crewmembers.pdf",
+          "size_bytes": 405492,
+          "compressed_bytes": 401026,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-013-Report_of_Unusual_Flying_Object_Sightings_and_Attendant_Scientific_Activity.pdf",
+          "size_bytes": 201725,
+          "compressed_bytes": 197981,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-014_British_Activity_in_the_Field_of_Unidentified_Flying_Objects.pdf",
+          "size_bytes": 333058,
+          "compressed_bytes": 330231,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-015-Project_Blue_Book_Special_Report_No_14.pdf",
+          "size_bytes": 44543656,
+          "compressed_bytes": 42847219,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-016-Sightings_of_Unidentified_Flying_Ojbects_in_Ladakh_Nepal_Sikkim_and_Bhutan.pdf",
+          "size_bytes": 820944,
+          "compressed_bytes": 815737,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-017_Placement_on_High_Alert_Due_to_Perceived_Aggressive_Foreign_Posturing.pdf",
+          "size_bytes": 222769,
+          "compressed_bytes": 219178,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-018_Report_of_Unusual_Flying_Object_Sightings_and_Attendant_Scientific_Activity.pdf",
+          "size_bytes": 278504,
+          "compressed_bytes": 274308,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-019-Australian_Dept_of_Defense_Scientific_and_Intel_Aspects_of_the_UFO_Problem.pdf",
+          "size_bytes": 5165659,
+          "compressed_bytes": 4758303,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D077_Unresolved-Case-Analysis-Update_Western-United-States-Event.pdf",
+          "size_bytes": 385335,
+          "compressed_bytes": 330506,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D078_Notional-Map_Western-United-States-Event.pdf",
+          "size_bytes": 338242,
+          "compressed_bytes": 335436,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DoW-UAP-D079_Narrative-1_Western-US-Event.pdf",
+          "size_bytes": 443607,
+          "compressed_bytes": 394393,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DoW-UAP-D080_Narrative-2_Western-US-Event.pdf",
+          "size_bytes": 951724,
+          "compressed_bytes": 886448,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DoW-UAP-D081_Narrative-3_Western-US-Event.pdf",
+          "size_bytes": 445415,
+          "compressed_bytes": 396589,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DoW-UAP-D082_Narrative-4_Western-US-Event.pdf",
+          "size_bytes": 486522,
+          "compressed_bytes": 481051,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DoW-UAP-D083_Narrative-5_Western-US-Event.pdf",
+          "size_bytes": 337145,
+          "compressed_bytes": 329436,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D084_USArmy-Flying-Saucer-Study_1949.pdf",
+          "size_bytes": 46436256,
+          "compressed_bytes": 46079085,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D085_Transmission-of-CIA-Scientific-Advisory-Panel-Rept_1953.pdf",
+          "size_bytes": 29887827,
+          "compressed_bytes": 29891573,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D086_USNavy-Report-of-Flying-Discs_1948.pdf",
+          "size_bytes": 10155680,
+          "compressed_bytes": 10152681,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D087_US-AirForce_Analysis-of-Flying-Objects-in-the-US_1-100.pdf",
+          "size_bytes": 66269580,
+          "compressed_bytes": 65925541,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D088_US-AirForce_Analysis-of-Flying-Objects-in-the-US_101-172.pdf",
+          "size_bytes": 35274623,
+          "compressed_bytes": 34991811,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D001_FD-302_Unresolved-UAP-Report_ColoradoSprings_2022.pdf",
+          "size_bytes": 208050,
+          "compressed_bytes": 203563,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D002_FD-1057_Unresolved-UAP-Report_ColoradoSprings_2022.pdf",
+          "size_bytes": 268540,
+          "compressed_bytes": 262354,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D003_Digital-Rendering_Unresolved-UAP-Report_ColoradoSprings_2022.pdf",
+          "size_bytes": 190678,
+          "compressed_bytes": 189791,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D004_FD-1057-02_Northeastern-US_2024.pdf",
+          "size_bytes": 241647,
+          "compressed_bytes": 214454,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D005_FD-1057-04_Northeastern-US_2024.pdf",
+          "size_bytes": 235924,
+          "compressed_bytes": 230071,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D006_FD-1057-05_Northeastern-US_2024.pdf",
+          "size_bytes": 295437,
+          "compressed_bytes": 283574,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D007_FD-1057-06_Northeastern-US_2024.pdf",
+          "size_bytes": 297658,
+          "compressed_bytes": 290162,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D008_FD-1057-07_Northeastern-US_2024.pdf",
+          "size_bytes": 182929,
+          "compressed_bytes": 155795,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D009_FD-302-67_Northeastern-Orb-Sighting_2026.pdf",
+          "size_bytes": 367089,
+          "compressed_bytes": 357853,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D010_FD-302-71_Northeastern-Orb-Sighting_2026.pdf",
+          "size_bytes": 128254,
+          "compressed_bytes": 123490,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D011_DFBI-Correspondence-Referral_1949.pdf",
+          "size_bytes": 2024209,
+          "compressed_bytes": 2018377,
+          "date_time": "2026-06-12",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D012_Newark-Field-Office_1952-1967.pdf",
+          "size_bytes": 232558988,
+          "compressed_bytes": 232488573,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D013_WA-UFO-Investigation_1952-1960.pdf",
+          "size_bytes": 47476365,
+          "compressed_bytes": 47388825,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/ICA-UAP-D001_Analysis_Colorado-Springs-UAP-Incident.pdf",
+          "size_bytes": 75023,
+          "compressed_bytes": 65917,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/NASA-UAP-D015_Astronaut-Scientific-Debriefings_1962-1963.pdf",
+          "size_bytes": 30730463,
+          "compressed_bytes": 30507306,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/NASA-UAP-D016_Preliminary-Gemini-4-Crew-Debriefing_Part1_1965.pdf",
+          "size_bytes": 20559650,
+          "compressed_bytes": 20156338,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/NASA-UAP-D017_Preliminary-Gemini-4-Crew-Debriefing_Part2_1965.pdf",
+          "size_bytes": 19705562,
+          "compressed_bytes": 19361502,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/NASA-UAP-D018_Gemini-4_Experiment-Debriefing_1967.pdf",
+          "size_bytes": 75811833,
+          "compressed_bytes": 75579897,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/NASA-UAP-D019_Gemini-5-Technical-Debriefing_Part1_1965.pdf",
+          "size_bytes": 16176046,
+          "compressed_bytes": 15888528,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/NASA-UAP-D020_Gemini-5-Technical-Debriefing_Part2_1965.pdf",
+          "size_bytes": 23873406,
+          "compressed_bytes": 23460807,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/NASA-UAP-D021_Gemini-7-Technical-Debriefing_1965.pdf",
+          "size_bytes": 19642012,
+          "compressed_bytes": 19276531,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/NASA-UAP-D022_Gemini-9-Debriefing_1966.pdf",
+          "size_bytes": 47927174,
+          "compressed_bytes": 47841998,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/USG-UAP-D001_Congress-WhiteHouse-UFO-Correspondence_1998.pdf",
+          "size_bytes": 14825775,
+          "compressed_bytes": 14710398,
+          "date_time": "2026-06-14",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "videos/DOD_111764142-1920x1080-9000k.mp4",
+          "size_bytes": 100957993,
+          "compressed_bytes": 99044669,
+          "date_time": "2026-06-12",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111764148-1920x1080-9000k.mp4",
+          "size_bytes": 158586764,
+          "compressed_bytes": 156804103,
+          "date_time": "2026-06-12",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111764159-1920x1080-9000k.mp4",
+          "size_bytes": 123247302,
+          "compressed_bytes": 120240784,
+          "date_time": "2026-06-12",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111764177-1920x1080-9000k.mp4",
+          "size_bytes": 21072448,
+          "compressed_bytes": 20498030,
+          "date_time": "2026-06-12",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111764189-1920x1080-9000k.mp4",
+          "size_bytes": 5668557,
+          "compressed_bytes": 4918409,
+          "date_time": "2026-06-12",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111764213-1920x1080-9000k.mp4",
+          "size_bytes": 4027867,
+          "compressed_bytes": 3757905,
+          "date_time": "2026-06-12",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111764796-1920x1080-9000k.mp4",
+          "size_bytes": 3212901468,
+          "compressed_bytes": 3208526452,
+          "date_time": "2026-06-12",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111764902-1920x1080-9000k.mp4",
+          "size_bytes": 1281077153,
+          "compressed_bytes": 1277454698,
+          "date_time": "2026-06-12",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111764959-1920x1080-9000k.mp4",
+          "size_bytes": 72024798,
+          "compressed_bytes": 71919598,
+          "date_time": "2026-06-12",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        }
+      ]
+    },
+    {
+      "name": "UFOFiles-Release4.zip",
+      "archive_size_bytes": 2469257173,
+      "archive_size_mb": 2354.87,
+      "files": [
+        {
+          "path": "pdfs/CIA-UAP-D020_Memorandum-on-Unconventional-Aircraft-Sightings_1955.pdf",
+          "size_bytes": 821185,
+          "compressed_bytes": 818220,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-D021_Analysis-of-Unconventional-Aircraft-Sightings_1955.pdf",
+          "size_bytes": 925083,
+          "compressed_bytes": 920086,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOE-UAP-D004_Los-Alamos-Conference-on-Aerial-Phenomena_1949.pdf",
+          "size_bytes": 5050103,
+          "compressed_bytes": 5034542,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "Nuclear Site Forensics & Radiation Surveys (G31 / G33)"
+        },
+        {
+          "path": "pdfs/DOE-UAP-D005_Pantex-Unidentified-Object-Incident-Report_2015.pdf",
+          "size_bytes": 1219512,
+          "compressed_bytes": 1170882,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "Nuclear Site Forensics & Radiation Surveys (G31 / G33)"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D089_Range-Fouler-Debrief_Eastern-US_2020.pdf",
+          "size_bytes": 317287,
+          "compressed_bytes": 309648,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D090_Range-Fouler-Debrief_Eastern-US_2019.pdf",
+          "size_bytes": 439041,
+          "compressed_bytes": 421040,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D091_Range-Fouler-Debrief_Atlantic-Ocean_2020.pdf",
+          "size_bytes": 646246,
+          "compressed_bytes": 625666,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D092_DAF-Committee-to-Review-Project-Bluebook_1966-1967.pdf",
+          "size_bytes": 73490698,
+          "compressed_bytes": 73472814,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "Historical Cold War Epigraphy & Archival Forensics (G32)"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D093_Analysis-of-Flying-Object-Incidents-in-the-US_1948.pdf",
+          "size_bytes": 15009284,
+          "compressed_bytes": 14936105,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D094_Analysis-of-Flying-Object-Incidents-in-the-US_1949.pdf",
+          "size_bytes": 67658302,
+          "compressed_bytes": 67661933,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D095_Joint-US-Canadian-Aviation-Projects-and-UFO-Sighting-Reports_1954-1955.pdf",
+          "size_bytes": 127130521,
+          "compressed_bytes": 127156923,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D096_Correspondence-Relating-to-Project-Blue-Book_1955.pdf",
+          "size_bytes": 608121718,
+          "compressed_bytes": 608272204,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D097_Project-Sign-Progress-Report_1948.pdf",
+          "size_bytes": 9973487,
+          "compressed_bytes": 9904411,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D014_Correspondence-Relating-to-UFO-Sightings_1967_1974.pdf",
+          "size_bytes": 735272,
+          "compressed_bytes": 729292,
+          "date_time": "2026-07-13",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "videos/DOD_111830004.mp4",
+          "size_bytes": 193625209,
+          "compressed_bytes": 190358883,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830007.mp4",
+          "size_bytes": 48796578,
+          "compressed_bytes": 47561401,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830012.mp4",
+          "size_bytes": 17007217,
+          "compressed_bytes": 16568995,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830015.mp4",
+          "size_bytes": 11595391,
+          "compressed_bytes": 10637528,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830020.mp4",
+          "size_bytes": 4520909,
+          "compressed_bytes": 4303720,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830027.mp4",
+          "size_bytes": 7954654,
+          "compressed_bytes": 7771774,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830028.mp4",
+          "size_bytes": 12517597,
+          "compressed_bytes": 12401361,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830030.mp4",
+          "size_bytes": 152672944,
+          "compressed_bytes": 149132572,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830034.mp4",
+          "size_bytes": 2923884,
+          "compressed_bytes": 2912954,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830041.mp4",
+          "size_bytes": 10300462,
+          "compressed_bytes": 10286418,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830058.mp4",
+          "size_bytes": 22891490,
+          "compressed_bytes": 21785354,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830063.mp4",
+          "size_bytes": 394579669,
+          "compressed_bytes": 387865283,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830065.mp4",
+          "size_bytes": 6282717,
+          "compressed_bytes": 6025903,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830069.mp4",
+          "size_bytes": 150361509,
+          "compressed_bytes": 148000038,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830075.mp4",
+          "size_bytes": 7084214,
+          "compressed_bytes": 6812387,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830080.mp4",
+          "size_bytes": 17333980,
+          "compressed_bytes": 17296063,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830085.mp4",
+          "size_bytes": 223556062,
+          "compressed_bytes": 219776566,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830092.mp4",
+          "size_bytes": 166178320,
+          "compressed_bytes": 162270812,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830133.mp4",
+          "size_bytes": 67174905,
+          "compressed_bytes": 67067272,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830143.mp4",
+          "size_bytes": 6687962,
+          "compressed_bytes": 6195313,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830147.mp4",
+          "size_bytes": 10879988,
+          "compressed_bytes": 10782076,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830151.mp4",
+          "size_bytes": 24269293,
+          "compressed_bytes": 23909351,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111830201.mp4",
+          "size_bytes": 24037268,
+          "compressed_bytes": 23800950,
+          "date_time": "2026-07-13",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "images/NASA-UAP-D030_STS-80-Unidentified-Object-Image1_1996.jpg",
+          "size_bytes": 1398967,
+          "compressed_bytes": 1382129,
+          "date_time": "2026-07-13",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/NASA-UAP-D031_STS-80-Unidentified-Object-Image2_1996.jpg",
+          "size_bytes": 1543284,
+          "compressed_bytes": 1527597,
+          "date_time": "2026-07-13",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/NASA-UAP-D032_STS-80-Unidentified-Object-Image3_1996.jpg",
+          "size_bytes": 1412864,
+          "compressed_bytes": 1380915,
+          "date_time": "2026-07-13",
+          "category": "Image",
+          "mapping": "General Archival"
+        }
+      ]
+    },
+    {
+      "name": "UFOFiles-Release5.zip",
+      "archive_size_bytes": 781677286,
+      "archive_size_mb": 745.47,
+      "files": [
+        {
+          "path": "images/FBI-UAP-D025_Digital-Rendering_Airborne-Triangle_2002.jpg",
+          "size_bytes": 2168856,
+          "compressed_bytes": 2053919,
+          "date_time": "2026-08-07",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D029_Digital-Rendering_Dark-Triangle-with-Lights_2011.jpg",
+          "size_bytes": 123327,
+          "compressed_bytes": 111700,
+          "date_time": "2026-08-07",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "images/FBI-UAP-D031_Digital-Rendering_Large-Triangle-with-Red-Lights_2023.jpg",
+          "size_bytes": 649050,
+          "compressed_bytes": 642687,
+          "date_time": "2026-08-07",
+          "category": "Image",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-D022_Unidentified-Flying-Object-Reported-near-Puerto-Rico_1965.pdf",
+          "size_bytes": 1511439,
+          "compressed_bytes": 1506259,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/CIA-UAP-D023_Briefing-Notes-for-Mr-Walter-Elder.pdf",
+          "size_bytes": 455333,
+          "compressed_bytes": 453918,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOS-UAP-D001_Diplomatic-Cable_Brazil_November-14-1963.pdf",
+          "size_bytes": 591355,
+          "compressed_bytes": 590042,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOS-UAP-D002_Diplomatic-Cable_Brazil_November-20-1963.pdf",
+          "size_bytes": 297861,
+          "compressed_bytes": 292774,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D098_Film-Analysis-of-Unidentified-Objects_1953.pdf",
+          "size_bytes": 99416709,
+          "compressed_bytes": 99376617,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D099_Intelligence-Review-of-Ghost-Rocket-Incidents_1947.pdf",
+          "size_bytes": 1342734,
+          "compressed_bytes": 1337910,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "Historical Cold War Epigraphy & Archival Forensics (G32)"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D100_Air-Materiel-Command-Report-on-UFOs_1947-1948.pdf",
+          "size_bytes": 40857049,
+          "compressed_bytes": 38399290,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "Historical Cold War Epigraphy & Archival Forensics (G32)"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D100_Air-Materiel-Command-Report-on-UFOs_1947-1948_recognized.pdf",
+          "size_bytes": 95353039,
+          "compressed_bytes": 92749712,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "Historical Cold War Epigraphy & Archival Forensics (G32)"
+        },
+        {
+          "path": "pdfs/DOW-UAP-D101_IIR_Unresolved-UAP-Report-Gulf-of-Oman_2021.pdf",
+          "size_bytes": 1483443,
+          "compressed_bytes": 1462731,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/EOP-UAP-D001_NASC-Inquiry-into-Bahia-Brazil-Incident_November-13-1963.pdf",
+          "size_bytes": 245236,
+          "compressed_bytes": 242329,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D024_FD-302_Airborne-Lights-and-Triangle_2002_2023-2024.pdf",
+          "size_bytes": 510169,
+          "compressed_bytes": 493461,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D026_FD-302_Dark-Translucent-Triangle_2023.pdf",
+          "size_bytes": 301962,
+          "compressed_bytes": 288431,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D027_Digital-Rendering_Dark-Translucent-Triangle_2023.pdf",
+          "size_bytes": 864051,
+          "compressed_bytes": 862537,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D028_FD-302_Dark-Triangle-with-Lights_2011.pdf",
+          "size_bytes": 468604,
+          "compressed_bytes": 441015,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D030_FD-302_Large-Triangle-with-Red-Lights_2023.pdf",
+          "size_bytes": 313394,
+          "compressed_bytes": 304056,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D032_FD-302_Slow-moving-Objects_2026.pdf",
+          "size_bytes": 281770,
+          "compressed_bytes": 271801,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D033_FD-302_Thermally-Elevated-Aerial-Object_2026.pdf",
+          "size_bytes": 136962,
+          "compressed_bytes": 130419,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D037_FD-302_Multiple-Red-Lights_2026.pdf",
+          "size_bytes": 319625,
+          "compressed_bytes": 312766,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D038_Digital-Rendering-1_Multiple-Red-Lights_2026.pdf",
+          "size_bytes": 123926,
+          "compressed_bytes": 122622,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D039_Digital-Rendering-2_Multiple-Red-Lights_2026.pdf",
+          "size_bytes": 521532,
+          "compressed_bytes": 517632,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D040_FD-302_Multiple-Red-Lights_2026.pdf",
+          "size_bytes": 358604,
+          "compressed_bytes": 349272,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D041_Digital-Rendering-1_Multiple-Red-Lights_2026.pdf",
+          "size_bytes": 466467,
+          "compressed_bytes": 461892,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "pdfs/FBI-UAP-D042_Digital-Rendering-2_Multiple-Red-Lights_2026.pdf",
+          "size_bytes": 136665,
+          "compressed_bytes": 135746,
+          "date_time": "2026-08-09",
+          "category": "Document (PDF)",
+          "mapping": "General Archival"
+        },
+        {
+          "path": "videos/DOD_111887376.mp4",
+          "size_bytes": 33427558,
+          "compressed_bytes": 33099883,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887380.mp4",
+          "size_bytes": 89410590,
+          "compressed_bytes": 87670026,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887384.mp4",
+          "size_bytes": 84195488,
+          "compressed_bytes": 82497269,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887390.mp4",
+          "size_bytes": 52517114,
+          "compressed_bytes": 51346167,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887401.mp4",
+          "size_bytes": 20916447,
+          "compressed_bytes": 20910819,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887407.mp4",
+          "size_bytes": 24280625,
+          "compressed_bytes": 24267090,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887413.mp4",
+          "size_bytes": 12249790,
+          "compressed_bytes": 11855427,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887419.mp4",
+          "size_bytes": 11176881,
+          "compressed_bytes": 11041872,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887421.mp4",
+          "size_bytes": 2132163,
+          "compressed_bytes": 2130086,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887426.mp4",
+          "size_bytes": 55170181,
+          "compressed_bytes": 54587106,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887427.mp4",
+          "size_bytes": 10304701,
+          "compressed_bytes": 10154575,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887430.mp4",
+          "size_bytes": 1230965,
+          "compressed_bytes": 1112033,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887439.mp4",
+          "size_bytes": 23882996,
+          "compressed_bytes": 23486178,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887446.mp4",
+          "size_bytes": 16649610,
+          "compressed_bytes": 16343702,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887456.mp4",
+          "size_bytes": 44368966,
+          "compressed_bytes": 43649756,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        },
+        {
+          "path": "videos/DOD_111887460.mp4",
+          "size_bytes": 64214893,
+          "compressed_bytes": 63602901,
+          "date_time": "2026-08-07",
+          "category": "Video",
+          "mapping": "PURSUE & Aerodynamic Acceleration Triangulation (N2-ext)"
+        }
+      ]
+    }
+  ]
+}

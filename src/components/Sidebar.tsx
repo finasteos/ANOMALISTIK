@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Cpu, Database, Activity, Sparkles, Binary, Layers, Compass, Palette, Check, X, Github, ExternalLink, Menu, ShieldCheck } from 'lucide-react';
+import { Cpu, Database, Activity, Sparkles, Binary, Layers, Compass, Palette, Check, X, Github, ExternalLink, Menu, ShieldCheck, FolderArchive } from 'lucide-react';
 import { COLOR_THEMES } from '../theme';
 
 interface SidebarProps {
@@ -28,6 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'mengines', label: 'M-Engines', icon: Cpu },
     { id: 'biophysics', label: 'Track A/B (Bio)', icon: Database },
     { id: 'geophysics', label: 'Track R (Geo/Astro)', icon: Activity },
+    { id: 'declassified-archives', label: 'Declassified UAP (375)', icon: FolderArchive },
     { id: 'simulator', label: 'Adjudicator', icon: Layers },
     { id: 'data-verification', label: 'Data Verification', icon: ShieldCheck },
     { id: 'ai-assistant', label: 'AI Research Grounding', icon: Sparkles },

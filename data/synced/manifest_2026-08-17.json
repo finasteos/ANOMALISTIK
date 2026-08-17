@@ -1,0 +1,27 @@
+{
+  "anomalistik_version": "2.0",
+  "run_timestamp_utc": "2026-08-17T01:09:04.262732",
+  "sources": {
+    "time_window": {
+      "start": "2026-08-16",
+      "end": "2026-08-17"
+    },
+    "resample": "1min",
+    "streams": {
+      "DSCOVR mag_7day": "3528 rows",
+      "DSCOVR plasma_7day": "3536 rows",
+      "INTERMAGNET BOU": "1441 rows",
+      "INTERMAGNET HER": "1441 rows",
+      "INTERMAGNET KAK": "1441 rows",
+      "EIDA GE.WLF.BHZ": "raw miniSEED saved (install obspy to parse)",
+      "EIDA II.BFO.BHZ": "1728000 samples",
+      "EIDA IU.ANMO.BHZ": "1133395 samples"
+    },
+    "output": {
+      "parquet": "/Users/imacpro/Documents/DEV-imac/ANOMALISTIK/data/synced/anomalistik_geospace_test_2026-08-17.parquet",
+      "csv": "/Users/imacpro/Documents/DEV-imac/ANOMALISTIK/data/synced/anomalistik_geospace_test_2026-08-17.csv"
+    }
+  },
+  "sync_dir": "/Users/imacpro/Documents/DEV-imac/ANOMALISTIK/data/synced",
+  "data_dir": "/Users/imacpro/Documents/DEV-imac/ANOMALISTIK/data/downloads"
+}

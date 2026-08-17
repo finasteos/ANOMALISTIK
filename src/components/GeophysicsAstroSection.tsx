@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { GeospaceliveFeed } from './GeospaceliveFeed';
 import { 
   Activity, 
   Radio, 
@@ -604,6 +605,8 @@ export const GeophysicsAstroSection: React.FC = () => {
   const [lunarOrbitAltKm, setLunarOrbitAltKm] = useState<number>(110);
   const [lightWavelengthNm, setLightWavelengthNm] = useState<number>(450);
   const [triSeparationM, setTriSeparationM] = useState<number>(450);
+  const [selectedNasaFrame, setSelectedNasaFrame] = useState<string>('nasa-uap-vm6-apollo-17-1972.jpg');
+  const [opticalFilterMode, setOpticalFilterMode] = useState<'RAW' | '450NM_BLUE' | 'SOBEL_EDGES' | 'TRIANGULATION'>('450NM_BLUE');
 
   // Calculations for 3,271 ft Spatial Dome Boundary (#5)
   const domeResults = useMemo(() => {
@@ -894,6 +897,16 @@ export const GeophysicsAstroSection: React.FC = () => {
 
   return (
     <div className="space-y-8 animate-fade-in font-mono">
+
+      {/* ═══ LIVE GEOSPACE DATA FEED ════════════════════════════════════ */}
+      <div className={`rounded-2xl border p-4 ${
+        isLight
+          ? 'bg-stone-100 border-stone-300'
+          : 'bg-slate-950/80 border-slate-700/50'
+      }`}>
+        <GeospaceliveFeed />
+      </div>
+
       {/* Top Module Sub-Navigation Bar */}
       <div className="flex flex-wrap items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 text-xs">
         <button
@@ -2054,7 +2067,59 @@ export const GeophysicsAstroSection: React.FC = () => {
             <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
               <div className="flex items-center space-x-2 border-b border-slate-800 pb-3">
                 <Sliders className="w-4 h-4 text-cyan-400" />
-                <h2 className="text-sm font-bold text-slate-100 uppercase">Lunar Orbit &amp; Optical Inputs</h2>
+                <h2 className="text-sm font-bold text-slate-100 uppercase">NASA Mission Frame &amp; Optical Controls</h2>
+              </div>
+
+              {/* NASA Mission Frame Selector */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <span className="text-slate-300 font-bold text-xs">NASA 70mm Hasselblad Frame</span>
+                <div className="grid grid-cols-2 gap-1.5 pt-1">
+                  {[
+                    { id: 'nasa-uap-vm6-apollo-17-1972.jpg', label: 'Apollo 17 (1972) VM-6' },
+                    { id: 'nasa-uap-vm1-apollo-12-1969.jpg', label: 'Apollo 12 (1969) VM-1' },
+                    { id: 'nasa-uap-vm2-apollo-12-1969.jpg', label: 'Apollo 12 (1969) VM-2' },
+                    { id: 'nasa-uap-vm3-apollo-12-1969.jpg', label: 'Apollo 12 (1969) VM-3' },
+                    { id: 'nasa-uap-vm4-apollo-12-1969.jpg', label: 'Apollo 12 (1969) VM-4' },
+                    { id: 'nasa-uap-vm5-apollo-12-1969.jpg', label: 'Apollo 12 (1969) VM-5' }
+                  ].map((f) => (
+                    <button
+                      key={f.id}
+                      onClick={() => setSelectedNasaFrame(f.id)}
+                      className={`p-2 rounded-lg text-left text-[11px] font-mono transition border ${
+                        selectedNasaFrame === f.id
+                          ? 'bg-cyan-950 text-cyan-300 border-cyan-600 font-bold'
+                          : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Optical Filter Shader Selector */}
+              <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <span className="text-slate-300 font-bold text-xs">Optical Photogrammetric Filter</span>
+                <div className="grid grid-cols-2 gap-1.5 pt-1">
+                  {[
+                    { id: 'RAW', label: 'Raw 70mm Scan' },
+                    { id: '450NM_BLUE', label: '450nm Monochromatic' },
+                    { id: 'SOBEL_EDGES', label: 'Sobel Edge Gradient' },
+                    { id: 'TRIANGULATION', label: '3-Point Triangulation' }
+                  ].map((m) => (
+                    <button
+                      key={m.id}
+                      onClick={() => setOpticalFilterMode(m.id as any)}
+                      className={`p-2 rounded-lg text-center text-[10px] font-mono transition border ${
+                        opticalFilterMode === m.id
+                          ? 'bg-purple-950 text-purple-300 border-purple-600 font-bold'
+                          : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      {m.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Altitude Slider */}
@@ -2092,39 +2157,83 @@ export const GeophysicsAstroSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Results */}
-            <div className="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center space-x-2">
-                  <Sparkles className="w-4 h-4 text-cyan-400" />
-                  <h2 className="text-sm font-bold text-slate-100 uppercase">Lens Flare Rejection Results</h2>
-                </div>
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
-                  {apolloResults.flareRejectionPercent}% LENS FLARE REJECTED
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
-                  <span className="text-slate-400 text-[10px]">Formation Velocity</span>
-                  <div className="text-lg font-bold text-cyan-300">{apolloResults.triFormationVelocityKmS} km/s</div>
+            {/* Results & Real NASA Image Frame Canvas */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="flex items-center space-x-2">
+                    <Sparkles className="w-4 h-4 text-cyan-400" />
+                    <h2 className="text-sm font-bold text-slate-100 uppercase">Empirical Photographic Frame Inspection</h2>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
+                    {apolloResults.flareRejectionPercent}% LENS FLARE REJECTED
+                  </span>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
-                  <span className="text-slate-400 text-[10px]">Wavelength Spectrum</span>
-                  <div className="text-sm font-bold text-purple-300">{apolloResults.monochromaticPurity}</div>
+                {/* Live Photographic Image Canvas with Shaders */}
+                <div className="relative w-full h-[280px] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center">
+                  <img
+                    src={`/api/declassified/images/${selectedNasaFrame}`}
+                    alt="NASA Lunar Frame"
+                    className="w-full h-full object-contain transition-all duration-300"
+                    style={{
+                      filter:
+                        opticalFilterMode === '450NM_BLUE'
+                          ? 'contrast(180%) hue-rotate(190deg) saturate(250%) brightness(95%)'
+                          : opticalFilterMode === 'SOBEL_EDGES'
+                          ? 'invert(100%) grayscale(100%) contrast(300%) drop-shadow(0 0 4px #38bdf8)'
+                          : opticalFilterMode === 'TRIANGULATION'
+                          ? 'contrast(140%) brightness(110%)'
+                          : 'none'
+                    }}
+                  />
+
+                  {/* Triangulation HUD Overlay */}
+                  {opticalFilterMode === 'TRIANGULATION' && (
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                      <polygon
+                        points="280,70 440,110 330,220"
+                        fill="rgba(6, 182, 212, 0.15)"
+                        stroke="#06b6d4"
+                        strokeWidth="2"
+                        strokeDasharray="4 4"
+                      />
+                      <circle cx="280" cy="70" r="5" fill="#f43f5e" />
+                      <circle cx="440" cy="110" r="5" fill="#f43f5e" />
+                      <circle cx="330" cy="220" r="5" fill="#f43f5e" />
+                      <text x="285" y="65" fill="#f43f5e" fontSize="10" fontFamily="monospace">Vertex A (450nm)</text>
+                      <text x="445" y="105" fill="#f43f5e" fontSize="10" fontFamily="monospace">Vertex B (450nm)</text>
+                      <text x="335" y="235" fill="#f43f5e" fontSize="10" fontFamily="monospace">Vertex C (450nm)</text>
+                    </svg>
+                  )}
+
+                  <div className="absolute bottom-2 left-2 bg-slate-950/80 border border-slate-800 rounded px-2 py-1 text-[10px] font-mono text-slate-300">
+                    Frame: {selectedNasaFrame} • Filter: {opticalFilterMode}
+                  </div>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5 sm:col-span-1 col-span-2">
-                  <span className="text-slate-400 text-[10px]">Pentagon UAP File Status</span>
-                  <div className="text-sm font-bold text-amber-300">Classified Unidentified</div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
+                    <span className="text-slate-400 text-[10px]">Formation Velocity</span>
+                    <div className="text-lg font-bold text-cyan-300">{apolloResults.triFormationVelocityKmS} km/s</div>
+                  </div>
+
+                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5">
+                    <span className="text-slate-400 text-[10px]">Wavelength Spectrum</span>
+                    <div className="text-sm font-bold text-purple-300">{apolloResults.monochromaticPurity}</div>
+                  </div>
+
+                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-0.5 sm:col-span-1 col-span-2">
+                    <span className="text-slate-400 text-[10px]">Pentagon UAP File Status</span>
+                    <div className="text-sm font-bold text-amber-300">Classified Unidentified</div>
+                  </div>
                 </div>
               </div>
 
               {/* Chart */}
-              <div className="space-y-2">
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-2">
                 <h3 className="text-xs font-bold text-slate-300 uppercase">Apollo 17 Frames vs Luminous Source Intensity (Lumens)</h3>
-                <div className="h-64 w-full pt-1">
+                <div className="h-44 w-full pt-1">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={apolloResults.formationProfile} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />

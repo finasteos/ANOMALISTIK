@@ -8,6 +8,7 @@ import { GeophysicsAstroSection } from './components/GeophysicsAstroSection';
 import { AdjudicationSimulator } from './components/AdjudicationSimulator';
 import { AiSearchAssistant } from './components/AiSearchAssistant';
 import { DataVerificationSection } from './components/DataVerificationSection';
+import { DeclassifiedArchiveSection } from './components/DeclassifiedArchiveSection';
 import { ThemeProvider, useTheme } from './ThemeContext';
 import { Menu } from 'lucide-react';
 
@@ -54,6 +55,7 @@ function AppContent() {
           {activeTab === 'mengines' && <MEnginesSection />}
           {activeTab === 'biophysics' && <BiophysicsSection />}
           {activeTab === 'geophysics' && <GeophysicsAstroSection />}
+          {activeTab === 'declassified-archives' && <DeclassifiedArchiveSection onNavigate={setActiveTab} />}
           {activeTab === 'simulator' && <AdjudicationSimulator />}
           {activeTab === 'data-verification' && <DataVerificationSection />}
           {activeTab === 'ai-assistant' && <AiSearchAssistant />}

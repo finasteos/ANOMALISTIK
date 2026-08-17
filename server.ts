@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import dotenv from "dotenv";
@@ -8,8 +9,155 @@ dotenv.config();
 
 const app = express();
 const PORT = 3000;
+const DATA_SYNCED_DIR = path.join(process.cwd(), "data", "synced");
+const DATA_DOWNLOADS_DIR = path.join(process.cwd(), "data", "downloads");
 
 app.use(express.json({ limit: "10mb" }));
+
+// ── Helper: find latest file matching pattern in a directory ──────────────
+function latestFile(dir: string, pattern: RegExp): string | null {
+  try {
+    const files = fs.readdirSync(dir)
+      .filter(f => pattern.test(f))
+      .map(f => ({ name: f, mtime: fs.statSync(path.join(dir, f)).mtimeMs }))
+      .sort((a, b) => b.mtime - a.mtime);
+    return files[0] ? path.join(dir, files[0].name) : null;
+  } catch { return null; }
+}
+
+// ── Helper: parse CSV text into array of row objects ─────────────────────
+function parseCSV(text: string): Record<string, string>[] {
+  const lines = text.trim().split("\n");
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(",").map(h => h.trim().replace(/^"|"$/g, ""));
+  return lines.slice(1).map(line => {
+    const values = line.split(",");
+    const row: Record<string, string> = {};
+    headers.forEach((h, i) => { row[h] = (values[i] || "").trim().replace(/^"|"$/g, ""); });
+    return row;
+  });
+}
+
+// ── Helper: safely parse float ────────────────────────────────────────────
+const pf = (v: string | undefined) => {
+  const n = parseFloat(v || "");
+  return isNaN(n) ? null : n;
+};
+
+// ─────────────────────────────────────────────────────────────────────────
+// API Route: Geospace Live Feed
+// Returns last N rows of DSCOVR + INTERMAGNET from synced CSV
+// ─────────────────────────────────────────────────────────────────────────
+app.get("/api/geospace", (_req, res) => {
+  try {
+    const csvPath = latestFile(DATA_SYNCED_DIR, /geospace.*\.csv$/);
+    if (!csvPath) {
+      return res.status(404).json({
+        error: "No synced geospace data found. Run: .venv/bin/python3 scripts/fetch_geospace_sync.py",
+        hint: "python3 scripts/fetch_geospace_sync.py --sources dscovr,intermagnet"
+      });
+    }
+
+    const raw = fs.readFileSync(csvPath, "utf-8");
+    const rows = parseCSV(raw);
+    if (rows.length === 0) return res.status(204).json({ error: "Empty dataset" });
+
+    // Take last 180 rows (3 hours @ 1min, or 1440 rows @ 5min = 5 days)
+    const tail = rows.slice(-180);
+
+    // Extract DSCOVR magnetometer time-series
+    const dscovr_mag = tail.map(r => ({
+      t: r["datetime_utc"] || r[""],
+      bt:     pf(r["dscovr_mag__bt"]),
+      bx_gsm: pf(r["dscovr_mag__bx_gsm"]),
+      by_gsm: pf(r["dscovr_mag__by_gsm"]),
+      bz_gsm: pf(r["dscovr_mag__bz_gsm"]),
+      theta:  pf(r["dscovr_mag__theta_gsm"]),
+    })).filter(r => r.bt !== null);
+
+    // Extract DSCOVR plasma time-series
+    const dscovr_plasma = tail.map(r => ({
+      t:           r["datetime_utc"] || r[""],
+      density:     pf(r["dscovr_plasma__proton_density"]) ?? pf(r["dscovr_plasma__density"]),
+      speed:       pf(r["dscovr_plasma__bulk_speed"])     ?? pf(r["dscovr_plasma__speed"]),
+      temperature: pf(r["dscovr_plasma__ion_temperature"]) ?? pf(r["dscovr_plasma__temperature"]),
+    })).filter(r => r.speed !== null || r.density !== null);
+
+    // Extract INTERMAGNET stations (look for imag_* columns)
+    const imagCols = Object.keys(rows[0] || {}).filter(c => c.startsWith("imag_"));
+    const stations: Record<string, { t: string; X: number | null; Y: number | null; Z: number | null; F: number | null }[]> = {};
+    const staCodes = [...new Set(imagCols.map(c => c.split("__")[0].replace("imag_", "")))];
+    for (const sta of staCodes) {
+      stations[sta] = tail.map(r => ({
+        t: r["datetime_utc"] || r[""],
+        X: pf(r[`imag_${sta}__X`]),
+        Y: pf(r[`imag_${sta}__Y`]),
+        Z: pf(r[`imag_${sta}__Z`]),
+        F: pf(r[`imag_${sta}__F`]),
+      })).filter(r => r.F !== null || r.X !== null);
+    }
+
+    // Latest snapshot (last row with valid Bz)
+    const lastMag = [...dscovr_mag].reverse().find(r => r.bz_gsm !== null);
+    const lastPlasma = [...dscovr_plasma].reverse().find(r => r.speed !== null);
+
+    // Kp-proxy from Bz (rough estimate: strong southward = elevated Kp)
+    const kpProxy = lastMag?.bz_gsm != null
+      ? Math.min(9, Math.max(0, Math.round((-lastMag.bz_gsm / 5) + 2)))
+      : null;
+
+    return res.json({
+      source_file: path.basename(csvPath),
+      rows_total:  rows.length,
+      rows_returned: tail.length,
+      last_updated: fs.statSync(csvPath).mtime.toISOString(),
+      snapshot: {
+        bz_gsm:      lastMag?.bz_gsm      ?? null,
+        bt:          lastMag?.bt           ?? null,
+        bx_gsm:      lastMag?.bx_gsm      ?? null,
+        by_gsm:      lastMag?.by_gsm      ?? null,
+        solar_speed: lastPlasma?.speed     ?? null,
+        density:     lastPlasma?.density   ?? null,
+        kp_proxy:    kpProxy,
+        timestamp:   lastMag?.t            ?? lastPlasma?.t ?? null,
+      },
+      timeseries: { dscovr_mag, dscovr_plasma, stations },
+    });
+  } catch (err: any) {
+    console.error("[/api/geospace]", err);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────
+// API Route: Geospace Pipeline Status
+// ─────────────────────────────────────────────────────────────────────────
+app.get("/api/geospace/status", (_req, res) => {
+  const csvPath  = latestFile(DATA_SYNCED_DIR,     /geospace.*\.csv$/);
+  const manifest = latestFile(DATA_SYNCED_DIR,     /manifest.*\.json$/);
+  const dscovr   = latestFile(path.join(DATA_DOWNLOADS_DIR, "dscovr"),       /\.parquet$/);
+  const eida     = latestFile(path.join(DATA_DOWNLOADS_DIR, "eida"),         /\.parquet$/);
+  const imag     = latestFile(path.join(DATA_DOWNLOADS_DIR, "intermagnet"),  /\.parquet$/);
+
+  const age = (p: string | null) => {
+    if (!p) return null;
+    const ms = Date.now() - fs.statSync(p).mtimeMs;
+    return Math.round(ms / 60000); // minutes ago
+  };
+
+  return res.json({
+    pipeline_ready:    !!csvPath,
+    synced_csv:        csvPath ? path.basename(csvPath) : null,
+    synced_age_min:    age(csvPath),
+    dscovr_age_min:    age(dscovr),
+    eida_age_min:      age(eida),
+    intermagnet_age_min: age(imag),
+    manifest:          manifest ? path.basename(manifest) : null,
+    fetch_command:     ".venv/bin/python3 scripts/fetch_geospace_sync.py --sources dscovr,intermagnet,eida",
+  });
+});
+
+
 
 // Initialize Gemini Client
 const getGeminiClient = () => {
@@ -240,6 +388,28 @@ app.post("/api/adjudicate", (req, res) => {
     layer1NegativeControlPassed: Math.abs(zScore) >= 2.0,
     timestamp: new Date().toISOString(),
   });
+});
+
+// ─────────────────────────────────────────────────────────────────────────
+// API Route: Declassified UAP Archives Catalog & Sample Images
+// ─────────────────────────────────────────────────────────────────────────
+const DECLAS_SAMPLES_DIR = path.join(process.cwd(), "data", "declassified_sample", "images");
+const DECLAS_CATALOG_PATH = path.join(process.cwd(), "data", "declassified_archive_index.json");
+
+if (fs.existsSync(DECLAS_SAMPLES_DIR)) {
+  app.use("/api/declassified/images", express.static(DECLAS_SAMPLES_DIR));
+}
+
+app.get("/api/declassified/catalog", (_req, res) => {
+  try {
+    if (fs.existsSync(DECLAS_CATALOG_PATH)) {
+      const data = JSON.parse(fs.readFileSync(DECLAS_CATALOG_PATH, "utf-8"));
+      return res.json(data);
+    }
+    return res.status(404).json({ error: "Catalog not found. Run scripts/catalog_declassified_archives.py" });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message || "Failed to load catalog." });
+  }
 });
 
 async function startServer() {
