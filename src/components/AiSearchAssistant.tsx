@@ -130,14 +130,14 @@ export const AiSearchAssistant: React.FC = () => {
       }`}>
         <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider">
           <Sparkles className={`w-4 h-4 ${isLight ? 'text-stone-900' : 'text-cyan-400'}`} />
-          <span>Server-Side Gemini AI Engine Integration</span>
+          <span>OpenRouter AI Engine Integration</span>
         </div>
         <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wider">
           AI Research Grounding &amp; High Thinking Adjudicator
         </h1>
         <p className={`text-xs md:text-sm font-sans leading-relaxed max-w-4xl ${isLight ? 'text-stone-700' : 'text-slate-300'}`}>
-          Powered by Gemini API server routes. Toggle between real-time Google Search Grounding with <code className="font-mono font-bold text-cyan-700">gemini-3.5-flash</code> 
-          and Deep Adjudication Reasoning with <code className="font-mono font-bold text-purple-700">gemini-3.1-pro-preview</code> (ThinkingLevel.HIGH).
+          Powered by OpenRouter API server routes. Active model: <code className="font-mono font-bold text-cyan-700">minimax/minimax-m3:free</code>.
+          Provides rapid scientific research queries and deep multi-dimensional adjudication reasoning.
         </p>
 
         {/* Subtab Toggle */}
@@ -153,7 +153,7 @@ export const AiSearchAssistant: React.FC = () => {
             }`}
           >
             <Search className="w-3.5 h-3.5" />
-            <span>Search Grounded (gemini-3.5-flash)</span>
+            <span>Research Query (MiniMax M3)</span>
           </button>
           <button
             onClick={() => setActiveSubTab('thinking')}
@@ -166,7 +166,7 @@ export const AiSearchAssistant: React.FC = () => {
             }`}
           >
             <Brain className="w-3.5 h-3.5" />
-            <span>High Thinking Reasoner (gemini-3.1-pro)</span>
+            <span>High Thinking Reasoner (MiniMax M3)</span>
           </button>
         </div>
       </div>
@@ -327,7 +327,7 @@ export const AiSearchAssistant: React.FC = () => {
               {thinkingLoading ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin text-slate-950" />
-                  <span>Reasoning with gemini-3.1-pro-preview (ThinkingLevel.HIGH)...</span>
+                  <span>Reasoning with minimax/minimax-m3:free...</span>
                 </>
               ) : (
                 <>
@@ -343,7 +343,7 @@ export const AiSearchAssistant: React.FC = () => {
               <div className="border-b border-slate-800 pb-3 flex items-center justify-between font-mono text-xs">
                 <span className="text-purple-300 font-bold">HIGH THINKING ADJUDICATION REPORT</span>
                 <span className="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">
-                  Model: gemini-3.1-pro-preview
+                  Model: {thinkingResponse.modelUsed || 'minimax/minimax-m3:free'}
                 </span>
               </div>
 

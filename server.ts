@@ -2,17 +2,24 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const DATA_SYNCED_DIR = path.join(process.cwd(), "data", "synced");
 const DATA_DOWNLOADS_DIR = path.join(process.cwd(), "data", "downloads");
 
 app.use(express.json({ limit: "10mb" }));
+
+// Normalize request URL if called by Vercel serverless function without /api prefix
+app.use((req, _res, next) => {
+  if (!req.url.startsWith("/api") && !req.url.startsWith("/@") && !req.url.startsWith("/src")) {
+    req.url = `/api${req.url.startsWith("/") ? "" : "/"}${req.url}`;
+  }
+  next();
+});
 
 // ── Helper: find latest file matching pattern in a directory ──────────────
 function latestFile(dir: string, pattern: RegExp): string | null {
@@ -159,28 +166,54 @@ app.get("/api/geospace/status", (_req, res) => {
 
 
 
-// Initialize Gemini Client
-const getGeminiClient = () => {
-  const apiKey = process.env.GEMINI_API_KEY;
+// OpenRouter Client Helper
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || "minimax/minimax-m3:free";
+
+async function callOpenRouter(
+  messages: { role: string; content: string }[],
+  options: { temperature?: number; max_tokens?: number } = {}
+) {
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
-    console.warn("GEMINI_API_KEY is missing from environment variables.");
+    throw new Error("OPENROUTER_API_KEY is not configured in environment variables.");
   }
-  return new GoogleGenAI({
-    apiKey: apiKey || "",
-    httpOptions: {
-      headers: {
-        "User-Agent": "aistudio-build",
-      },
+
+  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": "https://anomalistik.twistedstacks.com",
+      "X-Title": "ANOMALISTIK Laboratory",
     },
+    body: JSON.stringify({
+      model: OPENROUTER_MODEL,
+      messages,
+      temperature: options.temperature ?? 0.3,
+      max_tokens: options.max_tokens ?? 3072,
+    }),
   });
-};
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`OpenRouter API error (${res.status}): ${errorText}`);
+  }
+
+  const data = (await res.json()) as any;
+  const content = data.choices?.[0]?.message?.content || "No response generated.";
+  return {
+    content,
+    model: data.model || OPENROUTER_MODEL,
+    usage: data.usage,
+  };
+}
 
 // API Route: Health Check
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// API Route: Search Grounded Research (using gemini-3.5-flash with googleSearch)
+// API Route: Search Grounded Research (using OpenRouter minimax/minimax-m3:free)
 app.post("/api/ai/search-grounded", async (req, res) => {
   try {
     const { query } = req.body;
@@ -188,41 +221,31 @@ app.post("/api/ai/search-grounded", async (req, res) => {
       return res.status(400).json({ error: "Query is required" });
     }
 
-    const ai = getGeminiClient();
     const systemPrompt = `You are the AI Research Assistant for ANOMALISTICS (Integrated Laboratory & Universal Entropy Engine).
-You provide scientifically rigorous, data-driven answers grounded in up-to-date web literature, research papers, and astronomical/geophysical data.
+You provide scientifically rigorous, data-driven answers grounded in up-to-date scientific literature, research papers, and astronomical/geophysical data.
 You maintain strict scientific neutrality, emphasizing the core principles: "Structure ≠ Message" and "Layer 1 Negative Control Engine".
 When asked about crop circles, undeciphered scripts, FRBs, space weather, or geoglyphs, cross-reference real scientific facts.`;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: query,
-      config: {
-        systemInstruction: systemPrompt,
-        tools: [{ googleSearch: {} }],
-      },
-    });
-
-    const text = response.text || "No response generated.";
-    const groundingChunks =
-      response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+    const result = await callOpenRouter([
+      { role: "system", content: systemPrompt },
+      { role: "user", content: query },
+    ]);
 
     return res.json({
-      answer: text,
-      groundingChunks: groundingChunks.map((chunk: any) => ({
-        web: chunk.web ? { uri: chunk.web.uri, title: chunk.web.title } : undefined,
-      })),
+      answer: result.content,
+      groundingChunks: [],
       queryTime: new Date().toISOString(),
+      modelUsed: result.model,
     });
   } catch (error: any) {
     console.error("Error in /api/ai/search-grounded:", error);
     return res.status(500).json({
-      error: error.message || "Failed to execute Search Grounded query.",
+      error: error.message || "Failed to execute Research Query.",
     });
   }
 });
 
-// API Route: High Thinking Adjudication Engine (using gemini-3.1-pro-preview with ThinkingLevel.HIGH)
+// API Route: High Thinking Adjudication Engine (using OpenRouter minimax/minimax-m3:free)
 app.post("/api/ai/high-thinking", async (req, res) => {
   try {
     const { prompt, domainContext } = req.body;
@@ -230,7 +253,6 @@ app.post("/api/ai/high-thinking", async (req, res) => {
       return res.status(400).json({ error: "Prompt is required" });
     }
 
-    const ai = getGeminiClient();
     const systemInstruction = `You are the Deep Reasoner & Adjudication Engine for ANOMALISTICS (Integrated Laboratory & Universal Entropy Engine).
 Your task is to perform deep, multi-dimensional reasoning on complex anomalies across Epigraphy, Geophysics, Heliophysics, Biophysics, and Signals.
 
@@ -240,23 +262,15 @@ Rule Book:
 3. Express findings in z-scores, Shannon entropy H(X), conditional entropy H(Y|X), and clear verdicts (SEQUENCE_STRUCTURE, STRUCTURE_SIGNAL, DIP_STRUCTURE, CLAIM_FAILS_NULL, UNDERDETERMINED).
 4. Provide step-by-step hypothesis adjudication. Context provided: ${domainContext || 'General Lab Context'}`;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.1-pro-preview",
-      contents: prompt,
-      config: {
-        systemInstruction,
-        thinkingConfig: {
-          thinkingLevel: ThinkingLevel.HIGH,
-        },
-      },
-    });
-
-    const text = response.text || "No adjudication generated.";
+    const result = await callOpenRouter([
+      { role: "system", content: systemInstruction },
+      { role: "user", content: prompt },
+    ], { temperature: 0.2, max_tokens: 4096 });
 
     return res.json({
-      answer: text,
+      answer: result.content,
       thinkingLevel: "HIGH",
-      modelUsed: "gemini-3.1-pro-preview",
+      modelUsed: result.model,
       queryTime: new Date().toISOString(),
     });
   } catch (error: any) {
@@ -433,4 +447,8 @@ async function startServer() {
   });
 }
 
-startServer();
+export default app;
+
+if (!process.env.VERCEL) {
+  startServer();
+}

@@ -101,6 +101,6 @@ export interface HighThinkingResponse {
   reasoningText?: string;
   answer: string;
   thinkingLevel: 'HIGH';
-  modelUsed: 'gemini-3.1-pro-preview';
+  modelUsed: string;
   queryTime: string;
 }
