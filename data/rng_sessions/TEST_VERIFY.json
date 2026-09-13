@@ -1,0 +1,180 @@
+{
+  "sessionConfig": {
+    "sessionId": "TEST_VERIFY",
+    "participantId": "AUDIT_OPERATOR"
+  },
+  "blocks": [
+    {
+      "blockIndex": 0,
+      "condition": "CONTROL",
+      "target": 1,
+      "nBits": 8192,
+      "ones": 4096,
+      "targetScoreZ": 0
+    },
+    {
+      "blockIndex": 1,
+      "condition": "INTENTION",
+      "target": 1,
+      "nBits": 8192,
+      "ones": 4150,
+      "targetScoreZ": 1.193
+    },
+    {
+      "blockIndex": 2,
+      "condition": "CONTROL",
+      "target": 0,
+      "nBits": 8192,
+      "ones": 4090,
+      "targetScoreZ": 0.132
+    },
+    {
+      "blockIndex": 3,
+      "condition": "INTENTION",
+      "target": 0,
+      "nBits": 8192,
+      "ones": 4040,
+      "targetScoreZ": 1.237
+    }
+  ],
+  "analysis": {
+    "observedD": 1.149,
+    "meanIntentionZ": 1.215,
+    "meanControlZ": 0.066,
+    "overallRawZ": -0.0884,
+    "sigmaD": 0.6589,
+    "pValue": 0.16349,
+    "bf01": 0.663,
+    "bf10": 1.508,
+    "bayesFactorType": "Normal-Normal directional (H1+: mu > 0 vs H0: mu <= 0, tau = 0.20)",
+    "nPermutations": 20000,
+    "totalBits": 32768,
+    "totalOnes": 16376,
+    "layer1NegativeControlPassed": true,
+    "verdict": "CLAIM_FAILS_NULL",
+    "histogram": [
+      {
+        "bin": -1.111,
+        "count": 3259
+      },
+      {
+        "bin": -1.034,
+        "count": 0
+      },
+      {
+        "bin": -0.958,
+        "count": 0
+      },
+      {
+        "bin": -0.881,
+        "count": 0
+      },
+      {
+        "bin": -0.804,
+        "count": 0
+      },
+      {
+        "bin": -0.728,
+        "count": 0
+      },
+      {
+        "bin": -0.651,
+        "count": 0
+      },
+      {
+        "bin": -0.575,
+        "count": 0
+      },
+      {
+        "bin": -0.498,
+        "count": 0
+      },
+      {
+        "bin": -0.421,
+        "count": 0
+      },
+      {
+        "bin": -0.345,
+        "count": 0
+      },
+      {
+        "bin": -0.268,
+        "count": 0
+      },
+      {
+        "bin": -0.192,
+        "count": 0
+      },
+      {
+        "bin": -0.115,
+        "count": 3375
+      },
+      {
+        "bin": -0.038,
+        "count": 3344
+      },
+      {
+        "bin": 0.038,
+        "count": 3396
+      },
+      {
+        "bin": 0.115,
+        "count": 3357
+      },
+      {
+        "bin": 0.192,
+        "count": 0
+      },
+      {
+        "bin": 0.268,
+        "count": 0
+      },
+      {
+        "bin": 0.345,
+        "count": 0
+      },
+      {
+        "bin": 0.421,
+        "count": 0
+      },
+      {
+        "bin": 0.498,
+        "count": 0
+      },
+      {
+        "bin": 0.575,
+        "count": 0
+      },
+      {
+        "bin": 0.651,
+        "count": 0
+      },
+      {
+        "bin": 0.728,
+        "count": 0
+      },
+      {
+        "bin": 0.804,
+        "count": 0
+      },
+      {
+        "bin": 0.881,
+        "count": 0
+      },
+      {
+        "bin": 0.958,
+        "count": 0
+      },
+      {
+        "bin": 1.034,
+        "count": 0
+      },
+      {
+        "bin": 1.111,
+        "count": 3269
+      }
+    ],
+    "timestamp": "2026-09-13T13:46:32.761Z"
+  },
+  "savedAt": "2026-09-13T13:46:32.761Z"
+}

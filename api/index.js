@@ -368,6 +368,22 @@ function generateDeterministicBuffer(seed, blockIndex, length) {
   }
   return buf;
 }
+function erf(x) {
+  const sign = x >= 0 ? 1 : -1;
+  const a = Math.abs(x);
+  const a1 = 0.254829592;
+  const a2 = -0.284496736;
+  const a3 = 1.421413741;
+  const a4 = -1.453152027;
+  const a5 = 1.061405429;
+  const p = 0.3275911;
+  const t = 1 / (1 + p * a);
+  const y = 1 - ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * Math.exp(-a * a);
+  return sign * y;
+}
+function normalCdf(x) {
+  return 0.5 * (1 + erf(x / Math.SQRT2));
+}
 app.get("/api/rng/status", (_req, res) => {
   try {
     const cpus = os.cpus();
@@ -431,7 +447,7 @@ app.get("/api/rng/status", (_req, res) => {
         {
           id: "APPLE_CSPRNG",
           name: "macOS Kernel CSPRNG (/dev/random)",
-          type: "Secure Enclave TRNG Seeded CSPRNG",
+          type: "macOS kernel CSPRNG / system entropy source",
           isPhysical: false,
           available: true,
           statusText: "Active (Darwin Kernel Entropy Pool)"
@@ -579,29 +595,31 @@ app.post("/api/rng/session/analyze", (req, res) => {
     const permDValues = new Array(nPermutations);
     const nBlocks = blocks.length;
     const nInt = intentionScores.length;
-    const onesArr = blocks.map((b) => b.ones);
-    const nBitsArr = blocks.map((b) => b.nBits);
-    const sqrtNBitsArr = nBitsArr.map((n) => Math.sqrt(n));
-    const targetsArr = blocks.map((b) => b.target);
+    const nCtrl = controlScores.length;
+    const zScoresArr = blocks.map((b) => Number(b.targetScoreZ) || 0);
+    const baseMask = new Array(nBlocks).fill(false);
+    for (let i = 0; i < nInt; i++) {
+      baseMask[i] = true;
+    }
     let countGreaterOrEqual = 0;
     for (let p = 0; p < nPermutations; p++) {
-      const shuffledTargets = [...targetsArr];
+      const shuffledMask = [...baseMask];
       for (let i = nBlocks - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [shuffledTargets[i], shuffledTargets[j]] = [shuffledTargets[j], shuffledTargets[i]];
+        const temp = shuffledMask[i];
+        shuffledMask[i] = shuffledMask[j];
+        shuffledMask[j] = temp;
       }
       let intSum = 0;
       let ctrlSum = 0;
       for (let k = 0; k < nBlocks; k++) {
-        const sign = shuffledTargets[k] === 1 ? 1 : -1;
-        const z = sign * (2 * onesArr[k] - nBitsArr[k]) / sqrtNBitsArr[k];
-        if (k < nInt) {
-          intSum += z;
+        if (shuffledMask[k]) {
+          intSum += zScoresArr[k];
         } else {
-          ctrlSum += z;
+          ctrlSum += zScoresArr[k];
         }
       }
-      const permD = intSum / nInt - ctrlSum / (nBlocks - nInt);
+      const permD = intSum / nInt - ctrlSum / nCtrl;
       permDValues[p] = permD;
       if (permD >= observedD) {
         countGreaterOrEqual++;
@@ -611,9 +629,16 @@ app.post("/api/rng/session/analyze", (req, res) => {
     const meanPermD = permDValues.reduce((a, b) => a + b, 0) / nPermutations;
     const varPermD = permDValues.reduce((a, b) => a + Math.pow(b - meanPermD, 2), 0) / nPermutations;
     const stdPermD = Math.sqrt(varPermD) || 0.1;
-    const zD = observedD / stdPermD;
-    let bf01 = Math.exp(-0.5 * (zD * zD)) / (Math.sqrt(2 * Math.PI) * 0.2);
-    bf01 = Math.max(Number(bf01.toFixed(2)), 0.01);
+    const tau = 0.2;
+    const zStat = observedD / stdPermD;
+    const ratioVar = tau * tau / (stdPermD * stdPermD);
+    const exponent = -0.5 * (zStat * zStat) * (tau * tau / (stdPermD * stdPermD + tau * tau));
+    const bf01Twosided = Math.sqrt(1 + ratioVar) * Math.exp(exponent);
+    const argPhi = zStat * tau / Math.sqrt(stdPermD * stdPermD + tau * tau);
+    const phiVal = normalCdf(argPhi);
+    const bf01Directional = phiVal > 1e-6 ? bf01Twosided / (2 * phiVal) : bf01Twosided * 1e6;
+    const bf01 = Math.max(Number(bf01Directional.toFixed(3)), 1e-3);
+    const bf10 = bf01 > 0 ? Number((1 / bf01).toFixed(3)) : 999;
     const isPlacebo = sessionConfig?.sourceType === "DETERMINISTIC_PRNG_PLACEBO";
     const layer1NegativeControlPassed = isPlacebo ? Math.abs(observedD) < 2.5 : true;
     let verdict;
@@ -645,8 +670,11 @@ app.post("/api/rng/session/analyze", (req, res) => {
       meanIntentionZ: Number(meanIntentionZ.toFixed(4)),
       meanControlZ: Number(meanControlZ.toFixed(4)),
       overallRawZ: Number(overallRawZ.toFixed(4)),
+      sigmaD: Number(stdPermD.toFixed(4)),
       pValue: Number(pValue.toFixed(5)),
       bf01,
+      bf10,
+      bayesFactorType: "Normal-Normal directional (H1+: mu > 0 vs H0: mu <= 0, tau = 0.20)",
       nPermutations,
       totalBits,
       totalOnes,

@@ -64,7 +64,7 @@ class RandomSource(abc.ABC):
 
 
 class AppleCSPRNG(RandomSource):
-    """macOS Kernel CSPRNG via /dev/random (seeded by Secure Enclave TRNG + system entropy)."""
+    """macOS kernel CSPRNG / system entropy source via /dev/random."""
 
     @property
     def source_id(self) -> str:
@@ -246,63 +246,88 @@ def calculate_block_z(ones: int, n_bits: int, target: int) -> float:
     return float(t_j * raw_z)
 
 
-def analyze_session(blocks: List[BlockResult], n_permutations: int = 100_000) -> Dict[str, Any]:
-    """
-    Executes pre-registered primary analysis and 100,000-iteration permutation null test.
-    Primary statistic:
-      D_i = mean(Z_intention) - mean(Z_control)
-    """
-    intention_scores = [b.target_score_z for b in blocks if b.condition == "INTENTION"]
-    control_scores = [b.target_score_z for b in blocks if b.condition == "CONTROL"]
+def normal_cdf(x: float) -> float:
+    """Standard normal cumulative distribution function."""
+    return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
 
-    mean_intention_z = float(np.mean(intention_scores)) if intention_scores else 0.0
-    mean_control_z = float(np.mean(control_scores)) if control_scores else 0.0
+
+def analyze_session(
+    blocks: List[BlockResult],
+    n_permutations: int = 100_000,
+    prior_scale_tau: float = 0.20,
+) -> Dict[str, Any]:
+    """
+    Executes pre-registered primary analysis, exact condition permutation null test,
+    and directional Normal-Normal Bayes Factor estimation.
+    Primary statistic:
+      observed_d = mean(Z[condition == INTENTION]) - mean(Z[condition == CONTROL])
+    """
+    conditions = np.array([b.condition for b in blocks])
+    z_scores = np.array([b.target_score_z for b in blocks], dtype=np.float64)
+
+    is_intention = (conditions == "INTENTION")
+    is_control = (conditions == "CONTROL")
+
+    n_int = int(np.sum(is_intention))
+    n_ctrl = int(np.sum(is_control))
+
+    if n_int == 0 or n_ctrl == 0:
+        raise ValueError("Session must contain both INTENTION and CONTROL blocks.")
+
+    mean_intention_z = float(np.mean(z_scores[is_intention]))
+    mean_control_z = float(np.mean(z_scores[is_control]))
     observed_d = mean_intention_z - mean_control_z
 
     total_bits = sum(b.n_bits for b in blocks)
     total_ones = sum(b.ones for b in blocks)
     overall_raw_z = (2.0 * total_ones - total_bits) / math.sqrt(total_bits) if total_bits > 0 else 0.0
 
-    # Permutation Null Test:
-    # We maintain the exact target balance and shuffle condition/target assignments across blocks
-    raw_counts = [(b.ones, b.n_bits) for b in blocks]
-    n_blocks = len(blocks)
-    n_int = len(intention_scores)
-
-    # Base conditions and targets
-    conditions = np.array([b.condition for b in blocks])
-    targets = np.array([b.target for b in blocks])
-
+    # Exact Permutation Null Test:
+    # Under H0, the condition labels ("INTENTION" vs "CONTROL") are exchangeable across blocks.
+    # We permute the condition assignment vector (preserving exact n_int and n_ctrl counts)
+    # and compute d_perm = mean(Z[permuted_intention]) - mean(Z[permuted_control]).
+    # This directly reflects the actual experimental design without assuming blocks are ordered.
     rng = np.random.default_rng(42)
     perm_d_values = np.zeros(n_permutations, dtype=np.float64)
 
-    # Vectorized computation for speed
-    all_ones = np.array([b.ones for b in blocks], dtype=np.float64)
-    all_nbits = np.array([b.n_bits for b in blocks], dtype=np.float64)
-    sqrt_nbits = np.sqrt(all_nbits)
+    # Base boolean mask: exactly n_int True, n_ctrl False
+    base_mask = np.zeros(len(blocks), dtype=bool)
+    base_mask[:n_int] = True
 
     for i in range(n_permutations):
-        # Permute the target directions keeping balance intact
-        shuffled_targets = rng.permutation(targets)
-        t_signs = np.where(shuffled_targets == 1, 1.0, -1.0)
-        z_scores = t_signs * (2.0 * all_ones - all_nbits) / sqrt_nbits
-
-        # Compute permuted D
-        int_mean = np.mean(z_scores[:n_int])
-        ctrl_mean = np.mean(z_scores[n_int:])
-        perm_d_values[i] = int_mean - ctrl_mean
+        shuffled_mask = rng.permutation(base_mask)
+        perm_d = np.mean(z_scores[shuffled_mask]) - np.mean(z_scores[~shuffled_mask])
+        perm_d_values[i] = perm_d
 
     # Empirical one-sided p-value (H1: observed_d > null)
+    # Using (1 + sum(perm >= obs)) / (1 + N) to prevent zero p-values and guarantee exactness
     p_value = float((1.0 + np.sum(perm_d_values >= observed_d)) / (1.0 + n_permutations))
 
-    # Approximate Bayes Factor BF01 (favoring H0 over H1) using Savage-Dickey density ratio or bic
-    # Under standard normal prior mu ~ N(0, sigma0=0.20):
+    # Standard error of D under the empirical null distribution
     sigma_d = float(np.std(perm_d_values)) if np.std(perm_d_values) > 0 else 0.1
-    # z_d
-    z_d = observed_d / sigma_d if sigma_d > 0 else 0.0
-    # BF01 estimate
-    bf01 = float(math.exp(-0.5 * (z_d ** 2)) / (math.sqrt(2 * math.pi) * 0.20)) if abs(z_d) < 10 else 0.0001
-    bf01 = max(round(bf01, 2), 0.01)
+    tau = float(prior_scale_tau)
+
+    # Normal-Normal Bayes Factor:
+    # Under H0: D ~ N(0, sigma_d^2)
+    # Under H1: true effect mu ~ N(0, tau^2) -> marginal D ~ N(0, sigma_d^2 + tau^2)
+    # BF01_twosided = sqrt(1 + tau^2 / sigma_d^2) * exp(-0.5 * (D/sigma_d)^2 * (tau^2 / (sigma_d^2 + tau^2)))
+    z_stat = observed_d / sigma_d
+    ratio_var = (tau ** 2) / (sigma_d ** 2)
+    exponent = -0.5 * (z_stat ** 2) * ((tau ** 2) / (sigma_d ** 2 + tau ** 2))
+    bf01_twosided = math.sqrt(1.0 + ratio_var) * math.exp(exponent)
+
+    # Directional correction for one-sided micro-PK hypothesis (H1+: mu > 0):
+    # Under H1+ (Half-Normal prior mu ~ N+(0, tau^2)),
+    # BF01_directional = BF01_twosided / [2 * Phi(z_stat * tau / sqrt(sigma_d^2 + tau^2))]
+    arg_phi = z_stat * tau / math.sqrt(sigma_d ** 2 + tau ** 2)
+    phi_val = normal_cdf(arg_phi)
+    if phi_val > 1e-6:
+        bf01_directional = bf01_twosided / (2.0 * phi_val)
+    else:
+        bf01_directional = bf01_twosided * 1e6
+
+    bf01 = max(round(float(bf01_directional), 3), 0.001)
+    bf10 = round(1.0 / bf01, 3) if bf01 > 0 else 999.0
 
     # Layer 1 Negative Control Check:
     # A negative control passes if the deterministic/control streams show no anomalous target deflection
@@ -335,8 +360,11 @@ def analyze_session(blocks: List[BlockResult], n_permutations: int = 100_000) ->
         "mean_intention_z": round(mean_intention_z, 4),
         "mean_control_z": round(mean_control_z, 4),
         "overall_raw_z": round(overall_raw_z, 4),
+        "sigma_d": round(sigma_d, 4),
         "p_value": round(p_value, 5),
         "bf01": bf01,
+        "bf10": bf10,
+        "bayes_factor_type": "Normal-Normal directional (H1+: mu > 0 vs H0: mu <= 0, tau = 0.20)",
         "n_permutations": n_permutations,
         "total_bits": total_bits,
         "total_ones": total_ones,

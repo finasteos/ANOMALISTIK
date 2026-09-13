@@ -61,8 +61,11 @@ interface AnalysisResult {
   meanIntentionZ: number;
   meanControlZ: number;
   overallRawZ: number;
+  sigmaD?: number;
   pValue: number;
   bf01: number;
+  bf10?: number;
+  bayesFactorType?: string;
   nPermutations: number;
   totalBits: number;
   totalOnes: number;
@@ -802,11 +805,16 @@ export const QuantumRngSection: React.FC = () => {
                 </div>
 
                 <div className={`p-5 rounded-xl border ${theme.cardBorder} ${theme.cardBg}`}>
-                  <span className="text-[11px] font-mono text-slate-400">Bayes Factor (BF01)</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono text-slate-400">Normal-Normal BF₀₁</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300 font-bold">τ = 0.20</span>
+                  </div>
                   <div className="text-2xl font-mono font-black text-slate-200 mt-1">
                     {analysis.bf01}
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500">Stöd för H0 gentemot H1</span>
+                  <span className="text-[10px] font-mono text-slate-500">
+                    Stöd för H₀ (BF₁₀ = {analysis.bf10 ?? (1 / analysis.bf01).toFixed(2)})
+                  </span>
                 </div>
 
                 <div className={`p-5 rounded-xl border ${theme.cardBorder} ${theme.cardBg}`}>
@@ -1033,7 +1041,7 @@ export const QuantumRngSection: React.FC = () => {
                     <td className="py-2.5 px-3 font-bold text-slate-300">macOS Kernel CSPRNG</td>
                     <td className="py-2.5 px-3 text-blue-400">Sekundär Kontroll</td>
                     <td className="py-2.5 px-3 text-slate-400">Sekundär Kontroll</td>
-                    <td className="py-2.5 px-3 text-slate-400">Apples kernel-RNG (Secure Enclave TRNG)</td>
+                    <td className="py-2.5 px-3 text-slate-400">macOS kernel CSPRNG / system entropy source</td>
                   </tr>
                   <tr>
                     <td className="py-2.5 px-3 font-bold text-slate-300">Lokal QRNG utan Människa</td>
@@ -1210,6 +1218,6 @@ Kan explicit mänsklig intention orsaka en statistiskt påvisbar förändring i 
 
 ## 4. Primary Statistical Analysis
 - Ensidigt preregistrerat permutations-/randomiseringstest (100 000 iterationer) på deltagardifferensen D_i vid alfa = 0.001.
-- Savage-Dickey Bayes Factor BF01 för H0 gentemot H1.
+- Normal-Normal Bayes Factor BF01 med fördefinierad prior-skala τ = 0.20 för H0 gentemot H1.
 - Append-only kryptografisk loggning med SHA-256 för varje råbitström.
 `;

@@ -472,6 +472,26 @@ function generateDeterministicBuffer(seed: Buffer, blockIndex: number, length: n
   return buf;
 }
 
+// Helper: high-precision error function (Abramowitz & Stegun approximation)
+function erf(x: number): number {
+  const sign = x >= 0 ? 1 : -1;
+  const a = Math.abs(x);
+  const a1 = 0.254829592;
+  const a2 = -0.284496736;
+  const a3 = 1.421413741;
+  const a4 = -1.453152027;
+  const a5 = 1.061405429;
+  const p = 0.3275911;
+  const t = 1.0 / (1.0 + p * a);
+  const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-a * a);
+  return sign * y;
+}
+
+// Helper: standard normal cumulative distribution function Phi(x)
+function normalCdf(x: number): number {
+  return 0.5 * (1.0 + erf(x / Math.SQRT2));
+}
+
 app.get("/api/rng/status", (_req, res) => {
   try {
     const cpus = os.cpus();
@@ -538,7 +558,7 @@ app.get("/api/rng/status", (_req, res) => {
         {
           id: "APPLE_CSPRNG",
           name: "macOS Kernel CSPRNG (/dev/random)",
-          type: "Secure Enclave TRNG Seeded CSPRNG",
+          type: "macOS kernel CSPRNG / system entropy source",
           isPhysical: false,
           available: true,
           statusText: "Active (Darwin Kernel Entropy Pool)"
@@ -718,42 +738,49 @@ app.post("/api/rng/session/analyze", (req, res) => {
     const totalOnes = blocks.reduce((acc: number, b: any) => acc + (b.ones || 0), 0);
     const overallRawZ = totalBits > 0 ? (2 * totalOnes - totalBits) / Math.sqrt(totalBits) : 0;
 
-    // Fast Exact Permutation Null Test (20,000 iterations)
+    // Exact Permutation Null Test (20,000 iterations):
+    // Under H0, the condition label ("INTENTION" vs "CONTROL") is exchangeable across blocks.
+    // We permute the condition assignment vector (preserving exact nInt and nCtrl counts)
+    // and compute permD = mean(Z[shuffled_intention]) - mean(Z[shuffled_control]).
+    // This directly reflects the actual experimental design without assuming blocks are ordered.
     const nPermutations = 20000;
     const permDValues: number[] = new Array(nPermutations);
     const nBlocks = blocks.length;
     const nInt = intentionScores.length;
+    const nCtrl = controlScores.length;
 
-    // Cache ones and sqrt(nBits)
-    const onesArr = blocks.map((b: any) => b.ones);
-    const nBitsArr = blocks.map((b: any) => b.nBits);
-    const sqrtNBitsArr = nBitsArr.map((n: number) => Math.sqrt(n));
-    const targetsArr = blocks.map((b: any) => b.target);
+    const zScoresArr = blocks.map((b: any) => Number(b.targetScoreZ) || 0);
+
+    // Base boolean mask with exactly nInt true and nCtrl false
+    const baseMask = new Array(nBlocks).fill(false);
+    for (let i = 0; i < nInt; i++) {
+      baseMask[i] = true;
+    }
 
     let countGreaterOrEqual = 0;
 
     for (let p = 0; p < nPermutations; p++) {
-      // Shuffle target directions keeping 50/50 balance
-      const shuffledTargets = [...targetsArr];
+      // Fisher-Yates shuffle of the condition assignment mask
+      const shuffledMask = [...baseMask];
       for (let i = nBlocks - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [shuffledTargets[i], shuffledTargets[j]] = [shuffledTargets[j], shuffledTargets[i]];
+        const temp = shuffledMask[i];
+        shuffledMask[i] = shuffledMask[j];
+        shuffledMask[j] = temp;
       }
 
       let intSum = 0;
       let ctrlSum = 0;
 
       for (let k = 0; k < nBlocks; k++) {
-        const sign = shuffledTargets[k] === 1 ? 1 : -1;
-        const z = (sign * (2 * onesArr[k] - nBitsArr[k])) / sqrtNBitsArr[k];
-        if (k < nInt) {
-          intSum += z;
+        if (shuffledMask[k]) {
+          intSum += zScoresArr[k];
         } else {
-          ctrlSum += z;
+          ctrlSum += zScoresArr[k];
         }
       }
 
-      const permD = (intSum / nInt) - (ctrlSum / (nBlocks - nInt));
+      const permD = (intSum / nInt) - (ctrlSum / nCtrl);
       permDValues[p] = permD;
       if (permD >= observedD) {
         countGreaterOrEqual++;
@@ -762,15 +789,25 @@ app.post("/api/rng/session/analyze", (req, res) => {
 
     const pValue = (1 + countGreaterOrEqual) / (1 + nPermutations);
 
-    // Compute empirical standard deviation of permuted D
+    // Compute empirical standard deviation of permuted D under the null
     const meanPermD = permDValues.reduce((a, b) => a + b, 0) / nPermutations;
     const varPermD = permDValues.reduce((a, b) => a + Math.pow(b - meanPermD, 2), 0) / nPermutations;
     const stdPermD = Math.sqrt(varPermD) || 0.1;
-    const zD = observedD / stdPermD;
 
-    // Bayes Factor BF01 estimate favoring H0
-    let bf01 = Math.exp(-0.5 * (zD * zD)) / (Math.sqrt(2 * Math.PI) * 0.20);
-    bf01 = Math.max(Number(bf01.toFixed(2)), 0.01);
+    // Normal-Normal Bayes Factor (directional H1+: mu > 0 vs H0: mu <= 0, prior scale tau = 0.20)
+    const tau = 0.20;
+    const zStat = observedD / stdPermD;
+    const ratioVar = (tau * tau) / (stdPermD * stdPermD);
+    const exponent = -0.5 * (zStat * zStat) * ((tau * tau) / (stdPermD * stdPermD + tau * tau));
+    const bf01Twosided = Math.sqrt(1.0 + ratioVar) * Math.exp(exponent);
+
+    // Directional correction for one-sided micro-PK hypothesis
+    const argPhi = (zStat * tau) / Math.sqrt(stdPermD * stdPermD + tau * tau);
+    const phiVal = normalCdf(argPhi);
+    const bf01Directional = phiVal > 1e-6 ? bf01Twosided / (2.0 * phiVal) : bf01Twosided * 1e6;
+
+    const bf01 = Math.max(Number(bf01Directional.toFixed(3)), 0.001);
+    const bf10 = bf01 > 0 ? Number((1.0 / bf01).toFixed(3)) : 999.0;
 
     // Layer 1 Negative Control Check:
     const isPlacebo = sessionConfig?.sourceType === "DETERMINISTIC_PRNG_PLACEBO";
@@ -810,8 +847,11 @@ app.post("/api/rng/session/analyze", (req, res) => {
       meanIntentionZ: Number(meanIntentionZ.toFixed(4)),
       meanControlZ: Number(meanControlZ.toFixed(4)),
       overallRawZ: Number(overallRawZ.toFixed(4)),
+      sigmaD: Number(stdPermD.toFixed(4)),
       pValue: Number(pValue.toFixed(5)),
       bf01,
+      bf10,
+      bayesFactorType: "Normal-Normal directional (H1+: mu > 0 vs H0: mu <= 0, tau = 0.20)",
       nPermutations,
       totalBits,
       totalOnes,
