@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Cpu, Database, Activity, Sparkles, Binary, Layers, Compass, Palette, Check, X, Github, ExternalLink, Menu, ShieldCheck, FolderArchive } from 'lucide-react';
+import { Cpu, Database, Activity, Sparkles, Binary, Layers, Compass, Palette, Check, X, Github, ExternalLink, Menu, ShieldCheck, FolderArchive, Radio } from 'lucide-react';
 import { COLOR_THEMES } from '../theme';
 
 interface SidebarProps {
@@ -13,7 +13,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
   activeTab, 
-  setActiveTab,
+  setActiveTab, 
   currentThemeId,
   onSelectTheme,
   isMobileOpen,
@@ -24,6 +24,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navItems = [
     { id: 'overview', label: 'Atlas Overview', icon: Compass },
     { id: 'pattern-explorer', label: 'Pattern Explorer', icon: Sparkles },
+    { id: 'rng-lab', label: 'Quantum RNG (Micro-PK)', icon: Radio },
     { id: 'epigraphy', label: 'G-Series (Epigraphy)', icon: Binary },
     { id: 'mengines', label: 'M-Engines', icon: Cpu },
     { id: 'biophysics', label: 'Track A/B (Bio)', icon: Database },

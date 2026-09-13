@@ -13,6 +13,7 @@ import { ThemeProvider, useTheme } from './ThemeContext';
 import { Menu } from 'lucide-react';
 
 import { PatternExplorerSection } from './components/PatternExplorerSection';
+import { QuantumRngSection } from './components/QuantumRngSection';
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<string>('overview');
@@ -51,6 +52,7 @@ function AppContent() {
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {activeTab === 'overview' && <AtlasOverview onNavigate={setActiveTab} />}
           {activeTab === 'pattern-explorer' && <PatternExplorerSection />}
+          {activeTab === 'rng-lab' && <QuantumRngSection />}
           {activeTab === 'epigraphy' && <EpigraphySection />}
           {activeTab === 'mengines' && <MEnginesSection />}
           {activeTab === 'biophysics' && <BiophysicsSection />}

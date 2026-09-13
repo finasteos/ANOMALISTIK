@@ -1,0 +1,181 @@
+{
+  "sessionConfig": {
+    "sessionId": "RNG_SESS_1789306585503_aaf731ea",
+    "participantId": "TESTER"
+  },
+  "blocks": [
+    {
+      "sessionId": "RNG_SESS_1789306585503_aaf731ea",
+      "blockIndex": 0,
+      "condition": "INTENTION",
+      "target": 1,
+      "nBits": 8192,
+      "ones": 4069,
+      "zeros": 4123,
+      "rawSha256": "a0b60e86f03102647116ca7e05c27fc6d1283352f30e65546252cc9215c01030",
+      "targetScoreZ": -0.5966,
+      "timestamp": "2026-09-13T13:36:25.508Z"
+    },
+    {
+      "blockIndex": 1,
+      "condition": "INTENTION",
+      "target": 0,
+      "nBits": 8192,
+      "ones": 4090,
+      "targetScoreZ": 0.13
+    },
+    {
+      "blockIndex": 2,
+      "condition": "CONTROL",
+      "target": 1,
+      "nBits": 8192,
+      "ones": 4096,
+      "targetScoreZ": 0
+    },
+    {
+      "blockIndex": 3,
+      "condition": "CONTROL",
+      "target": 0,
+      "nBits": 8192,
+      "ones": 4100,
+      "targetScoreZ": -0.09
+    }
+  ],
+  "analysis": {
+    "observedD": -0.1883,
+    "meanIntentionZ": -0.2333,
+    "meanControlZ": -0.045,
+    "overallRawZ": -0.3204,
+    "pValue": 0.66007,
+    "bf01": 1.56,
+    "nPermutations": 20000,
+    "totalBits": 32768,
+    "totalOnes": 16355,
+    "layer1NegativeControlPassed": true,
+    "verdict": "CLAIM_FAILS_NULL",
+    "histogram": [
+      {
+        "bin": -0.31,
+        "count": 3426
+      },
+      {
+        "bin": -0.288,
+        "count": 0
+      },
+      {
+        "bin": -0.267,
+        "count": 3373
+      },
+      {
+        "bin": -0.246,
+        "count": 0
+      },
+      {
+        "bin": -0.224,
+        "count": 0
+      },
+      {
+        "bin": -0.203,
+        "count": 0
+      },
+      {
+        "bin": -0.182,
+        "count": 3311
+      },
+      {
+        "bin": -0.16,
+        "count": 0
+      },
+      {
+        "bin": -0.139,
+        "count": 0
+      },
+      {
+        "bin": -0.117,
+        "count": 0
+      },
+      {
+        "bin": -0.096,
+        "count": 0
+      },
+      {
+        "bin": -0.075,
+        "count": 0
+      },
+      {
+        "bin": -0.053,
+        "count": 0
+      },
+      {
+        "bin": -0.032,
+        "count": 0
+      },
+      {
+        "bin": -0.011,
+        "count": 0
+      },
+      {
+        "bin": 0.011,
+        "count": 0
+      },
+      {
+        "bin": 0.032,
+        "count": 0
+      },
+      {
+        "bin": 0.053,
+        "count": 0
+      },
+      {
+        "bin": 0.075,
+        "count": 0
+      },
+      {
+        "bin": 0.096,
+        "count": 0
+      },
+      {
+        "bin": 0.117,
+        "count": 0
+      },
+      {
+        "bin": 0.139,
+        "count": 0
+      },
+      {
+        "bin": 0.16,
+        "count": 0
+      },
+      {
+        "bin": 0.182,
+        "count": 3280
+      },
+      {
+        "bin": 0.203,
+        "count": 0
+      },
+      {
+        "bin": 0.224,
+        "count": 0
+      },
+      {
+        "bin": 0.246,
+        "count": 0
+      },
+      {
+        "bin": 0.267,
+        "count": 3301
+      },
+      {
+        "bin": 0.288,
+        "count": 0
+      },
+      {
+        "bin": 0.31,
+        "count": 3309
+      }
+    ],
+    "timestamp": "2026-09-13T13:36:25.523Z"
+  },
+  "savedAt": "2026-09-13T13:36:25.523Z"
+}

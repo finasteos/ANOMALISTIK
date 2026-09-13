@@ -1,0 +1,263 @@
+{
+  "session_id": "RNG_SESS_1789306376_482d8297",
+  "participant_id": "SELF_TEST_RUNNER",
+  "mindset_score": 80.0,
+  "source": "APPLE_CSPRNG",
+  "machine_arch": "x86_64",
+  "hostname": "iMacPros-iMac-Pro.local",
+  "is_pilot": true,
+  "blocks": [
+    {
+      "block_index": 0,
+      "condition": "CONTROL",
+      "target": 1,
+      "target_visible": false,
+      "blinded_source_id": "S1",
+      "actual_source_id": "APPLE_CSPRNG",
+      "start_utc": "2026-09-13T13:32:56Z",
+      "end_utc": "2026-09-13T13:32:56Z",
+      "start_ns": 1789306376066953000,
+      "end_ns": 1789306376067023000,
+      "duration_s": 0.0,
+      "n_bits": 408,
+      "ones": 200,
+      "zeros": 208,
+      "raw_sha256": "935a87abd22078a947c1a23ec891808f15c1f8ab99282a7d17a7ceea55d05296",
+      "target_score_z": -0.3961,
+      "hardware_status": "OK"
+    },
+    {
+      "block_index": 1,
+      "condition": "INTENTION",
+      "target": 0,
+      "target_visible": true,
+      "blinded_source_id": "S1",
+      "actual_source_id": "APPLE_CSPRNG",
+      "start_utc": "2026-09-13T13:32:56Z",
+      "end_utc": "2026-09-13T13:32:56Z",
+      "start_ns": 1789306376067123000,
+      "end_ns": 1789306376067163000,
+      "duration_s": 0.0,
+      "n_bits": 408,
+      "ones": 219,
+      "zeros": 189,
+      "raw_sha256": "45ae2b97b85bdec6aad1a32bd9debee2bbac06bd8c257091f0ec77362e0e7787",
+      "target_score_z": -1.4852,
+      "hardware_status": "OK"
+    },
+    {
+      "block_index": 2,
+      "condition": "INTENTION",
+      "target": 1,
+      "target_visible": true,
+      "blinded_source_id": "S1",
+      "actual_source_id": "APPLE_CSPRNG",
+      "start_utc": "2026-09-13T13:32:56Z",
+      "end_utc": "2026-09-13T13:32:56Z",
+      "start_ns": 1789306376067214000,
+      "end_ns": 1789306376067244000,
+      "duration_s": 0.0,
+      "n_bits": 408,
+      "ones": 205,
+      "zeros": 203,
+      "raw_sha256": "bbed09897e87aed2aadf5845e80ad8410b479d5f6de23e74b733e40453262724",
+      "target_score_z": 0.099,
+      "hardware_status": "OK"
+    },
+    {
+      "block_index": 3,
+      "condition": "CONTROL",
+      "target": 0,
+      "target_visible": false,
+      "blinded_source_id": "S1",
+      "actual_source_id": "APPLE_CSPRNG",
+      "start_utc": "2026-09-13T13:32:56Z",
+      "end_utc": "2026-09-13T13:32:56Z",
+      "start_ns": 1789306376067282000,
+      "end_ns": 1789306376067309000,
+      "duration_s": 0.0,
+      "n_bits": 408,
+      "ones": 209,
+      "zeros": 199,
+      "raw_sha256": "8ac76ed325e0a7a5c4ef1c38f47c8635acf79195667969735b184dd795090283",
+      "target_score_z": -0.4951,
+      "hardware_status": "OK"
+    }
+  ],
+  "analysis": {
+    "observed_d": -0.2475,
+    "mean_intention_z": -0.6931,
+    "mean_control_z": -0.4456,
+    "overall_raw_z": 0.8416,
+    "p_value": 0.49685,
+    "bf01": 1.92,
+    "n_permutations": 10000,
+    "total_bits": 1632,
+    "total_ones": 833,
+    "layer1_negative_control_passed": true,
+    "verdict": "CLAIM_FAILS_NULL",
+    "histogram": [
+      {
+        "bin": -1.1102,
+        "count": 1670
+      },
+      {
+        "bin": -1.0533,
+        "count": 0
+      },
+      {
+        "bin": -0.9963,
+        "count": 0
+      },
+      {
+        "bin": -0.9394,
+        "count": 0
+      },
+      {
+        "bin": -0.8825,
+        "count": 0
+      },
+      {
+        "bin": -0.8255,
+        "count": 1704
+      },
+      {
+        "bin": -0.7686,
+        "count": 1658
+      },
+      {
+        "bin": -0.7117,
+        "count": 0
+      },
+      {
+        "bin": -0.6547,
+        "count": 0
+      },
+      {
+        "bin": -0.5978,
+        "count": 0
+      },
+      {
+        "bin": -0.5409,
+        "count": 0
+      },
+      {
+        "bin": -0.4839,
+        "count": 0
+      },
+      {
+        "bin": -0.427,
+        "count": 0
+      },
+      {
+        "bin": -0.3701,
+        "count": 0
+      },
+      {
+        "bin": -0.3131,
+        "count": 0
+      },
+      {
+        "bin": -0.2562,
+        "count": 0
+      },
+      {
+        "bin": -0.1993,
+        "count": 0
+      },
+      {
+        "bin": -0.1423,
+        "count": 0
+      },
+      {
+        "bin": -0.0854,
+        "count": 0
+      },
+      {
+        "bin": -0.0285,
+        "count": 0
+      },
+      {
+        "bin": 0.0285,
+        "count": 0
+      },
+      {
+        "bin": 0.0854,
+        "count": 0
+      },
+      {
+        "bin": 0.1423,
+        "count": 0
+      },
+      {
+        "bin": 0.1993,
+        "count": 0
+      },
+      {
+        "bin": 0.2562,
+        "count": 0
+      },
+      {
+        "bin": 0.3131,
+        "count": 0
+      },
+      {
+        "bin": 0.3701,
+        "count": 0
+      },
+      {
+        "bin": 0.427,
+        "count": 0
+      },
+      {
+        "bin": 0.4839,
+        "count": 0
+      },
+      {
+        "bin": 0.5409,
+        "count": 0
+      },
+      {
+        "bin": 0.5978,
+        "count": 0
+      },
+      {
+        "bin": 0.6547,
+        "count": 0
+      },
+      {
+        "bin": 0.7117,
+        "count": 0
+      },
+      {
+        "bin": 0.7686,
+        "count": 1655
+      },
+      {
+        "bin": 0.8255,
+        "count": 1654
+      },
+      {
+        "bin": 0.8825,
+        "count": 0
+      },
+      {
+        "bin": 0.9394,
+        "count": 0
+      },
+      {
+        "bin": 0.9963,
+        "count": 0
+      },
+      {
+        "bin": 1.0533,
+        "count": 0
+      },
+      {
+        "bin": 1.1102,
+        "count": 1659
+      }
+    ],
+    "timestamp": "2026-09-13T13:32:56Z"
+  }
+}

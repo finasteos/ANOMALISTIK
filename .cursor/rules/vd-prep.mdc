@@ -1,0 +1,11 @@
+---
+description: VD-prep — graph first, autonomous until blocker
+alwaysApply: true
+---
+
+# VD-prep
+
+1. Run autonomously until a real blocker.
+2. Use `graft ask` / the graph before grep.
+3. Read `PRD.md` if it exists.
+4. Minimal diffs. Log new architecture in `learnings.md`.

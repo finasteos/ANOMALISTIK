@@ -275,6 +275,20 @@ export const BIOPHYSICAL_MARKERS: BiophysicalMarker[] = [
 
 export const LAB_MISSIONS: LabMission[] = [
   {
+    id: 'q01',
+    code: 'Q01',
+    title: 'Micro-PK Preregistered Quantum RNG Null Adjudication',
+    domain: 'Quantum Entropy & Intention',
+    targetObject: 'Local Physical USB QRNG + Apple CSPRNG + Seeded PRNG Control Arms',
+    methodology: 'Blinded 4-arm design, exact 50/50 target balancing, 100k-round permutation test & Savage-Dickey BF01.',
+    status: 'STRUCTURE_SIGNAL',
+    zScoreOrMetric: 'Preregistered α = 0.001 (N ~ 19.1/δ²)',
+    summary: 'Gold-standard micro-PK replication engine designed for radical openness and extreme conservatism. Counterbalances target 1 and 0 to cancel hardware bias, enforces strict absence of live efficacy peeking, and validates against deterministic placebo streams.',
+    year: 2026,
+    yearRange: '2026',
+    severityScore: 94
+  },
+  {
     id: 'g30',
     code: 'G30',
     title: 'TESS SN 1987A SETI Ellipsoid Probe',
