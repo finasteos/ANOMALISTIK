@@ -176,7 +176,7 @@ const RESEARCHER_WISHLIST_DATA: WishlistItem[] = [
 
 export const DataVerificationSection: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
   
   // Active intake target: 'CDLI_CORPUS' or 'SKINWALKER_OPEN_DATA'
   const [activeTarget, setActiveTarget] = useState<'CDLI_CORPUS' | 'SKINWALKER_OPEN_DATA'>('SKINWALKER_OPEN_DATA');

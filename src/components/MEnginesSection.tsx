@@ -287,7 +287,7 @@ const THzWaveCanvas: React.FC<THzCanvasProps> = ({
 
 export const MEnginesSection: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
   const [activeTab, setActiveTab] = useState<'CORRELATION_ENGINES' | 'METAMATERIAL_SOLVER'>('CORRELATION_ENGINES');
   const [selectedEngine, setSelectedEngine] = useState<MEngine>(M_ENGINES[0]);
   const [eventPreset, setEventPreset] = useState<string>('LIVE'); // 'LIVE' | 'MAY_2024_SOLAR' | 'DEC_2023_FRB' | 'HISTORICAL_1H'

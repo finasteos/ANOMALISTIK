@@ -36,7 +36,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   const currentTheme = COLOR_THEMES[currentThemeId] || COLOR_THEMES.IVORY_MONOCHROME;
-  const isLight = currentThemeId === 'IVORY_MONOCHROME';
+  const isLight = !currentTheme.isDark;
 
   const sidebarClasses = `
     fixed inset-y-0 left-0 z-50 flex flex-col w-64 border-r transition-transform duration-300

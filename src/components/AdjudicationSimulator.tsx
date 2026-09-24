@@ -52,7 +52,7 @@ const PRESET_SAMPLES = [
 
 export const AdjudicationSimulator: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
 
   const [sampleName, setSampleName] = useState(PRESET_SAMPLES[0].name);
   const [sequence, setSequence] = useState(PRESET_SAMPLES[0].seq);
@@ -301,7 +301,7 @@ export const AdjudicationSimulator: React.FC = () => {
 
 const BackgroundMissionService: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
   const [isActive, setIsActive] = useState(false);
   const [logs, setLogs] = useState<{ id: string; time: string; msg: string; type: string }[]>([]);
   const [processingMission, setProcessingMission] = useState<string | null>(null);

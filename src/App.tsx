@@ -41,10 +41,10 @@ function AppContent() {
   return (
     <div className={`min-h-screen flex flex-col ${theme.mainBg} font-sans transition-colors duration-300 overflow-x-hidden`}>
       {/* Mobile Top Header */}
-      <div className={`lg:hidden sticky top-0 z-40 flex items-center justify-between p-4 border-b backdrop-blur-md ${theme.navbarBg} ${themeId === 'IVORY_MONOCHROME' ? 'border-stone-300' : 'border-slate-800'}`}>
+      <div className={`lg:hidden sticky top-0 z-40 flex items-center justify-between p-4 border-b backdrop-blur-md ${theme.navbarBg} ${!theme.isDark ? 'border-stone-300' : 'border-slate-800'}`}>
         <div className="flex items-center space-x-2">
           <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-lg font-mono shadow-md ${
-            themeId === 'IVORY_MONOCHROME' ? 'bg-stone-900 text-stone-50' : 'bg-cyan-500 text-slate-950'
+            !theme.isDark ? 'bg-stone-900 text-stone-50' : 'bg-cyan-500 text-slate-950'
           }`}>
             A
           </div>
@@ -86,7 +86,7 @@ function AppContent() {
         </main>
 
         {/* Footer */}
-        <footer className={`border-t ${theme.cardBorder} ${themeId === 'IVORY_MONOCHROME' ? 'bg-[#f4f1e8]/90 text-stone-600' : 'bg-slate-950/90 text-slate-500'} py-6 text-center text-xs font-mono shrink-0 mt-auto`}>
+        <footer className={`border-t ${theme.cardBorder} ${!theme.isDark ? 'bg-[#f4f1e8]/90 text-stone-600' : 'bg-slate-950/90 text-slate-500'} py-6 text-center text-xs font-mono shrink-0 mt-auto`}>
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
             <div className="flex items-center space-x-2">
               <span className={`font-bold ${theme.primaryTextColor}`}>ANOMALISTICS</span>

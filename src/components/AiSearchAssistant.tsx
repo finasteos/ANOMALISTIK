@@ -7,7 +7,7 @@ import { apiPost } from '../lib/api';
 
 export const AiSearchAssistant: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
   const [activeSubTab, setActiveSubTab] = useState<'search' | 'thinking'>('search');
 
   // Search Grounded state

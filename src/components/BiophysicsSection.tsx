@@ -6,7 +6,7 @@ import { useTheme } from '../ThemeContext';
 
 export const BiophysicsSection: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
   const [activeTab, setActiveTab] = useState<'BLT_MARKERS' | 'RF_BIO_EXPOSURE' | 'QUANTUM_ORCH_OR' | 'EVOLUTIONARY_PROBABILITY_EPE'>('BLT_MARKERS');
   const [selectedMarker, setSelectedMarker] = useState(BIOPHYSICAL_MARKERS[0]);
 

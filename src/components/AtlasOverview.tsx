@@ -273,7 +273,7 @@ interface AtlasOverviewProps {
 
 export const AtlasOverview: React.FC<AtlasOverviewProps> = ({ onNavigate }) => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
 
   // Real-Time Threshold Alert System States
   const [alertThresholdZ, setAlertThresholdZ] = useState<number>(3.5);

@@ -19,7 +19,7 @@ import { useTheme } from '../ThemeContext';
 
 export const EpigraphySection: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
   const [selectedCorpus, setSelectedCorpus] = useState<EpigraphicCorpus>(EPIGRAPHIC_CORPORA[0]);
 
   // Transform data for bar chart
@@ -254,7 +254,7 @@ export const EpigraphySection: React.FC = () => {
 // Subcomponent: Markov Embedding & Semantic Slot-Aligner
 const MarkovSlotAlignerSection: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
 
   const [targetScript, setTargetScript] = useState<'linear-a' | 'indus' | 'proto-elamite' | 'rongorongo'>('linear-a');
   const [referenceStandard, setReferenceStandard] = useState<'linear-b' | 'sumerian-ur3' | 'old-babylonian'>('linear-b');

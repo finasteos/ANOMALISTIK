@@ -565,7 +565,7 @@ const generateCrossCorrCurve = (r: number, lagOpt: number) => {
 
 export const GeophysicsAstroSection: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
   const [activeTab, setActiveTab] = useState<'CORRELATION_MATRIX' | 'SPATIAL_DOME_3271' | 'BLACK_HOLE_COSMOLOGY' | 'APOLLO_17_LUNAR' | 'SETI_ELLIPSOID_SN1987A' | 'INFRARED_PORTAL_NAVAJO'>('CORRELATION_MATRIX');
   const [selectedMission, setSelectedMission] = useState(LAB_MISSIONS[0]);
 

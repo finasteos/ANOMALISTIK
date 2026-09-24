@@ -95,7 +95,7 @@ interface RngClusterStatus {
 
 export const QuantumRngSection: React.FC = () => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
 
   // Navigation tabs
   const [activeSubTab, setActiveSubTab] = useState<'session' | 'analysis' | 'cluster' | 'power' | 'prereg'>('session');

@@ -49,7 +49,7 @@ interface DeclassifiedArchiveSectionProps {
 
 export const DeclassifiedArchiveSection: React.FC<DeclassifiedArchiveSectionProps> = ({ onNavigate }) => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
 
   const [catalog, setCatalog] = useState<DeclassifiedArchiveIndex | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

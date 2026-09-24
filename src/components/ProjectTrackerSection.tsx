@@ -201,7 +201,7 @@ interface ProjectTrackerProps {
 
 export const ProjectTrackerSection: React.FC<ProjectTrackerProps> = ({ onNavigate }) => {
   const { theme, themeId } = useTheme();
-  const isLight = themeId === 'IVORY_MONOCHROME';
+  const isLight = !theme.isDark;
 
   const [projects, setProjects] = useState<ActiveProjectSchema[]>(() => {
     try {
