@@ -682,7 +682,7 @@ class TimestampSynchronizer:
             return {}
         today = datetime.date.today().isoformat()
         parquet_path = SYNC_DIR / f"{name}_{today}.parquet"
-        df.to_parquet(parquet_path)
+        df.to_parquet(parquet_path, compression="zstd")  # TASKLIST D2: zstd (readers agnostic)
         out = {
             "parquet": str(parquet_path),
             "parquet_rel": str(parquet_path.relative_to(PROJECT_ROOT)),
