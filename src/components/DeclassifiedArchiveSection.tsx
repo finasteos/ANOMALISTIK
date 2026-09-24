@@ -18,6 +18,7 @@ import {
   FolderArchive
 } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { apiGet } from '../lib/api';
 
 interface ArchiveFileItem {
   path: string;
@@ -60,20 +61,20 @@ export const DeclassifiedArchiveSection: React.FC<DeclassifiedArchiveSectionProp
 
   // Fetch catalog from API
   useEffect(() => {
-    fetch('/api/declassified/catalog')
-      .then((res) => {
-        if (!res.ok) throw new Error('Could not load declassified archive index');
-        return res.json();
-      })
-      .then((data: DeclassifiedArchiveIndex) => {
+    let cancelled = false;
+    apiGet<DeclassifiedArchiveIndex>('/api/declassified/catalog')
+      .then((data) => {
+        if (cancelled) return;
         setCatalog(data);
         setLoading(false);
       })
       .catch((err) => {
+        if (cancelled) return;
         console.error(err);
         setError(err.message);
         setLoading(false);
       });
+    return () => { cancelled = true; };
   }, []);
 
   // Flatten all files into a single array with archive_name

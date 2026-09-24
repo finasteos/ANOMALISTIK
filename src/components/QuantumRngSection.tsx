@@ -42,6 +42,7 @@ import {
   Line 
 } from 'recharts';
 import { useTheme } from '../ThemeContext';
+import { apiGet, apiPost } from '../lib/api';
 
 interface RngBlock {
   blockIndex: number;
@@ -133,11 +134,8 @@ export const QuantumRngSection: React.FC = () => {
   const fetchClusterStatus = async () => {
     setLoadingStatus(true);
     try {
-      const res = await fetch('/api/rng/status');
-      if (res.ok) {
-        const data = await res.json();
-        setClusterInfo(data);
-      }
+      const data = await apiGet<unknown>('/api/rng/status');
+      setClusterInfo(data);
     } catch (err) {
       console.warn('Could not fetch RNG status:', err);
     } finally {
@@ -153,22 +151,14 @@ export const QuantumRngSection: React.FC = () => {
     setCompletedBlocks([]);
 
     try {
-      const res = await fetch('/api/rng/session/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          participantId,
-          mindsetScore,
-          sourceType,
-          nBlocksEach,
-          blockDurationS,
-          isPilot: true,
-        }),
+      const data = await apiPost<any>('/api/rng/session/start', {
+        participantId,
+        mindsetScore,
+        sourceType,
+        nBlocksEach,
+        blockDurationS,
+        isPilot: true,
       });
-
-      if (!res.ok) throw new Error('Failed to initialize RNG session on server');
-
-      const data = await res.json();
       setSessionId(data.sessionId);
       setPrngCommitment(data.prngCommitment);
       setSchedule(data.schedule);
@@ -205,21 +195,14 @@ export const QuantumRngSection: React.FC = () => {
     const currentBlock = schedule[currentBlockIndex];
 
     try {
-      const res = await fetch('/api/rng/session/block', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          blockIndex: currentBlock.blockIndex,
-          condition: currentBlock.condition,
-          target: currentBlock.target,
-          sourceType,
-          bytesToRead: 2048, // 16,384 bits per block
-        }),
+      const blockResult = await apiPost<any>('/api/rng/session/block', {
+        sessionId,
+        blockIndex: currentBlock.blockIndex,
+        condition: currentBlock.condition,
+        target: currentBlock.target,
+        sourceType,
+        bytesToRead: 2048, // 16,384 bits per block
       });
-
-      if (!res.ok) throw new Error('Block acquisition failed');
-      const blockResult = await res.json();
 
       const updated = [...completedBlocks, { ...currentBlock, ...blockResult }];
       setCompletedBlocks(updated);
@@ -242,24 +225,17 @@ export const QuantumRngSection: React.FC = () => {
     const blocksToAnalyze = finalBlocks || completedBlocks;
 
     try {
-      const res = await fetch('/api/rng/session/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionConfig: {
-            sessionId,
-            participantId,
-            mindsetScore,
-            sourceType,
-            blockDurationS,
-            totalBlocks: blocksToAnalyze.length,
-          },
-          blocks: blocksToAnalyze,
-        }),
-      });
-
-      if (!res.ok) throw new Error('Analysis failed on server');
-      const analysisData = await res.json();
+      const analysisData = await apiPost<any>('/api/rng/session/analyze', {
+        sessionConfig: {
+          sessionId,
+          participantId,
+          mindsetScore,
+          sourceType,
+          blockDurationS,
+          totalBlocks: blocksToAnalyze.length,
+        },
+        blocks: blocksToAnalyze,
+      }, 120000); // 20k-perm null burns CPU; allow 120s
       setAnalysis(analysisData);
       setSessionState('FINISHED');
       setActiveSubTab('analysis');

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Layers, Play, RefreshCw, CheckCircle2, AlertTriangle, ShieldAlert, Sparkles, HelpCircle, Upload, FileUp, Terminal, Activity, Zap } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { apiPost } from '../lib/api';
 import { LAB_MISSIONS } from '../data/labData';
 
 interface AdjudicationResult {
@@ -69,18 +70,10 @@ export const AdjudicationSimulator: React.FC = () => {
     setError(null);
 
     try {
-      const res = await fetch('/api/adjudicate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sequence, sampleName }),
+      const data = await apiPost<AdjudicationResult>('/api/adjudicate', {
+        sequence: sequence.trim().slice(0, 50000),
+        sampleName,
       });
-
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error || 'Adjudication failed');
-      }
-
-      const data: AdjudicationResult = await res.json();
       setResult(data);
     } catch (err: any) {
       setError(err.message || 'Error executing adjudication');

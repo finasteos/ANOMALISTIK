@@ -26,6 +26,40 @@ if (!fs.existsSync(DATA_RNG_DIR)) {
 }
 
 app.use(express.json({ limit: "10mb" }));
+app.disable("x-powered-by");
+
+// ── Security headers (helmet-lite, zero deps — TASKLIST B6) ───────────────
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  if (process.env.VERCEL === "1") {
+    res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  }
+  next();
+});
+
+// ── In-memory sliding-window rate limiter (TASKLIST B6) ────────────────────
+// Caps anonymous quota burn on AI routes. Resets on restart (serverless-safe default).
+const rateBuckets = new Map<string, number[]>();
+function rateLimit(max: number, windowMs: number) {
+  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const key = `${req.ip || req.socket?.remoteAddress || "?"}:${req.path}`;
+    const now = Date.now();
+    const hits = (rateBuckets.get(key) || []).filter((t) => now - t < windowMs);
+    if (hits.length >= max) {
+      res.setHeader("Retry-After", String(Math.ceil(windowMs / 1000)));
+      return res.status(429).json({ error: "Rate limit exceeded. Slow down." });
+    }
+    hits.push(now);
+    if (rateBuckets.size > 5000) rateBuckets.clear();
+    rateBuckets.set(key, hits);
+    next();
+  };
+}
+app.use("/api/ai/", rateLimit(30, 60_000)); // 30/min per IP+route (OpenRouter quota)
+app.use("/api/", rateLimit(300, 60_000)); // 300/min backstop for the rest
 
 // Normalize request URL only on Vercel (serverless strips /api prefix).
 // Skips static assets, Vite internals, health, and files with extensions.
@@ -842,10 +876,10 @@ app.post("/api/rng/session/analyze", (req, res) => {
       verdict = "CLAIM_FAILS_NULL";
     }
 
-    // Build Histogram Bins for Recharts
+    // Build Histogram Bins for Recharts (40 bins = Python parity, TASKLIST D4)
     const minD = Math.min(...permDValues, observedD);
     const maxD = Math.max(...permDValues, observedD);
-    const nBins = 30;
+    const nBins = 40;
     const step = (maxD - minD) / nBins || 0.1;
     const bins = Array.from({ length: nBins }, (_, i) => ({
       bin: Number((minD + (i + 0.5) * step).toFixed(3)),
@@ -937,6 +971,19 @@ app.get("/api/rng/sessions", (req, res) => {
   } catch (error: any) {
     return res.status(500).json({ error: error.message || "Failed to list RNG sessions." });
   }
+});
+
+// Unknown /api/* → JSON 404 (must precede SPA fallback — TASKLIST B6)
+app.use("/api", (_req, res) => {
+  return res.status(404).json({ error: "Unknown API route." });
+});
+
+// Global error handler: never leak stacks to clients in production
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error("[unhandled]", err);
+  const msg = process.env.NODE_ENV === "production" ? "Internal error." : String(err?.message || err);
+  return res.status(500).json({ error: msg });
 });
 
 async function startServer() {
