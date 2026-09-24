@@ -4,6 +4,14 @@ import fs from "fs";
 import crypto from "crypto";
 import os from "os";
 import dotenv from "dotenv";
+import {
+  parseCSV,
+  pf,
+  countOnesBytes,
+  normalCdf,
+  shannonEntropy,
+  indexOfCoincidence,
+} from "./src/lib/stats";
 
 dotenv.config();
 
@@ -19,10 +27,21 @@ if (!fs.existsSync(DATA_RNG_DIR)) {
 
 app.use(express.json({ limit: "10mb" }));
 
-// Normalize request URL if called by Vercel serverless function without /api prefix
+// Normalize request URL only on Vercel (serverless strips /api prefix).
+// Skips static assets, Vite internals, health, and files with extensions.
 app.use((req, _res, next) => {
-  if (!req.url.startsWith("/api") && !req.url.startsWith("/@") && !req.url.startsWith("/src")) {
-    req.url = `/api${req.url.startsWith("/") ? "" : "/"}${req.url}`;
+  if (process.env.VERCEL === "1") {
+    const url = req.url.split("?")[0];
+    const isAsset = /\.[a-zA-Z0-9]+$/.test(url);
+    if (
+      !req.url.startsWith("/api") &&
+      !req.url.startsWith("/@") &&
+      !req.url.startsWith("/src") &&
+      url !== "/health" &&
+      !isAsset
+    ) {
+      req.url = `/api${req.url.startsWith("/") ? "" : "/"}${req.url}`;
+    }
   }
   next();
 });
@@ -38,24 +57,7 @@ function latestFile(dir: string, pattern: RegExp): string | null {
   } catch { return null; }
 }
 
-// ── Helper: parse CSV text into array of row objects ─────────────────────
-function parseCSV(text: string): Record<string, string>[] {
-  const lines = text.trim().split("\n");
-  if (lines.length < 2) return [];
-  const headers = lines[0].split(",").map(h => h.trim().replace(/^"|"$/g, ""));
-  return lines.slice(1).map(line => {
-    const values = line.split(",");
-    const row: Record<string, string> = {};
-    headers.forEach((h, i) => { row[h] = (values[i] || "").trim().replace(/^"|"$/g, ""); });
-    return row;
-  });
-}
-
-// ── Helper: safely parse float ────────────────────────────────────────────
-const pf = (v: string | undefined) => {
-  const n = parseFloat(v || "");
-  return isNaN(n) ? null : n;
-};
+// ── Shared pure helpers live in ./src/lib/stats (TASKLIST Q3/B3) ──────────
 
 // ─────────────────────────────────────────────────────────────────────────
 // API Route: Geospace Live Feed
@@ -73,7 +75,7 @@ app.get("/api/geospace", (_req, res) => {
 
     const raw = fs.readFileSync(csvPath, "utf-8");
     const rows = parseCSV(raw);
-    if (rows.length === 0) return res.status(204).json({ error: "Empty dataset" });
+    if (rows.length === 0) return res.status(404).json({ error: "Empty dataset" });
 
     // Take last 180 rows (3 hours @ 1min, or 1440 rows @ 5min = 5 days)
     const tail = rows.slice(-180);
@@ -146,28 +148,35 @@ app.get("/api/geospace", (_req, res) => {
 // API Route: Geospace Pipeline Status
 // ─────────────────────────────────────────────────────────────────────────
 app.get("/api/geospace/status", (_req, res) => {
-  const csvPath  = latestFile(DATA_SYNCED_DIR,     /geospace.*\.csv$/);
-  const manifest = latestFile(DATA_SYNCED_DIR,     /manifest.*\.json$/);
-  const dscovr   = latestFile(path.join(DATA_DOWNLOADS_DIR, "dscovr"),       /\.parquet$/);
-  const eida     = latestFile(path.join(DATA_DOWNLOADS_DIR, "eida"),         /\.parquet$/);
-  const imag     = latestFile(path.join(DATA_DOWNLOADS_DIR, "intermagnet"),  /\.parquet$/);
+  try {
+    const csvPath  = latestFile(DATA_SYNCED_DIR,     /geospace.*\.csv$/);
+    const manifest = latestFile(DATA_SYNCED_DIR,     /manifest.*\.json$/);
+    const dscovr   = latestFile(path.join(DATA_DOWNLOADS_DIR, "dscovr"),       /\.parquet$/);
+    const eida     = latestFile(path.join(DATA_DOWNLOADS_DIR, "eida"),         /\.parquet$/);
+    const imag     = latestFile(path.join(DATA_DOWNLOADS_DIR, "intermagnet"),  /\.parquet$/);
 
-  const age = (p: string | null) => {
-    if (!p) return null;
-    const ms = Date.now() - fs.statSync(p).mtimeMs;
-    return Math.round(ms / 60000); // minutes ago
-  };
+    const age = (p: string | null) => {
+      if (!p) return null;
+      try {
+        const ms = Date.now() - fs.statSync(p).mtimeMs;
+        return Math.round(ms / 60000); // minutes ago
+      } catch { return null; }
+    };
 
-  return res.json({
-    pipeline_ready:    !!csvPath,
-    synced_csv:        csvPath ? path.basename(csvPath) : null,
-    synced_age_min:    age(csvPath),
-    dscovr_age_min:    age(dscovr),
-    eida_age_min:      age(eida),
-    intermagnet_age_min: age(imag),
-    manifest:          manifest ? path.basename(manifest) : null,
-    fetch_command:     ".venv/bin/python3 scripts/fetch_geospace_sync.py --sources dscovr,intermagnet,eida",
-  });
+    return res.json({
+      pipeline_ready:    !!csvPath,
+      synced_csv:        csvPath ? path.basename(csvPath) : null,
+      synced_age_min:    age(csvPath),
+      dscovr_age_min:    age(dscovr),
+      eida_age_min:      age(eida),
+      intermagnet_age_min: age(imag),
+      manifest:          manifest ? path.basename(manifest) : null,
+      fetch_command:     ".venv/bin/python3 scripts/fetch_geospace_sync.py --sources dscovr,intermagnet,eida",
+    });
+  } catch (err: any) {
+    console.error("[/api/geospace/status]", err);
+    return res.status(500).json({ error: "Failed to read pipeline status." });
+  }
 });
 
 
@@ -184,25 +193,37 @@ async function callOpenRouter(
     throw new Error("OPENROUTER_API_KEY is not configured in environment variables.");
   }
 
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": "https://anomalistik.twistedstacks.com",
-      "X-Title": "ANOMALISTIK Laboratory",
-    },
-    body: JSON.stringify({
-      model: OPENROUTER_MODEL,
-      messages,
-      temperature: options.temperature ?? 0.3,
-      max_tokens: options.max_tokens ?? 3072,
-    }),
-  });
+  const ctrl = new AbortController();
+  const timeout = setTimeout(() => ctrl.abort(), 25000);
+  let res: Response;
+  try {
+    res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": process.env.APP_PUBLIC_URL || "https://anomalistics.local",
+        "X-Title": "ANOMALISTICS Laboratory",
+      },
+      body: JSON.stringify({
+        model: OPENROUTER_MODEL,
+        messages,
+        temperature: options.temperature ?? 0.3,
+        max_tokens: options.max_tokens ?? 3072,
+      }),
+      signal: ctrl.signal,
+    });
+  } catch (e: any) {
+    if (e?.name === "AbortError") throw new Error("OpenRouter request timed out after 25s.");
+    throw e;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`OpenRouter API error (${res.status}): ${errorText}`);
+    const errorText = (await res.text()).slice(0, 300);
+    console.error(`[openrouter] upstream ${res.status}: ${errorText}`);
+    throw new Error(`AI upstream failed (HTTP ${res.status}).`);
   }
 
   const data = (await res.json()) as any;
@@ -216,7 +237,13 @@ async function callOpenRouter(
 
 // API Route: Health Check
 app.get("/api/health", (_req, res) => {
-  res.json({ status: "ok", timestamp: new Date().toISOString() });
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime_s: Math.round(process.uptime()),
+    version: process.env.npm_package_version || "2.0.0",
+    vercel: process.env.VERCEL === "1",
+  });
 });
 
 // API Route: Search Grounded Research (using OpenRouter minimax/minimax-m3:free)
@@ -226,6 +253,7 @@ app.post("/api/ai/search-grounded", async (req, res) => {
     if (!query) {
       return res.status(400).json({ error: "Query is required" });
     }
+    const safeQuery = String(query).slice(0, 4000);
 
     const systemPrompt = `You are the AI Research Assistant for ANOMALISTICS (Integrated Laboratory & Universal Entropy Engine).
 You provide scientifically rigorous, data-driven answers grounded in up-to-date scientific literature, research papers, and astronomical/geophysical data.
@@ -234,7 +262,7 @@ When asked about crop circles, undeciphered scripts, FRBs, space weather, or geo
 
     const result = await callOpenRouter([
       { role: "system", content: systemPrompt },
-      { role: "user", content: query },
+      { role: "user", content: safeQuery },
     ]);
 
     return res.json({
@@ -258,6 +286,8 @@ app.post("/api/ai/high-thinking", async (req, res) => {
     if (!prompt) {
       return res.status(400).json({ error: "Prompt is required" });
     }
+    const safePrompt = String(prompt).slice(0, 8000);
+    const safeDomain = String(domainContext || "General Lab Context").slice(0, 500);
 
     const systemInstruction = `You are the Deep Reasoner & Adjudication Engine for ANOMALISTICS (Integrated Laboratory & Universal Entropy Engine).
 Your task is to perform deep, multi-dimensional reasoning on complex anomalies across Epigraphy, Geophysics, Heliophysics, Biophysics, and Signals.
@@ -266,11 +296,11 @@ Rule Book:
 1. "Structure ≠ Message": Mathematical structure, periodicity, or low entropy is evidence of structural coupling, never direct proof of intent or alien origin.
 2. "Layer 1 Negative Control": Test every signal against shuffle nulls, known hoaxes, and natural analogs.
 3. Express findings in z-scores, Shannon entropy H(X), conditional entropy H(Y|X), and clear verdicts (SEQUENCE_STRUCTURE, STRUCTURE_SIGNAL, DIP_STRUCTURE, CLAIM_FAILS_NULL, UNDERDETERMINED).
-4. Provide step-by-step hypothesis adjudication. Context provided: ${domainContext || 'General Lab Context'}`;
+4. Provide step-by-step hypothesis adjudication. Context provided: ${safeDomain}`;
 
     const result = await callOpenRouter([
       { role: "system", content: systemInstruction },
-      { role: "user", content: prompt },
+      { role: "user", content: safePrompt },
     ], { temperature: 0.2, max_tokens: 4096 });
 
     return res.json({
@@ -294,29 +324,22 @@ app.post("/api/adjudicate", (req, res) => {
     return res.status(400).json({ error: "Valid text sequence is required" });
   }
 
-  const cleanSeq = sequence.trim();
+  const cleanSeq = sequence.trim().slice(0, 50000);
   const len = cleanSeq.length;
   if (len < 10) {
     return res.status(400).json({ error: "Sequence must be at least 10 characters long" });
   }
 
-  // 1. Calculate character frequencies & Shannon Entropy H(X)
+  // 1. Character frequencies → Shannon Entropy H(X) + Index of Coincidence
   const freq: Record<string, number> = {};
   for (const char of cleanSeq) {
     freq[char] = (freq[char] || 0) + 1;
   }
-
-  let hX = 0;
-  let sumICNumerator = 0;
-  for (const char in freq) {
-    const count = freq[char];
-    const p = count / len;
-    hX -= p * Math.log2(p);
-    sumICNumerator += count * (count - 1);
-  }
+  const counts = Object.values(freq);
+  const hX = shannonEntropy(counts, len);
 
   // 2. Index of Coincidence (IC)
-  const ic = len > 1 ? sumICNumerator / (len * (len - 1)) : 0;
+  const ic = indexOfCoincidence(counts, len);
 
   // 3. Conditional Bigram Entropy H(Y|X)
   const bigramFreq: Record<string, number> = {};
@@ -343,10 +366,10 @@ app.post("/api/adjudicate", (req, res) => {
 
   const charsArr = cleanSeq.split("");
   for (let s = 0; s < numPermutations; s++) {
-    // Fisher-Yates shuffle
+    // Fisher-Yates shuffle (CSPRNG — null model must not use Math.random)
     const shuf = [...charsArr];
     for (let i = shuf.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = crypto.randomInt(0, i + 1);
       [shuf[i], shuf[j]] = [shuf[j], shuf[i]];
     }
 
@@ -439,17 +462,9 @@ app.get("/api/declassified/catalog", (_req, res) => {
 // In-memory active session commitments (seed -> commitment hash)
 const activeSessionCommitments = new Map<string, { seedHex: string; commitment: string }>();
 
-// Helper: count ones in a Buffer
+// Helper: count ones in a Buffer (pure impl in ./src/lib/stats)
 function countBufferOnes(buffer: Buffer): number {
-  let ones = 0;
-  for (let i = 0; i < buffer.length; i++) {
-    let byte = buffer[i];
-    while (byte > 0) {
-      ones += byte & 1;
-      byte >>= 1;
-    }
-  }
-  return ones;
+  return countOnesBytes(buffer);
 }
 
 // Helper: generate pseudo-random deterministic buffer using SHA-256 stream
@@ -472,25 +487,7 @@ function generateDeterministicBuffer(seed: Buffer, blockIndex: number, length: n
   return buf;
 }
 
-// Helper: high-precision error function (Abramowitz & Stegun approximation)
-function erf(x: number): number {
-  const sign = x >= 0 ? 1 : -1;
-  const a = Math.abs(x);
-  const a1 = 0.254829592;
-  const a2 = -0.284496736;
-  const a3 = 1.421413741;
-  const a4 = -1.453152027;
-  const a5 = 1.061405429;
-  const p = 0.3275911;
-  const t = 1.0 / (1.0 + p * a);
-  const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-a * a);
-  return sign * y;
-}
-
-// Helper: standard normal cumulative distribution function Phi(x)
-function normalCdf(x: number): number {
-  return 0.5 * (1.0 + erf(x / Math.SQRT2));
-}
+// Helper: standard normal CDF Phi(x) — see ./src/lib/stats (TASKLIST Q3)
 
 app.get("/api/rng/status", (_req, res) => {
   try {
@@ -597,6 +594,9 @@ app.post("/api/rng/session/start", (req, res) => {
       isPilot = true
     } = req.body || {};
 
+    const safeNBlocksEach = Math.min(Math.max(parseInt(String(nBlocksEach), 10) || 6, 1), 20);
+    const safeBlockDurationS = Math.min(Math.max(Number(blockDurationS) || 5, 1), 300);
+
     const sessionId = `RNG_SESS_${Date.now()}_${crypto.randomBytes(4).toString("hex")}`;
     
     // Create pre-study seed & commitment for deterministic PRNG
@@ -609,10 +609,10 @@ app.post("/api/rng/session/start", (req, res) => {
 
     // Create balanced schedule:
     // Half target 1, half target 0 for both Intention and Control
-    const intT1 = Math.floor(nBlocksEach / 2);
-    const intT0 = nBlocksEach - intT1;
-    const ctrlT1 = Math.floor(nBlocksEach / 2);
-    const ctrlT0 = nBlocksEach - ctrlT1;
+    const intT1 = Math.floor(safeNBlocksEach / 2);
+    const intT0 = safeNBlocksEach - intT1;
+    const ctrlT1 = Math.floor(safeNBlocksEach / 2);
+    const ctrlT0 = safeNBlocksEach - ctrlT1;
 
     const blocks: Array<{ condition: "INTENTION" | "CONTROL"; target: 0 | 1; targetVisible: boolean }> = [];
     for (let i = 0; i < intT1; i++) blocks.push({ condition: "INTENTION", target: 1, targetVisible: true });
@@ -636,9 +636,9 @@ app.post("/api/rng/session/start", (req, res) => {
       participantId,
       mindsetScore,
       sourceType,
-      nBlocksEach,
+      nBlocksEach: safeNBlocksEach,
       totalBlocks: schedule.length,
-      blockDurationS,
+      blockDurationS: safeBlockDurationS,
       isPilot,
       prngCommitment: commitment,
       schedule
@@ -659,27 +659,41 @@ app.post("/api/rng/session/block", (req, res) => {
       bytesToRead = 2048
     } = req.body || {};
 
+    const safeBytes = Math.min(Math.max(parseInt(String(bytesToRead), 10) || 2048, 64), 8192);
+    if (target !== 0 && target !== 1) {
+      return res.status(400).json({ error: "target must be 0 or 1" });
+    }
+    if (condition !== "INTENTION" && condition !== "CONTROL") {
+      return res.status(400).json({ error: "condition must be INTENTION or CONTROL" });
+    }
+
     let buffer: Buffer;
 
     if (sourceType === "DETERMINISTIC_PRNG_PLACEBO") {
       const sessionData = activeSessionCommitments.get(sessionId);
-      const seed = sessionData ? Buffer.from(sessionData.seedHex, "hex") : crypto.randomBytes(32);
-      buffer = generateDeterministicBuffer(seed, blockIndex, bytesToRead);
+      if (!sessionData) {
+        return res.status(404).json({ error: "Unknown sessionId for placebo verification. Restart session." });
+      }
+      const seed = Buffer.from(sessionData.seedHex, "hex");
+      buffer = generateDeterministicBuffer(seed, blockIndex, safeBytes);
+    } else if (sourceType === "EXTERNAL_QRNG") {
+      // Fail loud: no USB/hardware QRNG attached in this deployment.
+      return res.status(501).json({ error: "EXTERNAL_QRNG not available on this node. Use APPLE_CSPRNG or SIMULATION." });
     } else if (sourceType === "APPLE_CSPRNG") {
       try {
         if (process.platform === "darwin" && fs.existsSync("/dev/random")) {
           const fd = fs.openSync("/dev/random", "r");
-          buffer = Buffer.alloc(bytesToRead);
-          fs.readSync(fd, buffer, 0, bytesToRead, null);
+          buffer = Buffer.alloc(safeBytes);
+          fs.readSync(fd, buffer, 0, safeBytes, null);
           fs.closeSync(fd);
         } else {
-          buffer = crypto.randomBytes(bytesToRead);
+          buffer = crypto.randomBytes(safeBytes);
         }
       } catch {
-        buffer = crypto.randomBytes(bytesToRead);
+        buffer = crypto.randomBytes(safeBytes);
       }
     } else {
-      buffer = crypto.randomBytes(bytesToRead);
+      buffer = crypto.randomBytes(safeBytes);
     }
 
     const nBits = buffer.length * 8;
@@ -748,6 +762,9 @@ app.post("/api/rng/session/analyze", (req, res) => {
     const nBlocks = blocks.length;
     const nInt = intentionScores.length;
     const nCtrl = controlScores.length;
+    if (nInt === 0 || nCtrl === 0) {
+      return res.status(400).json({ error: "Need at least one INTENTION and one CONTROL block." });
+    }
 
     const zScoresArr = blocks.map((b: any) => Number(b.targetScoreZ) || 0);
 
@@ -760,10 +777,10 @@ app.post("/api/rng/session/analyze", (req, res) => {
     let countGreaterOrEqual = 0;
 
     for (let p = 0; p < nPermutations; p++) {
-      // Fisher-Yates shuffle of the condition assignment mask
+      // Fisher-Yates shuffle of the condition assignment mask (CSPRNG — null model must not use Math.random)
       const shuffledMask = [...baseMask];
       for (let i = nBlocks - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = crypto.randomInt(0, i + 1);
         const temp = shuffledMask[i];
         shuffledMask[i] = shuffledMask[j];
         shuffledMask[j] = temp;
@@ -879,11 +896,13 @@ app.post("/api/rng/session/analyze", (req, res) => {
   }
 });
 
-app.get("/api/rng/sessions", (_req, res) => {
+app.get("/api/rng/sessions", (req, res) => {
   try {
     if (!fs.existsSync(DATA_RNG_DIR)) {
       return res.json([]);
     }
+    const limit = Math.min(Math.max(parseInt(String(req.query.limit ?? "50"), 10) || 50, 1), 200);
+    const offset = Math.max(parseInt(String(req.query.offset ?? "0"), 10) || 0, 0);
     const files = fs.readdirSync(DATA_RNG_DIR)
       .filter(f => f.endsWith(".json"))
       .map(f => {
@@ -909,7 +928,12 @@ app.get("/api/rng/sessions", (_req, res) => {
       .filter(Boolean)
       .sort((a: any, b: any) => b.mtime - a.mtime);
 
-    return res.json(files);
+    return res.json({
+      total: files.length,
+      limit,
+      offset,
+      sessions: files.slice(offset, offset + limit),
+    });
   } catch (error: any) {
     return res.status(500).json({ error: error.message || "Failed to list RNG sessions." });
   }

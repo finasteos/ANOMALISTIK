@@ -5,6 +5,7 @@ import {
 } from 'recharts';
 import { Activity, Radio, Satellite, Wifi, WifiOff, RefreshCw, AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { apiGet, ApiError } from '../lib/api';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface MagPoint   { t: string; bt: number | null; bx_gsm: number | null; by_gsm: number | null; bz_gsm: number | null; }
@@ -114,32 +115,26 @@ export const GeospaceliveFeed: React.FC = () => {
   const [showStations, setShowStations] = useState(false);
 
   const fetchData = useCallback(async () => {
+    const ctrl = new AbortController();
     try {
       setLoading(true);
-      const [geoRes, statusRes] = await Promise.all([
-        fetch('/api/geospace'),
-        fetch('/api/geospace/status'),
+      const [geo, st] = await Promise.all([
+        apiGet<GeospaceData>('/api/geospace', 20000).catch((e: unknown) => {
+          throw e;
+        }),
+        apiGet<unknown>('/api/geospace/status', 20000).catch(() => null),
       ]);
-
-      if (!geoRes.ok) {
-        const j = await geoRes.json().catch(() => ({}));
-        setError(j.error || `HTTP ${geoRes.status}`);
-        setData(null);
-      } else {
-        const j = await geoRes.json();
-        setData(j);
-        setError(null);
-      }
-
-      if (statusRes.ok) {
-        setStatus(await statusRes.json());
-      }
-
+      setData(geo);
+      setStatus(st);
+      setError(null);
       setLastFetch(new Date());
     } catch (e: any) {
-      setError(e.message || 'Network error');
+      const msg = e instanceof ApiError ? e.message : (e?.message || 'Network error');
+      // Keep last good snapshot on transient failure; surface error only
+      setError(msg);
     } finally {
       setLoading(false);
+      ctrl.abort();
     }
   }, []);
 

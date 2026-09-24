@@ -2,5 +2,8 @@
   "name": "ANOMALISTICS • Integrated Laboratory & Universal Entropy Atlas",
   "description": "Multimodal Empirical Structure & Universal Entropy Detection Framework for ANOMALISTICS.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"],
+  "version": "2.0.0",
+  "themes": ["IVORY_MONOCHROME", "CYAN_OBSIDIAN", "EMERALD_AURORA", "COSMIC_AMBER", "NEON_VIOLET"],
+  "engines": ["geospace", "rng-micro-pk", "adjudication", "declassified-archive", "epigraphy", "m-engines", "biophysics"]
 }

@@ -106,6 +106,10 @@ logging.basicConfig(
 )
 log = logging.getLogger("ANOMALISTIK.fetcher")
 
+# Fail-loud provenance (TASKLIST D1): --strict aborts instead of substituting
+# synthetic baselines. Module-level so fetchers can check it without plumbing.
+STRICT_MODE = False
+
 
 def load_env(env_path: Path = PROJECT_ROOT / ".env") -> dict:
     """Load KEY=VALUE pairs from .env file."""
@@ -310,6 +314,8 @@ class INTERMAGNETFetcher:
                 continue
 
         log.warning(f"[INTERMAGNET] {station}: all data types failed - using synthetic baseline")
+        if STRICT_MODE:
+            raise RuntimeError(f"[INTERMAGNET] {station}: live fetch failed and --strict forbids synthetic baseline")
         return self._synthetic_baseline(station, start, end, cadence)
 
     def _parse_iaga2002(self, text: str, station: str) -> pd.DataFrame:
@@ -362,6 +368,7 @@ class INTERMAGNETFetcher:
         else:
             df = pd.DataFrame(index=times, columns=["X", "Y", "Z", "F"])
         df.index.name = "datetime_utc"
+        df["provenance"] = "synthetic"  # TASKLIST D1: never masquerade as live
         return df
 
     def fetch_all_stations(self, start: str, end: str, cadence: str = "minute") -> dict:
@@ -762,11 +769,17 @@ Examples:
     p.add_argument("--mag-cadence", default="minute",
                    choices=["minute", "second"],
                    help="INTERMAGNET sampling cadence")
+    p.add_argument("--strict", action="store_true",
+                   help="Fail instead of substituting synthetic baselines (TASKLIST D1)")
     return p.parse_args()
 
 
 def main():
     args = parse_args()
+    global STRICT_MODE
+    STRICT_MODE = bool(args.strict)
+    if STRICT_MODE:
+        log.info("[MAIN] --strict: synthetic fallbacks disabled, will raise on live failure")
 
     print("\n" + "=" * 64)
     print("  ANOMALISTIK - Multi-Source Geospace Synchronizer v2.0")

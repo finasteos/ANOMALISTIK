@@ -20,42 +20,11 @@ import {
   Code
 } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import type { ActiveProjectSchema as BaseProject, ProjectTaskItem, ProjectLogEntry } from '../types';
+export type { ProjectTaskItem, ProjectLogEntry };
 
-export interface ProjectTaskItem {
-  id: string;
-  title: string;
-  completed: boolean;
-  assigned_role: string;
-}
-
-export interface ProjectLogEntry {
-  id: string;
-  timestamp: string;
-  author: string;
-  note: string;
-}
-
-export interface ActiveProjectSchema {
-  anomaly_id: string;
-  code: string;
-  title: string;
-  domain: string;
-  target_tab: string;
-  status: 'STRUCTURE_SIGNAL' | 'SEQUENCE_STRUCTURE' | 'DIP_STRUCTURE' | 'UNDERDETERMINED' | 'INSTRUMENT_SYSTEMATICS' | 'CLAIM_FAILS_NULL';
-  progress_percentage: number;
-  last_anomaly_timestamp: string;
-  metrics: {
-    z_score?: number | string;
-    conditional_entropy?: number | string;
-    snr_db?: number;
-    periodicity_days?: number;
-    elongation_pct?: number;
-    synchronicity_ly?: string;
-    [key: string]: any;
-  };
-  negative_controls_applied: string[];
-  repo_file_path: string;
-  summary: string;
+// Tracker extension of the canonical schema (TASKLIST F3).
+export interface ActiveProjectSchema extends BaseProject {
   tasks: ProjectTaskItem[];
   logs: ProjectLogEntry[];
 }
