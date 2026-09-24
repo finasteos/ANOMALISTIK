@@ -32,11 +32,11 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 ## 2. Frontend — `src/` (14 components, Graft hotspot `useTheme`)
 
 - [x] **F1 — Central `lib/api.ts` client (P0/M)** — DONE 2026-09-24/25: `src/lib/api.ts` + ALL call sites migrated (`GeospaceliveFeed, AiSearch×2, Adjudication, RNG×4 incl. 120s analyze timeout, Declassified` + unmount guard). Zero raw `fetch('/api` remain. `tsc PASS`.
-- [x] **F2 — Fix theming contract (P1/M)** — STARTED 2026-09-25: additive contract (`accentText/accentBgSoft/chartPalette/isDark`) on interface + all 5 themes, zero visual change. Remain: adopt in Sidebar/cards/charts, drop `isLight` ternaries.
+- [x] **F2 — Fix theming contract (P1/M)** — PROGRESS 2026-09-25: contract tokens + first adoption (`GeospaceliveFeed`: `chartPalette` strokes/gradient, `accentText` header). Remain: Sidebar/cards/charts adoption, drop `isLight` ternaries.
 - [x] **F3 — Single source of truth for projects/missions (P0/M)** — DONE 2026-09-24 (schema half): canonical `ActiveProjectSchema + ProjectTaskItem/LogEntry + TrackedProject` in `src/types.ts`; `AtlasOverview` imports base (re-export kept for `exportWiki`), `ProjectTrackerSection` extends base with `tasks/logs`. `tsc PASS`. Remain: kill `LAB_MISSIONS` mutation + `localStorage` raw store (zustand/context).
 - [x] **F4 — Stop leaks & non-determinism (P1/M)** — PARTIAL 2026-09-25: `DataVerificationSection` timers tracked + cancelled on unmount/switch, `crypto.randomUUID` IDs (deprecated `substr` gone), clipboard fallback. Remain: `MEngines`/canvas `rAF` cleanup, seeded synth gens.
 - [x] **F5 — Code-split & perf (P1/M)** — DONE 2026-09-25: 10 tab sections `React.lazy` + `Suspense` fallback (`App.tsx`, landing eager). Remain: memoize `setiTargets`, virtualize table.
-- [x] **F6 — A11y + UX honesty (P2/M)** — PARTIAL 2026-09-25: Declassified modal (Escape/overlay-click/`role=dialog`/`aria-modal`/`aria-label`, `img onError` fallback) + clipboard fallback done. Remain: focus-trap, table pagination/sort, `window.confirm` replacements, SIM-vs-live labels.
+- [x] **F6 — A11y + UX honesty (P2/M)** — PROGRESS 2026-09-25: modal a11y + clipboard fallback + `window.confirm` → two-step inline reset (auto-disarm 4s). Remain: focus-trap, table pagination/sort, SIM-vs-live labels.
 - [x] **F7 — Hygiene pass (P2/S)** — PARTIAL 2026-09-25: typo fixed, `GeospaceStatus/RngClusterStatus/TooltipEntry` typed (`any` ×4 gone), `timerRef` typed, `StatusDot` always-true bug fixed. Remain: eslint unused icons, `rehype-sanitize`, dead state.
 
 ## 3. Backend — `server.ts` / `api/` (Graft: 14 routes)
@@ -70,7 +70,7 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 
 - [ ] **M1 — G30 SETI ellipsoid live (P2/L)** — wire MAST/TESS fetcher to frontend; recompute `Δt=(d1+d2-dSN)/c` for SN1987A + Boyajian + Turgai; publish null results.
 - [ ] **M2 — Mesa dome multi-physics (P2/L)** — couple GPR 50m cigar/dome + 1.6GHz L-band + IR portal `ΔT=-22C` + magnetics in one canvas with shared `zCutoff` + overlay epochs.
-- [ ] **M3 — Epigraphy blind test (P2/M)** — run Markov slot-aligner G-LINA/G-INDUS/G-ELAM/G-RONG vs Linear B/Sumerian with held-out slots; report `H(Pk), I, D_KL`.
+- [x] **M3 — Epigraphy blind test (P2/M)** — STARTED 2026-09-25: consistency census + `docs/EPIGRAPHY-AUDIT.md`; **G-MER −11336 flagged** (155× next value, condH 1.84 vs G01's 0.12 undocumented, demo chip misattributes Byblos's −12.4). Do-not-cite until raw-corpus rerun. Remain: commit corpora + aligner, held-out test.
 - [x] **M4 — Micro-PK Q01 replication (P1/M)** — LIVE PILOT 2026-09-25: full 4-block `APPLE_CSPRNG` session via API (balanced schedule, 20k crypto perms): `D=-0.914, p=1.0, BF01=1.26` → `CLAIM_FAILS_NULL`. Textbook null on physical randomness — Layer-1 conservatism holds. Remain: pre-registered 100k-perm + hardware QRNG arm.
 - [x] **M5 — Declassified 375-file triage (P1/M)** — STARTED 2026-09-25: full-census `docs/DECLASSIFIED-TRIAGE.md` (212 PDF / 133 MP4 / 30 img; **213 unmapped = backlog**, top files 3.2GB DOD video). Remain: OCR/keyframes, Apollo linking, triage queue UI.
 - [x] **M6 — Geospace → biology coupling (P2/L)** — STARTED 2026-09-25: `docs/GEOSPACE-STORMLOG.md` census of 2026-08-16→17 window (QUIET: Kp~2 85%, Bz min −4.0, 0 storm intervals, 320 km/s) declared as **null baseline**; proxy sanity-checked; storm-window diff (May 2024) queued. Remain: INTERMAGNET coupling, dose-response.
@@ -87,3 +87,4 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 *Progress 2026-09-25 batch 6: 26/35 (+F6-modal, B3-security-extract, M4-live-pilot). Verified: `tsc PASS`, `npm test 11/11`, `graft check OK`, live 4-block pilot `CLAIM_FAILS_NULL`.*
 *Progress 2026-09-25 batch 7: 27/35 (+B3-rng-extract, M5-triage, Q4-links). Verified: `tsc PASS`, `npm test 17/17`, `graft check OK`.*
 *Progress 2026-09-25 batch 8: 28/35 (+M6-stormlog, D2-emit-csv, F2-contract). Verified: `tsc PASS`, `npm test 17/17`, `PY_OK`, `graft check OK`.*
+*Progress 2026-09-25 batch 9: 29/35 (+F2-adoption, F6-confirm, M3-audit). Verified: `tsc PASS`, `npm test 17/17`, `graft check OK`.*

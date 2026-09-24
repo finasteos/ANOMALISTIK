@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   FolderKanban, 
   Search, 
@@ -231,15 +231,23 @@ export const ProjectTrackerSection: React.FC<ProjectTrackerProps> = ({ onNavigat
     }
   }, [projects]);
 
-  // Reset projects to initial dataset
+  // Reset projects to initial dataset (two-step inline confirm, no window.confirm — F6)
+  const [confirmingReset, setConfirmingReset] = useState(false);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (resetTimer.current) clearTimeout(resetTimer.current); }, []);
   const handleResetProjects = () => {
-    if (window.confirm('Reset all project task lists and progress to default?')) {
-      setProjects(INITIAL_PROJECTS_DATA);
-      setSelectedProject(null);
-      try {
-        localStorage.removeItem('anomalistics_projects_data');
-      } catch (e) {}
+    if (!confirmingReset) {
+      setConfirmingReset(true);
+      resetTimer.current = setTimeout(() => setConfirmingReset(false), 4000);
+      return;
     }
+    if (resetTimer.current) clearTimeout(resetTimer.current);
+    setConfirmingReset(false);
+    setProjects(INITIAL_PROJECTS_DATA);
+    setSelectedProject(null);
+    try {
+      localStorage.removeItem('anomalistics_projects_data');
+    } catch (e) {}
   };
 
   // Toggle Task Checklist Item
@@ -361,12 +369,14 @@ export const ProjectTrackerSection: React.FC<ProjectTrackerProps> = ({ onNavigat
             <button
               onClick={handleResetProjects}
               className={`px-3 py-1 rounded-lg border font-bold transition flex items-center space-x-1.5 ${
-                isLight ? 'bg-stone-100 hover:bg-stone-200 border-stone-300 text-stone-600' : 'bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-400'
+                confirmingReset
+                  ? 'bg-red-600 hover:bg-red-500 border-red-500 text-white'
+                  : isLight ? 'bg-stone-100 hover:bg-stone-200 border-stone-300 text-stone-600' : 'bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-400'
               }`}
-              title="Reset tasks to initial status"
+              title={confirmingReset ? 'Click again to confirm reset' : 'Reset tasks to initial status'}
             >
               <Clock className="w-3.5 h-3.5" />
-              <span>Reset</span>
+              <span>{confirmingReset ? 'Confirm reset?' : 'Reset'}</span>
             </button>
 
             <span className={`px-3 py-1 rounded-full border font-bold flex items-center space-x-1.5 ${

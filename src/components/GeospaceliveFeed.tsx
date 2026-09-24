@@ -123,6 +123,7 @@ const StatusDot: React.FC<{ ok: boolean; label: string; age?: number | null }> =
 // ══════════════════════════════════════════════════════════════════════════
 export const GeospaceliveFeed: React.FC = () => {
   const { theme } = useTheme();
+  const pal = theme.chartPalette; // TASKLIST F2: data colors follow active theme
   const [data, setData] = useState<GeospaceData | null>(null);
   const [status, setStatus] = useState<GeospaceStatus | null>(null);
   const [loading, setLoading] = useState(true);
@@ -183,7 +184,7 @@ export const GeospaceliveFeed: React.FC = () => {
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2">
           <Satellite className="w-4 h-4 text-cyan-400" />
-          <span className="text-sm font-mono font-bold text-cyan-400 tracking-widest uppercase">
+          <span className={`text-sm font-mono font-bold tracking-widest uppercase ${theme.accentText}`}>
             Live Geospace Feed
           </span>
           {loading && <RefreshCw className="w-3 h-3 text-slate-400 animate-spin" />}
@@ -282,9 +283,9 @@ export const GeospaceliveFeed: React.FC = () => {
                   <Tooltip content={<GeoTooltip />} />
                   <ReferenceLine y={0} stroke="#475569" strokeDasharray="2 2" />
                   <Line dataKey="bz_gsm" name="Bz" stroke="#ef4444" dot={false} strokeWidth={1.5} />
-                  <Line dataKey="bt"     name="|B|" stroke="#38bdf8" dot={false} strokeWidth={1.5} />
-                  <Line dataKey="bx_gsm" name="Bx" stroke="#64748b" dot={false} strokeWidth={1} />
-                  <Line dataKey="by_gsm" name="By" stroke="#94a3b8" dot={false} strokeWidth={1} />
+                  <Line dataKey="bt"     name="|B|" stroke={pal[0]} dot={false} strokeWidth={1.5} />
+                  <Line dataKey="bx_gsm" name="Bx" stroke={pal[3]} dot={false} strokeWidth={1} />
+                  <Line dataKey="by_gsm" name="By" stroke={pal[2]} dot={false} strokeWidth={1} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -312,8 +313,8 @@ export const GeospaceliveFeed: React.FC = () => {
                     <AreaChart data={plasmaChart} margin={{ top: 4, right: 8, bottom: 0, left: -20 }}>
                       <defs>
                         <linearGradient id="speedGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%"  stopColor="#a78bfa" stopOpacity={0.25} />
-                          <stop offset="95%" stopColor="#a78bfa" stopOpacity={0} />
+                          <stop offset="5%"  stopColor={pal[1]} stopOpacity={0.25} />
+                          <stop offset="95%" stopColor={pal[1]} stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
@@ -321,7 +322,7 @@ export const GeospaceliveFeed: React.FC = () => {
                              tickFormatter={shortTime} interval="preserveStartEnd" />
                       <YAxis tick={{ fontSize: 9, fill: '#475569', fontFamily: 'monospace' }} />
                       <Tooltip content={<GeoTooltip />} />
-                      <Area dataKey="speed" name="Speed km/s" stroke="#a78bfa"
+                      <Area dataKey="speed" name="Speed km/s" stroke={pal[1]}
                             fill="url(#speedGrad)" strokeWidth={1.5} dot={false} />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -360,8 +361,8 @@ export const GeospaceliveFeed: React.FC = () => {
                                    tickFormatter={shortTime} interval="preserveStartEnd" />
                             <YAxis tick={{ fontSize: 8, fill: '#475569', fontFamily: 'monospace' }} />
                             <Tooltip content={<GeoTooltip />} />
-                            <Line dataKey="F" name="F nT" stroke="#22c55e" dot={false} strokeWidth={1.5} />
-                            <Line dataKey="Z" name="Z nT" stroke="#86efac" dot={false} strokeWidth={1} />
+                            <Line dataKey="F" name="F nT" stroke={pal[0]} dot={false} strokeWidth={1.5} />
+                            <Line dataKey="Z" name="Z nT" stroke={pal[3]} dot={false} strokeWidth={1} />
                           </LineChart>
                         </ResponsiveContainer>
                       </div>

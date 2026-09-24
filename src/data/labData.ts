@@ -7,6 +7,12 @@ export const EPIGRAPHIC_CORPORA: EpigraphicCorpus[] = [
     code: 'G-MER',
     origin: 'Kingdom of Kush / Nubia (~200 BCE)',
     sampleSize: 'Full Royal & Epigraphic Corpus',
+    // AUDIT FLAG (M3, 2026-09-25): |z|=11336 is an extraordinary outlier
+    // (next largest: G-LINA -73). Basis per G01: H(Y|X)=0.12 on Remu&Qere
+    // royal names vs 100x Fisher-Yates nulls — but corpus condEntropy here
+    // is 1.84, and AtlasOverview demo chip shows -12.4 (Byblos's value).
+    // Numbers need a methods note + raw-corpus rerun before citing.
+    // See docs/EPIGRAPHY-AUDIT.md.
     zScore: -11336,
     condEntropy: 1.84,
     shuffleNullEntropy: 3.42,
