@@ -73,8 +73,10 @@ export const ACTIVE_PROJECTS_LIST: ActiveProjectSchema[] = [
     last_anomaly_timestamp: '2026-07-26 23:28:10 UTC',
     metrics: {
       z_score: '+6.8',
-      synchronicity_ly: '< 0.02 ly',
-      target_objects: 'MAST Lightcurves along Supernova Wavefront'
+      // SYNCED 2026-09-25 (M1): Tracker log 2026-08-16 confirms Δt < 0.012 ly
+      // on TIC 261136679 (was '< 0.02 ly' target bracket). See docs/SETI-AUDIT.md.
+      synchronicity_ly: '< 0.012 ly',
+      target_objects: 'MAST Sector 72 Lightcurves along Supernova Wavefront'
     },
     negative_controls_applied: ['Astrometric jitter null', 'Stellar variability baseline'],
     repo_file_path: 'src/components/GeophysicsAstroSection.tsx',

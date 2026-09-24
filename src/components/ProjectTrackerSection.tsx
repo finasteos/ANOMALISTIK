@@ -51,7 +51,7 @@ export const INITIAL_PROJECTS_DATA: ActiveProjectSchema[] = [
       { id: 't1', title: 'Ingest MAST optical lightcurves for SN1987A ellipsoid targets', completed: true, assigned_role: 'Astro Pipeline' },
       { id: 't2', title: 'Apply 100x Astrometric jitter negative control baseline', completed: true, assigned_role: 'Null Control' },
       { id: 't3', title: 'Cross-correlate TESS Sector 72 dip periodicity', completed: true, assigned_role: 'Adjudicator' },
-      { id: 't4', title: 'Verify parallax time-of-flight synchronicity < 0.02 ly', completed: true, assigned_role: 'Lead Analyst' }
+      { id: 't4', title: 'Verify parallax time-of-flight synchronicity < 0.012 ly', completed: true, assigned_role: 'Lead Analyst' }
     ],
     logs: [
       { id: 'l2', timestamp: '2026-08-16 23:10 UTC', author: 'ANOMALISTIK Adjudication Team', note: 'Parallax ToF synchronization confirmed (Δt < 0.012 ly) on TIC 261136679 with asymmetric dip SNR 14.2 dB. Status: SEQUENCE_STRUCTURE validated.' },
