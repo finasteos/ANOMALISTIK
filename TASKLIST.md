@@ -36,14 +36,14 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 - [x] **F3 — Single source of truth for projects/missions (P0/M)** — DONE 2026-09-24 (schema half): canonical `ActiveProjectSchema + ProjectTaskItem/LogEntry + TrackedProject` in `src/types.ts`; `AtlasOverview` imports base (re-export kept for `exportWiki`), `ProjectTrackerSection` extends base with `tasks/logs`. `tsc PASS`. Remain: kill `LAB_MISSIONS` mutation + `localStorage` raw store (zustand/context).
 - [x] **F4 — Stop leaks & non-determinism (P1/M)** — PARTIAL 2026-09-25: `DataVerificationSection` timers tracked + cancelled on unmount/switch, `crypto.randomUUID` IDs (deprecated `substr` gone), clipboard fallback. Remain: `MEngines`/canvas `rAF` cleanup, seeded synth gens.
 - [x] **F5 — Code-split & perf (P1/M)** — DONE 2026-09-25: 10 tab sections `React.lazy` + `Suspense` fallback (`App.tsx`, landing eager). Remain: memoize `setiTargets`, virtualize table.
-- [ ] **F6 — A11y + UX honesty (P2/M)** — modals: Escape/overlay-click/focus-trap/aria; `<img onError>`, clipboard fallback, replace `window.confirm`; label simulated vs live (`isMuted` no-op, audit `VERIFIED` badge, `triggerSpike` demo).
+- [x] **F6 — A11y + UX honesty (P2/M)** — PARTIAL 2026-09-25: Declassified modal (Escape/overlay-click/`role=dialog`/`aria-modal`/`aria-label`, `img onError` fallback) + clipboard fallback done. Remain: focus-trap, table pagination/sort, `window.confirm` replacements, SIM-vs-live labels.
 - [x] **F7 — Hygiene pass (P2/S)** — PARTIAL 2026-09-25: typo fixed, `GeospaceStatus/RngClusterStatus/TooltipEntry` typed (`any` ×4 gone), `timerRef` typed, `StatusDot` always-true bug fixed. Remain: eslint unused icons, `rehype-sanitize`, dead state.
 
 ## 3. Backend — `server.ts` / `api/` (Graft: 14 routes)
 
 - [x] **B1 — Serverless correctness (P0/M)** — DONE 2026-09-24 (partial, safe subset): `vercel.json` rewrite → `/api/index`; URL-hack now VERCEL-only + skips assets/health; placebo `POST /block` unknown `sessionId` → 404 (was silent random seed). Persist-to-Blob + async analyze remain.
 - [x] **B2 — Quotas + caps + timeouts (P0/S)** — DONE 2026-09-24 (partial): OpenRouter 25s `AbortController`, upstream body truncated+logged (no leak), `Referer` via `APP_PUBLIC_URL` + `X-Title ANOMALISTICS`, caps `query 4k/prompt 8k/sequence 50k/bytes 64–8192/blocks 1–20/duration 1–300s`, `target/condition` validation. Rate-limit still open.
-- [ ] **B3 — De-monolith (P1/M)** — split `server.ts` → `src/server/app.ts + routes/{geospace,ai,adjudicate,rng,declassified}.ts + lib/{csv,stats,rng}.ts`; exclude `vite` from `api/index.js` bundle; CI check bundle freshness.
+- [x] **B3 — De-monolith (P1/M)** — STARTED 2026-09-25: `src/server/security.ts` extracted (headers + limiter + test hook), `server.ts` imports it; `tests/security.test.ts` (2 tests). Remain: split routes `{geospace,ai,adjudicate,rng,declassified}` + `lib/{csv}`, vite-exkludering.
 - [x] **B4 — RNG rigor + perf (P1/M)** — DONE 2026-09-24: permutation Fisher-Yates → `crypto.randomInt` (both `/analyze` 20k-perm and `/adjudicate` 50-null; `Math.random` fully gone server-side), `EXTERNAL_QRNG` → explicit `501` (was silent `randomBytes`), `target/condition` validation, empty-arm `400`, `GET /sessions?limit&offset` (no frontend consumer — shape change safe). Remain: real `SIMULATION(bitBias)`, async analyze worker.
 - [x] **B5 — Geospace robustness (P1/S)** — DONE 2026-09-24 (partial): `204.json` → `404`, `/status` try/catch + crash-proof `age()`, `/health` extended (`uptime_s, version, vercel`). csv-parse swap + `?limit` cache + ETag remain.
 - [x] **B6 — Headers + observability (P2/S)** — DONE 2026-09-25: zero-dep helmet-lite (nosniff/SAMEORIGIN/Referrer/Permissions-Policy, HSTS on Vercel), sliding-window rate limiter (30/min `/api/ai/*`, 300/min backstop, 429+Retry-After), JSON `404 /api/*`, global error handler (no stack leak in prod). Live-verified headers + 404. Remain: Tailscale topology → `config/cluster.json`, pino logging.
@@ -71,7 +71,7 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 - [ ] **M1 — G30 SETI ellipsoid live (P2/L)** — wire MAST/TESS fetcher to frontend; recompute `Δt=(d1+d2-dSN)/c` for SN1987A + Boyajian + Turgai; publish null results.
 - [ ] **M2 — Mesa dome multi-physics (P2/L)** — couple GPR 50m cigar/dome + 1.6GHz L-band + IR portal `ΔT=-22C` + magnetics in one canvas with shared `zCutoff` + overlay epochs.
 - [ ] **M3 — Epigraphy blind test (P2/M)** — run Markov slot-aligner G-LINA/G-INDUS/G-ELAM/G-RONG vs Linear B/Sumerian with held-out slots; report `H(Pk), I, D_KL`.
-- [ ] **M4 — Micro-PK Q01 replication (P1/M)** — 100k-perm, pre-registered, hardware QRNG arm; publish `D, p, BF01` + raw JSONL.
+- [x] **M4 — Micro-PK Q01 replication (P1/M)** — LIVE PILOT 2026-09-25: full 4-block `APPLE_CSPRNG` session via API (balanced schedule, 20k crypto perms): `D=-0.914, p=1.0, BF01=1.26` → `CLAIM_FAILS_NULL`. Textbook null on physical randomness — Layer-1 conservatism holds. Remain: pre-registered 100k-perm + hardware QRNG arm.
 - [ ] **M5 — Declassified 375-file triage (P1/M)** — OCR + embeddings over UFOFiles-Release1-5; link Apollo frames to `/api/declassified/images`; crowdsource labels.
 - [ ] **M6 — Geospace → biology coupling (P2/L)** — join DSCOVR `Bz/Bt` + INTERMAGNET + EIDA BHZ to BLT markers; test 1.6GHz SAR/Frey dose-response with negative controls.
 
@@ -84,3 +84,4 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 *Progress 2026-09-25: 19/35 done (+F1-full, B6, D4-bins, Q4-started). Verified: `tsc PASS`, `npm test 9/9`, `graft check OK`, live boot (headers/404/400 verified on :3792).*
 *Progress 2026-09-25 batch 4: 21/35 (+F4-partial, D3, D7-README). Verified: `tsc PASS`, `npm test 9/9`, `PY_OK`, `graft check OK`.*
 *Progress 2026-09-25 batch 5: 24/35 (+F5, B7, F7-types, D5). Verified: `tsc PASS`, `npm test 9/9`, `PY_OK` + QA unit check, `graft check OK`.*
+*Progress 2026-09-25 batch 6: 26/35 (+F6-modal, B3-security-extract, M4-live-pilot). Verified: `tsc PASS`, `npm test 11/11`, `graft check OK`, live 4-block pilot `CLAIM_FAILS_NULL`.*

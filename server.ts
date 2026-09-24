@@ -12,6 +12,7 @@ import {
   shannonEntropy,
   indexOfCoincidence,
 } from "./src/lib/stats";
+import { securityHeaders, rateLimit } from "./src/server/security";
 
 dotenv.config();
 
@@ -28,36 +29,8 @@ if (!fs.existsSync(DATA_RNG_DIR)) {
 app.use(express.json({ limit: "10mb" }));
 app.disable("x-powered-by");
 
-// ── Security headers (helmet-lite, zero deps — TASKLIST B6) ───────────────
-app.use((_req, res, next) => {
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-Frame-Options", "SAMEORIGIN");
-  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
-  if (process.env.VERCEL === "1") {
-    res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
-  }
-  next();
-});
-
-// ── In-memory sliding-window rate limiter (TASKLIST B6) ────────────────────
-// Caps anonymous quota burn on AI routes. Resets on restart (serverless-safe default).
-const rateBuckets = new Map<string, number[]>();
-function rateLimit(max: number, windowMs: number) {
-  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const key = `${req.ip || req.socket?.remoteAddress || "?"}:${req.path}`;
-    const now = Date.now();
-    const hits = (rateBuckets.get(key) || []).filter((t) => now - t < windowMs);
-    if (hits.length >= max) {
-      res.setHeader("Retry-After", String(Math.ceil(windowMs / 1000)));
-      return res.status(429).json({ error: "Rate limit exceeded. Slow down." });
-    }
-    hits.push(now);
-    if (rateBuckets.size > 5000) rateBuckets.clear();
-    rateBuckets.set(key, hits);
-    next();
-  };
-}
+// ── Security (helmet-lite + rate limiter live in ./src/server/security — B3/B6)
+app.use(securityHeaders);
 app.use("/api/ai/", rateLimit(30, 60_000)); // 30/min per IP+route (OpenRouter quota)
 app.use("/api/", rateLimit(300, 60_000)); // 300/min backstop for the rest
 

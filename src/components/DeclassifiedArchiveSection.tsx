@@ -58,6 +58,22 @@ export const DeclassifiedArchiveSection: React.FC<DeclassifiedArchiveSectionProp
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [selectedArchive, setSelectedArchive] = useState<string>('ALL');
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [imgBroken, setImgBroken] = useState<boolean>(false);
+
+  const openPreview = (path: string) => {
+    setImgBroken(false);
+    setPreviewImage(path);
+  };
+
+  // Escape closes the preview modal (TASKLIST F6)
+  useEffect(() => {
+    if (!previewImage) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPreviewImage(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [previewImage]);
 
   // Fetch catalog from API
   useEffect(() => {
@@ -306,7 +322,7 @@ export const DeclassifiedArchiveSection: React.FC<DeclassifiedArchiveSectionProp
                         </button>
                       ) : isImage && file.path.includes('images/') ? (
                         <button
-                          onClick={() => setPreviewImage(`/api/declassified/images/${file.path.replace('images/', '')}`)}
+                          onClick={() => openPreview(`/api/declassified/images/${file.path.replace('images/', '')}`)}
                           className="px-2.5 py-1 rounded bg-purple-950 text-purple-300 hover:bg-purple-900 border border-purple-700 transition text-[10px] font-bold inline-flex items-center space-x-1"
                         >
                           <Eye className="w-3 h-3" />
@@ -332,23 +348,40 @@ export const DeclassifiedArchiveSection: React.FC<DeclassifiedArchiveSectionProp
 
       {/* Image Preview Modal */}
       {previewImage && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-5 space-y-4">
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in"
+          onClick={() => setPreviewImage(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Declassified photographic preview"
+        >
+          <div
+            className="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-5 space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <span className="font-bold text-xs text-slate-200">Declassified Photographic Preview</span>
               <button
                 onClick={() => setPreviewImage(null)}
                 className="text-slate-400 hover:text-slate-100 font-bold text-xs"
+                aria-label="Close preview"
               >
                 ✕ Close
               </button>
             </div>
             <div className="w-full h-[400px] bg-slate-950 rounded-xl overflow-hidden flex items-center justify-center border border-slate-800">
-              <img
-                src={previewImage}
-                alt="Declassified Preview"
-                className="w-full h-full object-contain"
-              />
+              {imgBroken ? (
+                <span className="text-xs font-mono text-slate-500">
+                  Image unavailable (offline archive or missing file)
+                </span>
+              ) : (
+                <img
+                  src={previewImage}
+                  alt="Declassified Preview"
+                  className="w-full h-full object-contain"
+                  onError={() => setImgBroken(true)}
+                />
+              )}
             </div>
             <div className="flex justify-between items-center text-xs text-slate-400">
               <span className="text-[10px] font-mono">{previewImage}</span>
