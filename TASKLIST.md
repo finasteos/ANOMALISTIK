@@ -79,3 +79,4 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 *Next: tick off T5 → F3 → B3/B4 → D1/D4 → Q3, then M4. Update this file as you go. How to verify: `graft check`, `tsc --noEmit`, `npm run build`, `pytest`, `graft ask`.
 *Progress 2026-09-24 eve: 11/35 done (T1-T4, T6, F1, B1/B2/B5 partial, D6 partial, Q1, Q2). Verified: `tsc PASS`, `graft check OK (243 nodes)`, `micro_pk_rng --test ALL PASSED`.*
 *Progress 2026-09-24 natt: 16/35 done (+T5, F3-schema, B4, D1, Q3-foundation). Verified: `tsc PASS`, `npm test 9/9 PASS`, `graft check OK (249 nodes)`, `micro_pk_rng --test ALL PASSED`.*
+*Pushed: branch `anomalistics/tasklist` → https://github.com/finasteos/ANOMALISTIK/pull/1 (base `main`).*
