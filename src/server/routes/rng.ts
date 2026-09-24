@@ -16,14 +16,46 @@ import {
 export function createRngRouter(opts: { dataDir: string }) {
   const router = express.Router();
   const DATA_RNG_DIR = opts.dataDir;
-  // Per-mount commitments (server mounts once — same semantics as before).
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // API Routes: Micro-PK Quantum Random Number Generator (QRNG) Studio
-  // ─────────────────────────────────────────────────────────────────────────
-
-  // In-memory active session commitments (seed -> commitment hash)
+  // Session commitments: memory cache + disk journal (TASKLIST D4).
+  // Disk survives restarts (local prod); on serverless it lasts as long as
+  // the instance's /tmp-backed volume. Writes are read-modify-write —
+  // fine at pilot scale, not a concurrent multi-writer store.
+  const COMMITMENTS_PATH = path.join(DATA_RNG_DIR, ".commitments.json");
   const activeSessionCommitments = new Map<string, { seedHex: string; commitment: string }>();
+
+  function loadCommitments(): void {
+    try {
+      if (!fs.existsSync(COMMITMENTS_PATH)) return;
+      const raw = JSON.parse(fs.readFileSync(COMMITMENTS_PATH, "utf-8")) as Record<string, { seedHex: string; commitment: string }>;
+      for (const [k, v] of Object.entries(raw)) {
+        if (v?.seedHex && v?.commitment && !activeSessionCommitments.has(k)) {
+          activeSessionCommitments.set(k, v);
+        }
+      }
+    } catch { /* corrupt journal → start empty, never crash boot */ }
+  }
+
+  function persistCommitment(sessionId: string, entry: { seedHex: string; commitment: string }): void {
+    try {
+      let raw: Record<string, { seedHex: string; commitment: string }> = {};
+      if (fs.existsSync(COMMITMENTS_PATH)) {
+        raw = JSON.parse(fs.readFileSync(COMMITMENTS_PATH, "utf-8"));
+      }
+      raw[sessionId] = entry;
+      fs.writeFileSync(COMMITMENTS_PATH, JSON.stringify(raw), "utf-8");
+    } catch (e) {
+      console.warn("[rng] commitment journal write failed:", (e as Error)?.message);
+    }
+  }
+
+  function getCommitment(sessionId: string): { seedHex: string; commitment: string } | undefined {
+    return activeSessionCommitments.get(sessionId) ?? (() => {
+      loadCommitments();
+      return activeSessionCommitments.get(sessionId);
+    })();
+  }
+
+  loadCommitments();
 
   // Helper: count ones in a Buffer (pure impl in ./src/lib/stats)
   function countBufferOnes(buffer: Buffer): number {
@@ -165,10 +197,12 @@ export function createRngRouter(opts: { dataDir: string }) {
       // Create pre-study seed & commitment for deterministic PRNG
       const prngSeed = crypto.randomBytes(32);
       const commitment = crypto.createHash("sha256").update(prngSeed).digest("hex");
-      activeSessionCommitments.set(sessionId, {
+      const entry = {
         seedHex: prngSeed.toString("hex"),
         commitment
-      });
+      };
+      activeSessionCommitments.set(sessionId, entry);
+      persistCommitment(sessionId, entry); // D4: survive restarts
 
       // Create balanced schedule:
       // Half target 1, half target 0 for both Intention and Control
@@ -233,7 +267,7 @@ export function createRngRouter(opts: { dataDir: string }) {
       let buffer: Buffer;
 
       if (sourceType === "DETERMINISTIC_PRNG_PLACEBO") {
-        const sessionData = activeSessionCommitments.get(sessionId);
+        const sessionData = getCommitment(sessionId);
         if (!sessionData) {
           return res.status(404).json({ error: "Unknown sessionId for placebo verification. Restart session." });
         }

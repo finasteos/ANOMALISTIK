@@ -9,3 +9,6 @@ coverage/
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# RNG commitment journal — runtime state, regenerated on session start (D4).
+data/rng_sessions/.commitments.json

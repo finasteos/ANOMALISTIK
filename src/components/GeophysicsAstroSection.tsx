@@ -759,7 +759,9 @@ export const GeophysicsAstroSection: React.FC = () => {
   }, [lunarOrbitAltKm, lightWavelengthNm, triSeparationM]);
 
   // SETI SN 1987A Ellipsoid Calculations (Mission G30)
-  const setiTargets = [
+  // Static target table memoized (TASKLIST F5) — was recreated per render,
+  // breaking referential stability for downstream useMemo hooks.
+  const setiTargets = useMemo(() => [
     {
       id: 'tic_261136679',
       name: 'TIC 261136679 (HD 38529 System)',
@@ -820,11 +822,11 @@ export const GeophysicsAstroSection: React.FC = () => {
       verdict: 'SEQUENCE_STRUCTURE',
       summary: 'Focal apex target passing stellar variability baseline at 0.024 ly time-of-flight bracket.'
     }
-  ];
+  ], []);
 
   const activeSetiTarget = useMemo(() => {
     return setiTargets.find(t => t.id === selectedSetiTargetId) || setiTargets[0];
-  }, [selectedSetiTargetId]);
+  }, [selectedSetiTargetId, setiTargets]);
 
   const setiResults = useMemo(() => {
     const isSynchronized = activeSetiTarget.syncOffsetLy <= parallaxToleranceLy;
