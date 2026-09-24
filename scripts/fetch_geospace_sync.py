@@ -722,6 +722,57 @@ def git_sha() -> Optional[str]:
 
 
 # =============================================================================
+# SECTION 7b - QA Gate (TASKLIST D5)
+# =============================================================================
+
+def qa_check(streams: dict, df_sync) -> dict:
+    """Per-stream quality checks → history/{ts}_qa.md. Never raises."""
+    ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d_%H%M%S")
+    checks, fails = [], 0
+    try:
+        import pandas as pd  # local import: module already requires pandas
+        for label, df in streams.items():
+            try:
+                n = len(df)
+                num = df.select_dtypes(include="number")
+                gap_pct = round(float(num.isna().mean().mean()) * 100, 2) if n else 100.0
+                synth = bool((df.get("provenance") == "synthetic").any()) if "provenance" in df.columns else False
+                ok = gap_pct <= 20.0 and not synth
+                if not ok:
+                    fails += 1
+                checks.append({"stream": label, "rows": n, "gap_pct": gap_pct,
+                               "synthetic": synth, "verdict": "PASS" if ok else "FAIL"})
+            except Exception as e:
+                fails += 1
+                checks.append({"stream": label, "rows": 0, "gap_pct": 100.0,
+                               "synthetic": False, "verdict": f"ERROR: {e}"})
+        sync_shape = list(df_sync.shape) if df_sync is not None and not df_sync.empty else [0, 0]
+    except Exception as e:
+        checks.append({"stream": "*", "rows": 0, "gap_pct": 100.0,
+                       "synthetic": False, "verdict": f"QA harness error: {e}"})
+        fails += 1
+        sync_shape = [0, 0]
+    verdict = "PASS" if fails == 0 else ("WARN" if fails == 1 else "FAIL")
+    lines = [f"# Geospace QA Gate - {ts}", "",
+             f"**Verdict:** {verdict} ({fails}/{len(checks)} streams failing)",
+             f"**Sync shape:** {sync_shape[0]} rows x {sync_shape[1]} cols",
+             f"**Rule:** gap% > 20 or synthetic provenance → FAIL", "",
+             "| Stream | Rows | Gap % | Synthetic | Verdict |",
+             "|---|---|---|---|---|"]
+    for c in checks:
+        lines.append(f"| {c['stream']} | {c['rows']} | {c['gap_pct']} | {c['synthetic']} | {c['verdict']} |")
+    qa_path = HISTORY_DIR / f"{ts}_qa.md"
+    try:
+        qa_path.write_text("\n".join(lines) + "\n")
+        log.info(f"[QA] {verdict} -> {qa_path.name}")
+    except Exception as e:
+        log.warning(f"[QA] could not write report: {e}")
+    if verdict == "FAIL":
+        log.error("[QA] FAIL: >20% gaps or synthetic streams present — see QA report")
+    return {"verdict": verdict, "checks": checks, "report": str(qa_path)}
+
+
+# =============================================================================
 # SECTION 7 - Manifest & History
 # =============================================================================
 
@@ -926,6 +977,10 @@ def main():
     log.info(f"[MAIN] -- Synchronizing {len(streams)} streams @ {args.resample} --")
     syncer  = TimestampSynchronizer(resample_freq=args.resample)
     df_sync = syncer.sync(streams)
+
+    # -- QA gate (D5) --
+    qa = qa_check(streams, df_sync)
+    summary["QA gate"] = qa["verdict"]
 
     if not df_sync.empty:
         paths = syncer.save(df_sync, name=args.output)

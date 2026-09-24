@@ -36,6 +36,17 @@ interface GeospaceData {
   };
 }
 
+interface GeospaceStatus {
+  pipeline_ready?: boolean;
+  synced_csv?: string | null;
+  synced_age_min?: number | null;
+  dscovr_age_min?: number | null;
+  eida_age_min?: number | null;
+  intermagnet_age_min?: number | null;
+  manifest?: string | null;
+  fetch_command?: string;
+}
+
 // ── Helpers ────────────────────────────────────────────────────────────────
 const fmt = (v: number | null, dec = 1, unit = '') =>
   v === null ? '—' : `${v.toFixed(dec)}${unit}`;
@@ -76,13 +87,19 @@ const MetricCard: React.FC<{
 );
 
 // ── Custom tooltip ─────────────────────────────────────────────────────────
-const GeoTooltip: React.FC<any> = ({ active, payload, label }) => {
+interface TooltipEntry {
+  dataKey?: string | number;
+  name?: string;
+  value?: number | string;
+  color?: string;
+}
+const GeoTooltip: React.FC<{ active?: boolean; payload?: TooltipEntry[]; label?: string }> = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs font-mono shadow-xl">
-      <div className="text-slate-400 mb-1">{shortTime(label)}</div>
-      {payload.map((p: any) => (
-        <div key={p.dataKey} style={{ color: p.color }}>
+      <div className="text-slate-400 mb-1">{label ? shortTime(label) : '—'}</div>
+      {payload.map((p) => (
+        <div key={String(p.dataKey)} style={{ color: p.color }}>
           {p.name}: {typeof p.value === 'number' ? p.value.toFixed(2) : '—'}
         </div>
       ))}
@@ -107,7 +124,7 @@ const StatusDot: React.FC<{ ok: boolean; label: string; age?: number | null }> =
 export const GeospaceliveFeed: React.FC = () => {
   const { theme } = useTheme();
   const [data, setData] = useState<GeospaceData | null>(null);
-  const [status, setStatus] = useState<any>(null);
+  const [status, setStatus] = useState<GeospaceStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastFetch, setLastFetch] = useState<Date | null>(null);
@@ -122,7 +139,7 @@ export const GeospaceliveFeed: React.FC = () => {
         apiGet<GeospaceData>('/api/geospace', 20000).catch((e: unknown) => {
           throw e;
         }),
-        apiGet<unknown>('/api/geospace/status', 20000).catch(() => null),
+        apiGet<GeospaceStatus>('/api/geospace/status', 20000).catch(() => null),
       ]);
       setData(geo);
       setStatus(st);
@@ -175,9 +192,9 @@ export const GeospaceliveFeed: React.FC = () => {
         {/* Pipeline status pills */}
         <div className="flex flex-wrap items-center gap-3">
           <StatusDot ok={!!status?.pipeline_ready}    label="Pipeline"   />
-          <StatusDot ok={!!status?.dscovr_age_min !== null && (status?.dscovr_age_min ?? 9999) < 120}
+          <StatusDot ok={status?.dscovr_age_min != null && status.dscovr_age_min < 120}
                      label="DSCOVR"    age={status?.dscovr_age_min} />
-          <StatusDot ok={!!status?.eida_age_min !== null && (status?.eida_age_min ?? 9999) < 240}
+          <StatusDot ok={status?.eida_age_min != null && status.eida_age_min < 240}
                      label="EIDA"      age={status?.eida_age_min} />
           <StatusDot ok={!!status?.intermagnet_age_min !== null}
                      label="INTERMAGNET" age={status?.intermagnet_age_min} />

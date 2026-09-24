@@ -87,6 +87,12 @@ interface ClusterNode {
   availableEngines: string[];
 }
 
+interface RngClusterStatus {
+  localNode?: { arch?: string; hostname?: string; [k: string]: unknown };
+  clusterNodes?: ClusterNode[];
+  [k: string]: unknown;
+}
+
 export const QuantumRngSection: React.FC = () => {
   const { theme, themeId } = useTheme();
   const isLight = themeId === 'IVORY_MONOCHROME';
@@ -95,7 +101,7 @@ export const QuantumRngSection: React.FC = () => {
   const [activeSubTab, setActiveSubTab] = useState<'session' | 'analysis' | 'cluster' | 'power' | 'prereg'>('session');
 
   // Node & Backend status
-  const [clusterInfo, setClusterInfo] = useState<any>(null);
+  const [clusterInfo, setClusterInfo] = useState<RngClusterStatus | null>(null);
   const [loadingStatus, setLoadingStatus] = useState(false);
 
   // Session configuration state
@@ -124,7 +130,7 @@ export const QuantumRngSection: React.FC = () => {
   const [effectDelta, setEffectDelta] = useState<number>(0.0001); // 1e-4
 
   // Timer reference
-  const timerRef = useRef<any>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Fetch cluster node status on mount
   useEffect(() => {
@@ -134,7 +140,7 @@ export const QuantumRngSection: React.FC = () => {
   const fetchClusterStatus = async () => {
     setLoadingStatus(true);
     try {
-      const data = await apiGet<unknown>('/api/rng/status');
+      const data = await apiGet<RngClusterStatus>('/api/rng/status');
       setClusterInfo(data);
     } catch (err) {
       console.warn('Could not fetch RNG status:', err);

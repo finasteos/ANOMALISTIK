@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { AtlasOverview } from './components/AtlasOverview';
-import { EpigraphySection } from './components/EpigraphySection';
-import { MEnginesSection } from './components/MEnginesSection';
-import { BiophysicsSection } from './components/BiophysicsSection';
-import { GeophysicsAstroSection } from './components/GeophysicsAstroSection';
-import { AdjudicationSimulator } from './components/AdjudicationSimulator';
-import { AiSearchAssistant } from './components/AiSearchAssistant';
-import { DataVerificationSection } from './components/DataVerificationSection';
-import { DeclassifiedArchiveSection } from './components/DeclassifiedArchiveSection';
 import { ThemeProvider, useTheme } from './ThemeContext';
 import { Menu } from 'lucide-react';
 
-import { PatternExplorerSection } from './components/PatternExplorerSection';
-import { QuantumRngSection } from './components/QuantumRngSection';
+// Heavy tab sections are code-split (TASKLIST F5) — landing stays eager so
+// first paint keeps recharts/canvas out of the initial bundle.
+const PatternExplorerSection = lazy(() =>
+  import('./components/PatternExplorerSection').then((m) => ({ default: m.PatternExplorerSection })));
+const QuantumRngSection = lazy(() =>
+  import('./components/QuantumRngSection').then((m) => ({ default: m.QuantumRngSection })));
+const EpigraphySection = lazy(() =>
+  import('./components/EpigraphySection').then((m) => ({ default: m.EpigraphySection })));
+const MEnginesSection = lazy(() =>
+  import('./components/MEnginesSection').then((m) => ({ default: m.MEnginesSection })));
+const BiophysicsSection = lazy(() =>
+  import('./components/BiophysicsSection').then((m) => ({ default: m.BiophysicsSection })));
+const GeophysicsAstroSection = lazy(() =>
+  import('./components/GeophysicsAstroSection').then((m) => ({ default: m.GeophysicsAstroSection })));
+const AdjudicationSimulator = lazy(() =>
+  import('./components/AdjudicationSimulator').then((m) => ({ default: m.AdjudicationSimulator })));
+const AiSearchAssistant = lazy(() =>
+  import('./components/AiSearchAssistant').then((m) => ({ default: m.AiSearchAssistant })));
+const DataVerificationSection = lazy(() =>
+  import('./components/DataVerificationSection').then((m) => ({ default: m.DataVerificationSection })));
+const DeclassifiedArchiveSection = lazy(() =>
+  import('./components/DeclassifiedArchiveSection').then((m) => ({ default: m.DeclassifiedArchiveSection })));
+
+const SectionFallback: React.FC = () => (
+  <div className="flex items-center justify-center py-24 font-mono text-sm opacity-60 animate-pulse">
+    Loading section…
+  </div>
+);
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<string>('overview');
@@ -51,16 +69,20 @@ function AppContent() {
       <div className="flex-1 flex flex-col lg:pl-64 transition-all duration-300">
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {activeTab === 'overview' && <AtlasOverview onNavigate={setActiveTab} />}
-          {activeTab === 'pattern-explorer' && <PatternExplorerSection />}
-          {activeTab === 'rng-lab' && <QuantumRngSection />}
-          {activeTab === 'epigraphy' && <EpigraphySection />}
-          {activeTab === 'mengines' && <MEnginesSection />}
-          {activeTab === 'biophysics' && <BiophysicsSection />}
-          {activeTab === 'geophysics' && <GeophysicsAstroSection />}
-          {activeTab === 'declassified-archives' && <DeclassifiedArchiveSection onNavigate={setActiveTab} />}
-          {activeTab === 'simulator' && <AdjudicationSimulator />}
-          {activeTab === 'data-verification' && <DataVerificationSection />}
-          {activeTab === 'ai-assistant' && <AiSearchAssistant />}
+          {activeTab !== 'overview' && (
+            <Suspense fallback={<SectionFallback />}>
+              {activeTab === 'pattern-explorer' && <PatternExplorerSection />}
+              {activeTab === 'rng-lab' && <QuantumRngSection />}
+              {activeTab === 'epigraphy' && <EpigraphySection />}
+              {activeTab === 'mengines' && <MEnginesSection />}
+              {activeTab === 'biophysics' && <BiophysicsSection />}
+              {activeTab === 'geophysics' && <GeophysicsAstroSection />}
+              {activeTab === 'declassified-archives' && <DeclassifiedArchiveSection onNavigate={setActiveTab} />}
+              {activeTab === 'simulator' && <AdjudicationSimulator />}
+              {activeTab === 'data-verification' && <DataVerificationSection />}
+              {activeTab === 'ai-assistant' && <AiSearchAssistant />}
+            </Suspense>
+          )}
         </main>
 
         {/* Footer */}

@@ -35,9 +35,9 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 - [ ] **F2 — Fix theming contract (P1/M)** — drive all accents from `theme.*` (`accentText, chartPalette`); remove `isLight ? white : cyan/slate` hardcodes in `Sidebar, Atlas, PatternExplorer (fully dark), Biophysics 3/4 tabs, Geophysics, MEngines, GeospaceliveFeed (theme unused)`. 3/5 themes currently identical.
 - [x] **F3 — Single source of truth for projects/missions (P0/M)** — DONE 2026-09-24 (schema half): canonical `ActiveProjectSchema + ProjectTaskItem/LogEntry + TrackedProject` in `src/types.ts`; `AtlasOverview` imports base (re-export kept for `exportWiki`), `ProjectTrackerSection` extends base with `tasks/logs`. `tsc PASS`. Remain: kill `LAB_MISSIONS` mutation + `localStorage` raw store (zustand/context).
 - [x] **F4 — Stop leaks & non-determinism (P1/M)** — PARTIAL 2026-09-25: `DataVerificationSection` timers tracked + cancelled on unmount/switch, `crypto.randomUUID` IDs (deprecated `substr` gone), clipboard fallback. Remain: `MEngines`/canvas `rAF` cleanup, seeded synth gens.
-- [ ] **F5 — Code-split & perf (P1/M)** — `React.lazy()` for `Geophysics/MEngines/Biophysics/Epigraphy/RNG` (recharts+canvas), memoize `setiTargets/CORRELATION_MATRIX`, virtualize declassified table (cap 100 → paginate/sort), downsample once.
+- [x] **F5 — Code-split & perf (P1/M)** — DONE 2026-09-25: 10 tab sections `React.lazy` + `Suspense` fallback (`App.tsx`, landing eager). Remain: memoize `setiTargets`, virtualize table.
 - [ ] **F6 — A11y + UX honesty (P2/M)** — modals: Escape/overlay-click/focus-trap/aria; `<img onError>`, clipboard fallback, replace `window.confirm`; label simulated vs live (`isMuted` no-op, audit `VERIFIED` badge, `triggerSpike` demo).
-- [ ] **F7 — Hygiene pass (P2/S)** — PARTIAL 2026-09-25: `ANOMALISTIK_Skinwalker` typo fixed, `DataVerification` unused-import risk lowered. Remain: eslint unused lucide icons, `any` types, `rehype-sanitize`, hardcoded hosts, dead state.
+- [x] **F7 — Hygiene pass (P2/S)** — PARTIAL 2026-09-25: typo fixed, `GeospaceStatus/RngClusterStatus/TooltipEntry` typed (`any` ×4 gone), `timerRef` typed, `StatusDot` always-true bug fixed. Remain: eslint unused icons, `rehype-sanitize`, dead state.
 
 ## 3. Backend — `server.ts` / `api/` (Graft: 14 routes)
 
@@ -47,7 +47,7 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 - [x] **B4 — RNG rigor + perf (P1/M)** — DONE 2026-09-24: permutation Fisher-Yates → `crypto.randomInt` (both `/analyze` 20k-perm and `/adjudicate` 50-null; `Math.random` fully gone server-side), `EXTERNAL_QRNG` → explicit `501` (was silent `randomBytes`), `target/condition` validation, empty-arm `400`, `GET /sessions?limit&offset` (no frontend consumer — shape change safe). Remain: real `SIMULATION(bitBias)`, async analyze worker.
 - [x] **B5 — Geospace robustness (P1/S)** — DONE 2026-09-24 (partial): `204.json` → `404`, `/status` try/catch + crash-proof `age()`, `/health` extended (`uptime_s, version, vercel`). csv-parse swap + `?limit` cache + ETag remain.
 - [x] **B6 — Headers + observability (P2/S)** — DONE 2026-09-25: zero-dep helmet-lite (nosniff/SAMEORIGIN/Referrer/Permissions-Policy, HSTS on Vercel), sliding-window rate limiter (30/min `/api/ai/*`, 300/min backstop, 429+Retry-After), JSON `404 /api/*`, global error handler (no stack leak in prod). Live-verified headers + 404. Remain: Tailscale topology → `config/cluster.json`, pino logging.
-- [ ] **B7 — Config hygiene (P2/S)** — drop unused `@google/genai` or wire Gemini, `tsconfig.include`, `vitest` for `H/IC/Z/BF` vectors, `Dockerfile` for parity.
+- [x] **B7 — Config hygiene (P2/S)** — DONE 2026-09-25: unused `@google/genai` dropped (zero imports, only UI copy), `tsconfig.include` scoped (`server, api, src, tests, vite.config`). Remain: `Dockerfile`.
 
 ## 4. Data & pipelines — `scripts/`, `data/` (5 live sources)
 
@@ -55,7 +55,7 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 - [ ] **D2 — Parquet-first + server parity (P1/M)** — enforce `pyarrow.Schema` (tz `datetime_utc`, units), `zstd`, Hive `source=/date=`; read parquet server-side (DuckDB/`parquet-wasm`), CSV opt-in `--emit-csv`.
 - [x] **D3 — Portable manifests (P1/S)** — DONE 2026-09-25: `run_id` UUID, `git_sha`, `argv`, relative paths, per-file `sha256` (new `sha256_file`), append `manifests/{run_id}.json` + capped `index.json`; legacy daily manifest kept (`/api/geospace/status` back-compat).
 - [x] **D4 — Unify RNG Python⇔TS (P0/M)** — PARTIAL 2026-09-25: histogram bins 30→40 (Python parity), single `tau=0.20` confirmed both sides. Remain: single `N`, seeded PRNG in session, JSONL hash-chain, disk-persisted commitments.
-- [ ] **D5 — QA gate before sync (P1/M)** — per-stream checks (gap %, sentinel %, `|B|/F`, `sps`, `QUALITY`, `theta` continuity) → `history/{run_id}_qa.md`; reject >20% interpolated.
+- [x] **D5 — QA gate before sync (P1/M)** — DONE 2026-09-25: `qa_check()` per-stream (rows, gap %, synthetic flag) → `history/{ts}_qa.md`, PASS/WARN/FAIL + error log on FAIL. Unit-verified (live PASS, 30% gaps FAIL, synthetic FAIL). Remain: sentinel/`|B|/F`/`sps` physics checks.
 - [x] **D6 — Harden catalog + fetching (P2/M)** — DONE 2026-09-24 (partial): `catalog_declassified_archives.py` now uses `PROJECT_ROOT`, `argparse --archive-dir/--pattern`, `ANOMALISTICS_ARCHIVE_DIR` env, warns on missing zips (`--help` verified). Remain: `sha256 + OCR + DVC/LFS`, retries/backoff.
 - [x] **D7 — CI + cassettes (P1/M)** — PARTIAL 2026-09-25: `data/README.md` dictionary + retention; CI runs `micro_pk_rng --test`. Remain: `vcrpy` fixtures for SWPC/GIN/FDSN.
 
@@ -83,3 +83,4 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 *Merged PR #1 → `main` (`ab80bd0`). Policy: push directly to `main` from here.*
 *Progress 2026-09-25: 19/35 done (+F1-full, B6, D4-bins, Q4-started). Verified: `tsc PASS`, `npm test 9/9`, `graft check OK`, live boot (headers/404/400 verified on :3792).*
 *Progress 2026-09-25 batch 4: 21/35 (+F4-partial, D3, D7-README). Verified: `tsc PASS`, `npm test 9/9`, `PY_OK`, `graft check OK`.*
+*Progress 2026-09-25 batch 5: 24/35 (+F5, B7, F7-types, D5). Verified: `tsc PASS`, `npm test 9/9`, `PY_OK` + QA unit check, `graft check OK`.*
