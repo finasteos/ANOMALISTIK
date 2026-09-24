@@ -19,6 +19,12 @@ export interface ColorTheme {
   highlightText: string;
   highlightBg: string;
   previewColors: string[];
+  // Theming contract (TASKLIST F2): accents/charts derive from these so all
+  // five themes actually differ. Additive — no visual change until adopted.
+  accentText: string;
+  accentBgSoft: string;
+  chartPalette: string[];
+  isDark: boolean;
 }
 
 export const COLOR_THEMES: Record<string, ColorTheme> = {
@@ -43,6 +49,10 @@ export const COLOR_THEMES: Record<string, ColorTheme> = {
     highlightText: 'text-stone-900',
     highlightBg: 'bg-stone-200/80 border-stone-300/80',
     previewColors: ['#1c1917', '#faf8f2', '#059669', '#d97706'],
+    accentText: 'text-stone-900',
+    accentBgSoft: 'bg-stone-900/5',
+    chartPalette: ['#1c1917', '#059669', '#d97706', '#78716c'],
+    isDark: false,
   },
   CYAN_OBSIDIAN: {
     id: 'CYAN_OBSIDIAN',
@@ -65,6 +75,10 @@ export const COLOR_THEMES: Record<string, ColorTheme> = {
     highlightText: 'text-cyan-300',
     highlightBg: 'bg-cyan-950/80 border-cyan-800/80',
     previewColors: ['#06b6d4', '#6366f1', '#a855f7', '#020617'],
+    accentText: 'text-cyan-400',
+    accentBgSoft: 'bg-cyan-500/10',
+    chartPalette: ['#06b6d4', '#6366f1', '#a855f7', '#64748b'],
+    isDark: true,
   },
   EMERALD_AURORA: {
     id: 'EMERALD_AURORA',
@@ -87,6 +101,10 @@ export const COLOR_THEMES: Record<string, ColorTheme> = {
     highlightText: 'text-emerald-300',
     highlightBg: 'bg-emerald-950/80 border-emerald-800/80',
     previewColors: ['#10b981', '#14b8a6', '#f59e0b', '#052e16'],
+    accentText: 'text-emerald-400',
+    accentBgSoft: 'bg-emerald-500/10',
+    chartPalette: ['#10b981', '#14b8a6', '#f59e0b', '#71717a'],
+    isDark: true,
   },
   COSMIC_AMBER: {
     id: 'COSMIC_AMBER',
@@ -109,6 +127,10 @@ export const COLOR_THEMES: Record<string, ColorTheme> = {
     highlightText: 'text-amber-300',
     highlightBg: 'bg-amber-950/80 border-amber-800/80',
     previewColors: ['#f59e0b', '#ea580c', '#f43f5e', '#0c0a09'],
+    accentText: 'text-amber-400',
+    accentBgSoft: 'bg-amber-500/10',
+    chartPalette: ['#f59e0b', '#ea580c', '#f43f5e', '#78716c'],
+    isDark: true,
   },
   NEON_VIOLET: {
     id: 'NEON_VIOLET',
@@ -131,5 +153,9 @@ export const COLOR_THEMES: Record<string, ColorTheme> = {
     highlightText: 'text-purple-300',
     highlightBg: 'bg-purple-950/80 border-purple-800/80',
     previewColors: ['#a855f7', '#d946ef', '#eab308', '#0d0b14'],
+    accentText: 'text-purple-400',
+    accentBgSoft: 'bg-purple-500/10',
+    chartPalette: ['#a855f7', '#d946ef', '#eab308', '#737373'],
+    isDark: true,
   },
 };

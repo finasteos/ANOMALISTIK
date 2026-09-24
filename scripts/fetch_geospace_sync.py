@@ -676,26 +676,32 @@ class TimestampSynchronizer:
                  f"{merged.shape[0]} rows x {merged.shape[1]} cols")
         return merged
 
-    def save(self, df: pd.DataFrame, name: str = "synced") -> dict:
+    def save(self, df: pd.DataFrame, name: str = "synced", emit_csv: bool = True) -> dict:
         if df.empty:
             log.warning("[SYNC] Nothing to save")
             return {}
         today = datetime.date.today().isoformat()
         parquet_path = SYNC_DIR / f"{name}_{today}.parquet"
-        csv_path     = SYNC_DIR / f"{name}_{today}.csv"
         df.to_parquet(parquet_path)
-        df.to_csv(csv_path)
-        log.info(f"[SYNC] -> {parquet_path.name} + {csv_path.name}")
-        return {
+        out = {
             "parquet": str(parquet_path),
-            "csv": str(csv_path),
             "parquet_rel": str(parquet_path.relative_to(PROJECT_ROOT)),
-            "csv_rel": str(csv_path.relative_to(PROJECT_ROOT)),
             "parquet_sha256": sha256_file(parquet_path),
-            "csv_sha256": sha256_file(csv_path),
             "rows": int(df.shape[0]),
             "cols": int(df.shape[1]),
         }
+        if emit_csv:
+            csv_path = SYNC_DIR / f"{name}_{today}.csv"
+            df.to_csv(csv_path)
+            out.update({
+                "csv": str(csv_path),
+                "csv_rel": str(csv_path.relative_to(PROJECT_ROOT)),
+                "csv_sha256": sha256_file(csv_path),
+            })
+            log.info(f"[SYNC] -> {parquet_path.name} + {csv_path.name}")
+        else:
+            log.info(f"[SYNC] -> {parquet_path.name} (csv suppressed)")
+        return out
 
 
 def sha256_file(path: Path) -> Optional[str]:
@@ -892,6 +898,8 @@ Examples:
                    help="INTERMAGNET sampling cadence")
     p.add_argument("--strict", action="store_true",
                    help="Fail instead of substituting synthetic baselines (TASKLIST D1)")
+    p.add_argument("--emit-csv", action=argparse.BooleanOptionalAction, default=True,
+                   help="Also write CSV alongside parquet (TASKLIST D2: disable on the road to parquet-first)")
     return p.parse_args()
 
 
@@ -983,9 +991,10 @@ def main():
     summary["QA gate"] = qa["verdict"]
 
     if not df_sync.empty:
-        paths = syncer.save(df_sync, name=args.output)
+        paths = syncer.save(df_sync, name=args.output, emit_csv=args.emit_csv)
         print(f"\n  Parquet:    {paths.get('parquet')}")
-        print(f"  CSV:        {paths.get('csv')}")
+        if paths.get("csv"):
+            print(f"  CSV:        {paths.get('csv')}")
         print(f"  Shape:      {df_sync.shape[0]} rows x {df_sync.shape[1]} cols")
         print(f"  Time range: {df_sync.index.min()} -> {df_sync.index.max()}")
         print("\n  Columns (first 20):")
