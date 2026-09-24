@@ -43,7 +43,7 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 
 - [x] **B1 — Serverless correctness (P0/M)** — DONE 2026-09-24 (partial, safe subset): `vercel.json` rewrite → `/api/index`; URL-hack now VERCEL-only + skips assets/health; placebo `POST /block` unknown `sessionId` → 404 (was silent random seed). Persist-to-Blob + async analyze remain.
 - [x] **B2 — Quotas + caps + timeouts (P0/S)** — DONE 2026-09-24 (partial): OpenRouter 25s `AbortController`, upstream body truncated+logged (no leak), `Referer` via `APP_PUBLIC_URL` + `X-Title ANOMALISTICS`, caps `query 4k/prompt 8k/sequence 50k/bytes 64–8192/blocks 1–20/duration 1–300s`, `target/condition` validation. Rate-limit still open.
-- [x] **B3 — De-monolith (P1/M)** — STARTED 2026-09-25: `src/server/security.ts` extracted (headers + limiter + test hook), `server.ts` imports it; `tests/security.test.ts` (2 tests). Remain: split routes `{geospace,ai,adjudicate,rng,declassified}` + `lib/{csv}`, vite-exkludering.
+- [x] **B3 — De-monolith (P1/M)** — PROGRESS 2026-09-25: `security.ts` + `rng.ts` (`directionalBF01/adjudicateVerdict/buildHistogram`) extracted, `server.ts` imports both; `tests/rng.test.ts` golden vectors from live smoke. Remain: split routes `{geospace,ai,adjudicate,rng,declassified}`.
 - [x] **B4 — RNG rigor + perf (P1/M)** — DONE 2026-09-24: permutation Fisher-Yates → `crypto.randomInt` (both `/analyze` 20k-perm and `/adjudicate` 50-null; `Math.random` fully gone server-side), `EXTERNAL_QRNG` → explicit `501` (was silent `randomBytes`), `target/condition` validation, empty-arm `400`, `GET /sessions?limit&offset` (no frontend consumer — shape change safe). Remain: real `SIMULATION(bitBias)`, async analyze worker.
 - [x] **B5 — Geospace robustness (P1/S)** — DONE 2026-09-24 (partial): `204.json` → `404`, `/status` try/catch + crash-proof `age()`, `/health` extended (`uptime_s, version, vercel`). csv-parse swap + `?limit` cache + ETag remain.
 - [x] **B6 — Headers + observability (P2/S)** — DONE 2026-09-25: zero-dep helmet-lite (nosniff/SAMEORIGIN/Referrer/Permissions-Policy, HSTS on Vercel), sliding-window rate limiter (30/min `/api/ai/*`, 300/min backstop, 429+Retry-After), JSON `404 /api/*`, global error handler (no stack leak in prod). Live-verified headers + 404. Remain: Tailscale topology → `config/cluster.json`, pino logging.
@@ -64,7 +64,7 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 - [x] **Q1 — README + LICENSE + ARCHITECTURE (P0/S)** — DONE 2026-09-24: `README.md` (quickstart, architecture, verdicts, caveats, roadmap) + MIT `LICENSE`.
 - [x] **Q2 — CI `/.github/workflows/ci.yml` (P0/S)** — DONE 2026-09-24: `lint+build`, absolute-link guard, hooks-path guard, `micro_pk_rng --test`.
 - [x] **Q3 — Real test harness (P0/M)** — DONE 2026-09-24 (foundation): zero-dep `src/lib/stats.ts` extracted from `server.ts` (`parseCSV/pf/countOnesBytes/shannonEntropy/indexOfCoincidence/erf/normalCdf`; server imports it — single source), `tests/stats.test.ts` 9 golden vectors via `tsx --test`, `npm test` script, CI already runs `micro_pk_rng --test`. 9/9 PASS. Remain: vitest/Playwright, CSV/SigMF parsers.
-- [x] **Q4 — Consolidate `history/` → `docs/` (P2/M)** — STARTED 2026-09-25: `docs/ROADMAP-GAPS.md` (live/simulated/missing single source). Remain: merge triple-sourced EPE / 7.2M☉ / Mesa docs, fix stale paths.
+- [x] **Q4 — Consolidate `history/` → `docs/` (P2/M)** — PROGRESS 2026-09-25: `ROADMAP-GAPS.md` + all 10 stale `file:///Users/…ANOMALISTIK/` links → repo-relative (prose history untouched). Remain: merge triple-sourced EPE/7.2M☉/Mesa docs.
 
 ## 6. Unveil mysteries — research tracks 🌌
 
@@ -72,7 +72,7 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 - [ ] **M2 — Mesa dome multi-physics (P2/L)** — couple GPR 50m cigar/dome + 1.6GHz L-band + IR portal `ΔT=-22C` + magnetics in one canvas with shared `zCutoff` + overlay epochs.
 - [ ] **M3 — Epigraphy blind test (P2/M)** — run Markov slot-aligner G-LINA/G-INDUS/G-ELAM/G-RONG vs Linear B/Sumerian with held-out slots; report `H(Pk), I, D_KL`.
 - [x] **M4 — Micro-PK Q01 replication (P1/M)** — LIVE PILOT 2026-09-25: full 4-block `APPLE_CSPRNG` session via API (balanced schedule, 20k crypto perms): `D=-0.914, p=1.0, BF01=1.26` → `CLAIM_FAILS_NULL`. Textbook null on physical randomness — Layer-1 conservatism holds. Remain: pre-registered 100k-perm + hardware QRNG arm.
-- [ ] **M5 — Declassified 375-file triage (P1/M)** — OCR + embeddings over UFOFiles-Release1-5; link Apollo frames to `/api/declassified/images`; crowdsource labels.
+- [x] **M5 — Declassified 375-file triage (P1/M)** — STARTED 2026-09-25: full-census `docs/DECLASSIFIED-TRIAGE.md` (212 PDF / 133 MP4 / 30 img; **213 unmapped = backlog**, top files 3.2GB DOD video). Remain: OCR/keyframes, Apollo linking, triage queue UI.
 - [ ] **M6 — Geospace → biology coupling (P2/L)** — join DSCOVR `Bz/Bt` + INTERMAGNET + EIDA BHZ to BLT markers; test 1.6GHz SAR/Frey dose-response with negative controls.
 
 ---
@@ -85,3 +85,4 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 *Progress 2026-09-25 batch 4: 21/35 (+F4-partial, D3, D7-README). Verified: `tsc PASS`, `npm test 9/9`, `PY_OK`, `graft check OK`.*
 *Progress 2026-09-25 batch 5: 24/35 (+F5, B7, F7-types, D5). Verified: `tsc PASS`, `npm test 9/9`, `PY_OK` + QA unit check, `graft check OK`.*
 *Progress 2026-09-25 batch 6: 26/35 (+F6-modal, B3-security-extract, M4-live-pilot). Verified: `tsc PASS`, `npm test 11/11`, `graft check OK`, live 4-block pilot `CLAIM_FAILS_NULL`.*
+*Progress 2026-09-25 batch 7: 27/35 (+B3-rng-extract, M5-triage, Q4-links). Verified: `tsc PASS`, `npm test 17/17`, `graft check OK`.*

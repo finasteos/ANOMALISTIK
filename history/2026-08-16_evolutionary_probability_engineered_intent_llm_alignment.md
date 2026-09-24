@@ -43,6 +43,6 @@ This mathematical requirement connects directly to:
 ---
 
 ## Integration in ANOMALISTIK Architecture
-1. Added to project history log [`history/2026-08-16_anomalistics_deep_breakdown_travis_taylor.md`](file:///Users/imacpro/Documents/DEV-imac/ANOMALISTIK/history/2026-08-16_anomalistics_deep_breakdown_travis_taylor.md).
+1. Added to project history log [`history/2026-08-16_anomalistics_deep_breakdown_travis_taylor.md`](./history/2026-08-16_anomalistics_deep_breakdown_travis_taylor.md).
 2. Saved as dedicated dated reference document.
 3. Uploaded into ANOMALISTIK NotebookLM notebook (`17bbb4fa-f31a-4cc5-826f-7d4cfd2951d5`).

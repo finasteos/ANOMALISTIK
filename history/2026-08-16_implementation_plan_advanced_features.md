@@ -6,14 +6,14 @@ This plan details the full implementation of Tier-1 interactive 3D field rendere
 ## Proposed Changes
 
 ### 1. Metamaterial Laboratory & 3D Wave Propagation Engine
-#### [MODIFY] [MEnginesSection.tsx](file:///Users/imacpro/Documents/DEV-imac/ANOMALISTIK/src/components/MEnginesSection.tsx)
+#### [MODIFY] [MEnginesSection.tsx](./src/components/MEnginesSection.tsx)
 - Add interactive HTML5 Canvas 3D THz Electromagnetic Wave Propagation engine demonstrating negative refractive index $n(\omega) < 0$ and phase velocity reversal through alternating Bismuth ($1-4\,\mu\text{m}$) and Zinc ($100-200\,\mu\text{m}$) micro-layers.
 - Add real-time control sliders for THz pump power, layer count, and incident wave frequency ($0.1 - 10\text{ THz}$).
 
 ---
 
 ### 2. Geophysics & Astrophysics Atlas
-#### [MODIFY] [GeophysicsAstroSection.tsx](file:///Users/imacpro/Documents/DEV-imac/ANOMALISTIK/src/components/GeophysicsAstroSection.tsx)
+#### [MODIFY] [GeophysicsAstroSection.tsx](./src/components/GeophysicsAstroSection.tsx)
 - Add interactive 3D Spatial Dome & Subsurface Anomaly Visualizer:
   - 3D rendering of Mesa topography with GPR 50m cigar/dome anomaly object.
   - 2,000 ft LiDAR suppression sphere and 50–100 ft vertical GPS jump vectors.
@@ -25,7 +25,7 @@ This plan details the full implementation of Tier-1 interactive 3D field rendere
 ---
 
 ### 3. Pattern Explorer & Telemetry Ingestion Engine
-#### [MODIFY] [PatternExplorerSection.tsx](file:///Users/imacpro/Documents/DEV-imac/ANOMALISTIK/src/components/PatternExplorerSection.tsx)
+#### [MODIFY] [PatternExplorerSection.tsx](./src/components/PatternExplorerSection.tsx)
 - Add live 1.6 GHz L-band RF burst signal synthesizer ($1.610 - 1.625\text{ GHz}$) with configurable SNR, pulse period, and Doppler shift.
 - Add GPR synthetic subsurface trace generator for metallic/cavity density anomalies.
 - Implement full CSV / JSON field log dataset export and drag-and-drop live import parser.

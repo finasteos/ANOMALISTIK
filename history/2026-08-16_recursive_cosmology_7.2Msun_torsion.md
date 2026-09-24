@@ -53,7 +53,7 @@ If the host $7.2 M_\odot$ black hole possesses angular momentum (Kerr metric), t
 
 ## Integration Plan in ANOMALISTIK Codebase
 1. Ingest full text into `ANOMALISTIK` NotebookLM notebook (`17bbb4fa-f31a-4cc5-826f-7d4cfd2951d5`).
-2. Upgrade [`src/components/GeophysicsAstroSection.tsx`](file:///Users/imacpro/Documents/DEV-imac/ANOMALISTIK/src/components/GeophysicsAstroSection.tsx) under Tab 3 (`BLACK_HOLE_COSMOLOGY`):
+2. Upgrade [`src/components/GeophysicsAstroSection.tsx`](./src/components/GeophysicsAstroSection.tsx) under Tab 3 (`BLACK_HOLE_COSMOLOGY`):
    - Add toggle for **Classical Schwarzschild vs Einstein-Cartan Torsion Bounce**.
    - Add sliders for **Kerr Spin Parameter ($a/M$)**, **Fermion Spin Density ($\rho_{\text{spin}}$)**, and **Neutron Star TOV Limit ($M_{\text{TOV}}$)**.
    - Display calculations for **Spin-Torsion Repulsive Pressure ($P_{\text{torsion}}$)**, **Big Bounce Radius ($r_{\text{min}}$)**, **Cosmic Spiral Galaxy Chirality Asymmetry ($\Delta_{\text{CW-CCW}}$)**, and **PSR J0952-0607 Compatibility Score**.

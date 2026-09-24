@@ -8,11 +8,16 @@ import {
   parseCSV,
   pf,
   countOnesBytes,
-  normalCdf,
   shannonEntropy,
   indexOfCoincidence,
 } from "./src/lib/stats";
 import { securityHeaders, rateLimit } from "./src/server/security";
+import {
+  RNG_TAU,
+  directionalBF01,
+  adjudicateVerdict,
+  buildHistogram,
+} from "./src/server/rng";
 
 dotenv.config();
 
@@ -818,53 +823,19 @@ app.post("/api/rng/session/analyze", (req, res) => {
     const varPermD = permDValues.reduce((a, b) => a + Math.pow(b - meanPermD, 2), 0) / nPermutations;
     const stdPermD = Math.sqrt(varPermD) || 0.1;
 
-    // Normal-Normal Bayes Factor (directional H1+: mu > 0 vs H0: mu <= 0, prior scale tau = 0.20)
-    const tau = 0.20;
-    const zStat = observedD / stdPermD;
-    const ratioVar = (tau * tau) / (stdPermD * stdPermD);
-    const exponent = -0.5 * (zStat * zStat) * ((tau * tau) / (stdPermD * stdPermD + tau * tau));
-    const bf01Twosided = Math.sqrt(1.0 + ratioVar) * Math.exp(exponent);
-
-    // Directional correction for one-sided micro-PK hypothesis
-    const argPhi = (zStat * tau) / Math.sqrt(stdPermD * stdPermD + tau * tau);
-    const phiVal = normalCdf(argPhi);
-    const bf01Directional = phiVal > 1e-6 ? bf01Twosided / (2.0 * phiVal) : bf01Twosided * 1e6;
-
-    const bf01 = Math.max(Number(bf01Directional.toFixed(3)), 0.001);
-    const bf10 = bf01 > 0 ? Number((1.0 / bf01).toFixed(3)) : 999.0;
+    // Normal-Normal Bayes Factor (directional H1+: mu > 0 — see src/server/rng.ts)
+    const tau = RNG_TAU;
+    const { bf01, bf10 } = directionalBF01(observedD, stdPermD, tau);
 
     // Layer 1 Negative Control Check:
     const isPlacebo = sessionConfig?.sourceType === "DETERMINISTIC_PRNG_PLACEBO";
     const layer1NegativeControlPassed = isPlacebo ? Math.abs(observedD) < 2.5 : true;
 
     // ANOMALISTIK Layer 3 Verdict
-    let verdict: string;
-    if (!layer1NegativeControlPassed) {
-      verdict = "INSTRUMENT_SYSTEMATICS";
-    } else if (pValue < 0.001 && observedD > 0) {
-      verdict = "STRUCTURE_SIGNAL";
-    } else if (pValue < 0.05 && observedD > 0) {
-      verdict = "UNDERDETERMINED";
-    } else {
-      verdict = "CLAIM_FAILS_NULL";
-    }
+    const verdict = adjudicateVerdict({ layer1Passed: layer1NegativeControlPassed, pValue, observedD });
 
-    // Build Histogram Bins for Recharts (40 bins = Python parity, TASKLIST D4)
-    const minD = Math.min(...permDValues, observedD);
-    const maxD = Math.max(...permDValues, observedD);
-    const nBins = 40;
-    const step = (maxD - minD) / nBins || 0.1;
-    const bins = Array.from({ length: nBins }, (_, i) => ({
-      bin: Number((minD + (i + 0.5) * step).toFixed(3)),
-      count: 0
-    }));
-
-    for (let i = 0; i < nPermutations; i++) {
-      const idx = Math.min(Math.floor((permDValues[i] - minD) / step), nBins - 1);
-      if (idx >= 0 && idx < nBins) {
-        bins[idx].count++;
-      }
-    }
+    // Histogram for Recharts (40 bins = Python parity)
+    const bins = buildHistogram(permDValues, observedD);
 
     const analysisResult = {
       observedD: Number(observedD.toFixed(4)),
