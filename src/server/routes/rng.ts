@@ -452,12 +452,49 @@ export function createRngRouter(opts: { dataDir: string }) {
       };
 
       fs.writeFileSync(sessionFile, JSON.stringify(sessionPayload, null, 2), "utf-8");
+      appendChainEntry(sessionId, sessionConfig, analysisResult);
 
       return res.json(analysisResult);
     } catch (error: any) {
       return res.status(500).json({ error: error.message || "Failed to analyze RNG session." });
     }
   });
+
+  // Append-only hash-chained session ledger (TASKLIST D4).
+  // Each entry commits to the previous hash — tampering breaks the chain.
+  // Best-effort: ledger failures warn but never fail the analysis response.
+  const CHAIN_PATH = path.join(DATA_RNG_DIR, "sessions.jsonl");
+
+  function appendChainEntry(
+    sessionId: string,
+    sessionConfig: any,
+    analysis: { observedD: number; pValue: number; verdict: string }
+  ): void {
+    try {
+      let prev = "GENESIS";
+      if (fs.existsSync(CHAIN_PATH)) {
+        const lines = fs.readFileSync(CHAIN_PATH, "utf-8").trim().split("\n").filter(Boolean);
+        if (lines.length > 0) {
+          try {
+            prev = (JSON.parse(lines[lines.length - 1]) as { hash?: string }).hash || "GENESIS";
+          } catch { /* corrupt tail → re-anchor on GENESIS */ }
+        }
+      }
+      const entry = {
+        sessionId,
+        sourceType: sessionConfig?.sourceType || "Unknown",
+        observedD: analysis.observedD,
+        pValue: analysis.pValue,
+        verdict: analysis.verdict,
+        timestamp: new Date().toISOString(),
+        prev_hash: prev,
+      };
+      const hash = crypto.createHash("sha256").update(JSON.stringify(entry)).digest("hex");
+      fs.appendFileSync(CHAIN_PATH, JSON.stringify({ ...entry, hash }) + "\n", "utf-8");
+    } catch (e) {
+      console.warn("[rng] chain append failed:", (e as Error)?.message);
+    }
+  }
 
   router.get("/sessions", (req, res) => {
     try {

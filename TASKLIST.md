@@ -54,7 +54,7 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 - [x] **D1 — Fail-loud provenance (P0/M)** — DONE 2026-09-24: `--strict` on both fetchers (raises/skips instead of synthetic), `provenance="synthetic"` column on INTERMAGNET baselines, `.provenance.json` sidecar (`live|synthetic` + timestamp) in `fetch_public_datasets.py`, `User-Agent ANOMALISTICS/2.0`. Remain: quarantine to `data/synthetic/`, QA gate (D5).
 - [x] **D2 — Parquet-first + server parity (P1/M)** — PROGRESS 2026-09-25: `--emit-csv` + **zstd compression** on writes. Remain: pyarrow schema/Hive, server parquet reads.
 - [x] **D3 — Portable manifests (P1/S)** — DONE 2026-09-25: `run_id` UUID, `git_sha`, `argv`, relative paths, per-file `sha256` (new `sha256_file`), append `manifests/{run_id}.json` + capped `index.json`; legacy daily manifest kept (`/api/geospace/status` back-compat).
-- [x] **D4 — Unify RNG Python⇔TS (P0/M)** — PROGRESS 2026-09-25: bins 40, tau 0.20, **commitments disk-journaled** (`.commitments.json`, gitignored) — live restart-test: pre-restart placebo → 200 (was 404), same block twice → identical SHA. Remain: single `N`, JSONL hash-chain.
+- [x] **D4 — Unify RNG Python⇔TS (P0/M)** — DONE 2026-09-25: bins 40, tau 0.20, disk journal + **hash-chained `sessions.jsonl`** (externally verified in Python: link + SHA OK), rebuilt `api/index.js` bundle committed. Remain: single `N` across impls.
 - [x] **D5 — QA gate before sync (P1/M)** — DONE 2026-09-25: `qa_check()` per-stream (rows, gap %, synthetic flag) → `history/{ts}_qa.md`, PASS/WARN/FAIL + error log on FAIL. Unit-verified (live PASS, 30% gaps FAIL, synthetic FAIL). Remain: sentinel/`|B|/F`/`sps` physics checks.
 - [x] **D6 — Harden catalog + fetching (P2/M)** — DONE 2026-09-24 (partial): `catalog_declassified_archives.py` now uses `PROJECT_ROOT`, `argparse --archive-dir/--pattern`, `ANOMALISTICS_ARCHIVE_DIR` env, warns on missing zips (`--help` verified). Remain: `sha256 + OCR + DVC/LFS`, retries/backoff.
 - [x] **D7 — CI + cassettes (P1/M)** — PARTIAL 2026-09-25: `data/README.md` dictionary + retention; CI runs `micro_pk_rng --test`. Remain: `vcrpy` fixtures for SWPC/GIN/FDSN.
@@ -63,7 +63,7 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 
 - [x] **Q1 — README + LICENSE + ARCHITECTURE (P0/S)** — DONE 2026-09-24: `README.md` (quickstart, architecture, verdicts, caveats, roadmap) + MIT `LICENSE`.
 - [x] **Q2 — CI `/.github/workflows/ci.yml` (P0/S)** — DONE 2026-09-24: `lint+build`, absolute-link guard, hooks-path guard, `micro_pk_rng --test`.
-- [x] **Q3 — Real test harness (P0/M)** — DONE 2026-09-24 (foundation): zero-dep `src/lib/stats.ts` extracted from `server.ts` (`parseCSV/pf/countOnesBytes/shannonEntropy/indexOfCoincidence/erf/normalCdf`; server imports it — single source), `tests/stats.test.ts` 9 golden vectors via `tsx --test`, `npm test` script, CI already runs `micro_pk_rng --test`. 9/9 PASS. Remain: vitest/Playwright, CSV/SigMF parsers.
+- [x] **Q3 — Real test harness (P0/M)** — PROGRESS 2026-09-25: stats tests 17/17 + security/rng tests + **full `npm run build` green** (lazy chunks verified: QuantumRng/Geophysics/AiSearch split) + **prod bundle `dist/server.cjs` smoke-tested**. Remain: Playwright E2E.
 - [x] **Q4 — Consolidate `history/` → `docs/` (P2/M)** — PROGRESS 2026-09-25: `ROADMAP-GAPS.md` + all 10 stale `file:///Users/…ANOMALISTIK/` links → repo-relative (prose history untouched). Remain: merge triple-sourced EPE/7.2M☉/Mesa docs.
 
 ## 6. Unveil mysteries — research tracks 🌌
@@ -92,3 +92,4 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 *Progress 2026-09-25 batch 11: 31/35 (+M1-audit/driftfix, B3-rng-router). Verified: `tsc PASS`, `npm test 17/17`, `graft check OK`, live router smoke (analyze D/p/verdict + 40 bins).*
 *Progress 2026-09-25 batch 12: 32/35 (+B3-routes-finish, D2-zstd). Verified: `tsc PASS`, `npm test 17/17`, `PY_OK`, `graft check OK`, full live smoke all 14 routes identical.*
 *Progress 2026-09-25 batch 13: 33/35 (+D4-disk-journal, F5-memo). Verified: `tsc PASS`, `npm test 17/17`, `graft check OK`, live restart-test (placebo 200 + deterministic SHA match).*
+*Progress 2026-09-25 batch 14: 34/35 (+D4-JSONL-chain, build-green). Verified: `tsc PASS`, `npm test 17/17`, chain externt verifierad, `npm run build` OK + prod-bundle smoke.*
