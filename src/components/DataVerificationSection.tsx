@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   ShieldCheck, 
   ShieldAlert, 
@@ -190,23 +190,64 @@ export const DataVerificationSection: React.FC = () => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isWishlistExpanded, setIsWishlistExpanded] = useState<boolean>(true);
 
+  // Tracked timers so scans can be cancelled on unmount / target switch (TASKLIST F4)
+  const timerIds = useRef<number[]>([]);
+  const clearScanTimers = () => {
+    timerIds.current.forEach((id) => clearTimeout(id));
+    timerIds.current = [];
+  };
+  useEffect(() => () => clearScanTimers(), []);
+  const later = (fn: () => void, delay: number) => {
+    timerIds.current.push(window.setTimeout(fn, delay));
+  };
+
+  const newLogId = () => {
+    try {
+      if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID();
+    } catch { /* fall through */ }
+    return `log-${Date.now().toString(36)}-${timerIds.current.length.toString(36)}`;
+  };
+
   const handleCopySchema = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
+    const done = () => {
+      setIsCopied(true);
+      later(() => setIsCopied(false), 2000);
+    };
+    try {
+      const p = navigator.clipboard?.writeText(text);
+      if (p && typeof p.then === 'function') p.then(done).catch(() => fallbackCopy(text, done));
+      else fallbackCopy(text, done);
+    } catch {
+      fallbackCopy(text, done);
+    }
+  };
+
+  const fallbackCopy = (text: string, done: () => void) => {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    } catch { /* clipboard unavailable */ }
+    done();
   };
 
   const handleDownloadWishlistJson = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(RESEARCHER_WISHLIST_DATA, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "ANOMALISTIK_Skinwalker_Public_Data_Wishlist_v1.0.json");
+    downloadAnchor.setAttribute("download", "ANOMALISTICS_Skinwalker_Public_Data_Wishlist_v1.0.json");
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
   };
 
   const runCdliScan = () => {
+    clearScanTimers(); // cancel any in-flight scan (target switch safe)
     setIsScanning(true);
     setScanComplete(false);
     setLogs([]);
@@ -222,9 +263,9 @@ export const DataVerificationSection: React.FC = () => {
     ];
 
     sequence.forEach((item, index) => {
-      setTimeout(() => {
+      later(() => {
         setLogs(prev => [...prev, {
-          id: Math.random().toString(36).substr(2, 9),
+          id: newLogId(),
           timestamp: new Date().toISOString().substring(11, 19) + ' UTC',
           message: item.msg,
           type: item.type
@@ -239,6 +280,7 @@ export const DataVerificationSection: React.FC = () => {
   };
 
   const runSkinwalkerIntake = () => {
+    clearScanTimers(); // cancel any in-flight scan (target switch safe)
     setIsScanning(true);
     setScanComplete(false);
     setLogs([]);
@@ -258,9 +300,9 @@ export const DataVerificationSection: React.FC = () => {
     ];
 
     sequence.forEach((item, index) => {
-      setTimeout(() => {
+      later(() => {
         setLogs(prev => [...prev, {
-          id: Math.random().toString(36).substr(2, 9),
+          id: newLogId(),
           timestamp: new Date().toISOString().substring(11, 19) + ' UTC',
           message: item.msg,
           type: item.type

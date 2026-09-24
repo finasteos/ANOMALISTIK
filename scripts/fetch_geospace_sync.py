@@ -32,6 +32,9 @@ import shutil
 import logging
 import argparse
 import datetime
+import uuid
+import hashlib
+import subprocess
 import urllib.request
 import urllib.parse
 from pathlib import Path
@@ -683,26 +686,93 @@ class TimestampSynchronizer:
         df.to_parquet(parquet_path)
         df.to_csv(csv_path)
         log.info(f"[SYNC] -> {parquet_path.name} + {csv_path.name}")
-        return {"parquet": str(parquet_path), "csv": str(csv_path)}
+        return {
+            "parquet": str(parquet_path),
+            "csv": str(csv_path),
+            "parquet_rel": str(parquet_path.relative_to(PROJECT_ROOT)),
+            "csv_rel": str(csv_path.relative_to(PROJECT_ROOT)),
+            "parquet_sha256": sha256_file(parquet_path),
+            "csv_sha256": sha256_file(csv_path),
+            "rows": int(df.shape[0]),
+            "cols": int(df.shape[1]),
+        }
+
+
+def sha256_file(path: Path) -> Optional[str]:
+    """TASKLIST D3: content hash for manifest integrity."""
+    try:
+        h = hashlib.sha256()
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except Exception as e:
+        log.warning(f"[HASH] {path.name}: {e}")
+        return None
+
+
+def git_sha() -> Optional[str]:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=PROJECT_ROOT, stderr=subprocess.DEVNULL,
+        ).decode().strip()
+    except Exception:
+        return None
 
 
 # =============================================================================
 # SECTION 7 - Manifest & History
 # =============================================================================
 
-def write_manifest(run_meta: dict) -> Path:
+def write_manifest(run_meta: dict, args=None) -> Path:
+    """Portable, content-addressed manifest (TASKLIST D3).
+
+    Appends manifests/{run_id}.json + updates manifests/index.json.
+    Legacy daily manifest_YYYY-MM-DD.json still written for back-compat
+    (/api/geospace/status globs it).
+    """
+    run_id = uuid.uuid4().hex[:12]
     manifest = {
+        "run_id":              run_id,
         "anomalistik_version": "2.0",
-        "run_timestamp_utc":   datetime.datetime.utcnow().isoformat(),
-        "sources":             run_meta,
-        "sync_dir":            str(SYNC_DIR),
-        "data_dir":            str(DATA_DIR),
+        "run_timestamp_utc":   datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "git_sha":             git_sha(),
+        "argv":                list(sys.argv[1:]),
+        "cli": {
+            "start":    getattr(args, "start", None),
+            "end":      getattr(args, "end", None),
+            "resample": getattr(args, "resample", None),
+            "sources":  getattr(args, "sources", None),
+            "strict":   bool(getattr(args, "strict", False)),
+        },
+        "sources":  run_meta,
+        "sync_dir": "data/synced",  # relative: portable across machines
+        "data_dir": "data/downloads",
     }
+    manifests_dir = SYNC_DIR / "manifests"
+    manifests_dir.mkdir(parents=True, exist_ok=True)
+    run_path = manifests_dir / f"{run_id}.json"
+    with open(run_path, "w") as f:
+        json.dump(manifest, f, indent=2, default=str)
+
+    index_path = manifests_dir / "index.json"
+    try:
+        index = json.loads(index_path.read_text()) if index_path.exists() else []
+    except Exception:
+        index = []
+    index.insert(0, {"run_id": run_id,
+                     "run_timestamp_utc": manifest["run_timestamp_utc"],
+                     "git_sha": manifest["git_sha"]})
+    with open(index_path, "w") as f:
+        json.dump(index[:100], f, indent=2)
+
+    # Legacy daily file (back-compat)
     path = SYNC_DIR / f"manifest_{datetime.date.today()}.json"
     with open(path, "w") as f:
         json.dump(manifest, f, indent=2, default=str)
-    log.info(f"[MANIFEST] -> {path}")
-    return path
+    log.info(f"[MANIFEST] -> manifests/{run_id}.json (+ legacy {path.name})")
+    return run_path
 
 
 def save_history(args, summary: dict) -> None:
@@ -877,7 +947,7 @@ def main():
         "resample":    args.resample,
         "streams":     summary,
         "output":      paths,
-    })
+    }, args)
     save_history(args, summary)
 
     print(f"\n  Log:      {log_file}")

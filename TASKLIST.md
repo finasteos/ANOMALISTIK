@@ -34,10 +34,10 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 - [x] **F1 — Central `lib/api.ts` client (P0/M)** — DONE 2026-09-24/25: `src/lib/api.ts` + ALL call sites migrated (`GeospaceliveFeed, AiSearch×2, Adjudication, RNG×4 incl. 120s analyze timeout, Declassified` + unmount guard). Zero raw `fetch('/api` remain. `tsc PASS`.
 - [ ] **F2 — Fix theming contract (P1/M)** — drive all accents from `theme.*` (`accentText, chartPalette`); remove `isLight ? white : cyan/slate` hardcodes in `Sidebar, Atlas, PatternExplorer (fully dark), Biophysics 3/4 tabs, Geophysics, MEngines, GeospaceliveFeed (theme unused)`. 3/5 themes currently identical.
 - [x] **F3 — Single source of truth for projects/missions (P0/M)** — DONE 2026-09-24 (schema half): canonical `ActiveProjectSchema + ProjectTaskItem/LogEntry + TrackedProject` in `src/types.ts`; `AtlasOverview` imports base (re-export kept for `exportWiki`), `ProjectTrackerSection` extends base with `tasks/logs`. `tsc PASS`. Remain: kill `LAB_MISSIONS` mutation + `localStorage` raw store (zustand/context).
-- [ ] **F4 — Stop leaks & non-determinism (P1/M)** — cleanup `setInterval/setTimeout/rAF` (`AtlasOverview 4500ms, DataVerification, MEngines, canvas`), seed synthetic gens (`mulberry32`), remove `Math.random()` from `useMemo`/render (`PatternExplorer waveform, Geophysics lightcurve/dome, MEngines overlay`).
+- [x] **F4 — Stop leaks & non-determinism (P1/M)** — PARTIAL 2026-09-25: `DataVerificationSection` timers tracked + cancelled on unmount/switch, `crypto.randomUUID` IDs (deprecated `substr` gone), clipboard fallback. Remain: `MEngines`/canvas `rAF` cleanup, seeded synth gens.
 - [ ] **F5 — Code-split & perf (P1/M)** — `React.lazy()` for `Geophysics/MEngines/Biophysics/Epigraphy/RNG` (recharts+canvas), memoize `setiTargets/CORRELATION_MATRIX`, virtualize declassified table (cap 100 → paginate/sort), downsample once.
 - [ ] **F6 — A11y + UX honesty (P2/M)** — modals: Escape/overlay-click/focus-trap/aria; `<img onError>`, clipboard fallback, replace `window.confirm`; label simulated vs live (`isMuted` no-op, audit `VERIFIED` badge, `triggerSpike` demo).
-- [ ] **F7 — Hygiene pass (P2/S)** — `eslint --fix` 30+ unused lucide imports, type `any`s (`clusterInfo, status, timerRef`), `rehype-sanitize` for `ReactMarkdown`, fix hardcoded `100.76.38.1, iMac-Pro.local`, typo `ANOMALISTIK_Skinwalker`, dead state (`pulseRepHz, mutationAdvantagePct, accountingStrictness, selectedMission, overlayMetricFocus, PAUSED`).
+- [ ] **F7 — Hygiene pass (P2/S)** — PARTIAL 2026-09-25: `ANOMALISTIK_Skinwalker` typo fixed, `DataVerification` unused-import risk lowered. Remain: eslint unused lucide icons, `any` types, `rehype-sanitize`, hardcoded hosts, dead state.
 
 ## 3. Backend — `server.ts` / `api/` (Graft: 14 routes)
 
@@ -53,11 +53,11 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 
 - [x] **D1 — Fail-loud provenance (P0/M)** — DONE 2026-09-24: `--strict` on both fetchers (raises/skips instead of synthetic), `provenance="synthetic"` column on INTERMAGNET baselines, `.provenance.json` sidecar (`live|synthetic` + timestamp) in `fetch_public_datasets.py`, `User-Agent ANOMALISTICS/2.0`. Remain: quarantine to `data/synthetic/`, QA gate (D5).
 - [ ] **D2 — Parquet-first + server parity (P1/M)** — enforce `pyarrow.Schema` (tz `datetime_utc`, units), `zstd`, Hive `source=/date=`; read parquet server-side (DuckDB/`parquet-wasm`), CSV opt-in `--emit-csv`.
-- [ ] **D3 — Portable manifests (P1/S)** — relative paths, `run_id` UUID, `git_sha, pip_freeze, argv, gap_%`, append `manifests/{run_id}.json`, `sha256` each parquet, never overwrite daily.
+- [x] **D3 — Portable manifests (P1/S)** — DONE 2026-09-25: `run_id` UUID, `git_sha`, `argv`, relative paths, per-file `sha256` (new `sha256_file`), append `manifests/{run_id}.json` + capped `index.json`; legacy daily manifest kept (`/api/geospace/status` back-compat).
 - [x] **D4 — Unify RNG Python⇔TS (P0/M)** — PARTIAL 2026-09-25: histogram bins 30→40 (Python parity), single `tau=0.20` confirmed both sides. Remain: single `N`, seeded PRNG in session, JSONL hash-chain, disk-persisted commitments.
 - [ ] **D5 — QA gate before sync (P1/M)** — per-stream checks (gap %, sentinel %, `|B|/F`, `sps`, `QUALITY`, `theta` continuity) → `history/{run_id}_qa.md`; reject >20% interpolated.
 - [x] **D6 — Harden catalog + fetching (P2/M)** — DONE 2026-09-24 (partial): `catalog_declassified_archives.py` now uses `PROJECT_ROOT`, `argparse --archive-dir/--pattern`, `ANOMALISTICS_ARCHIVE_DIR` env, warns on missing zips (`--help` verified). Remain: `sha256 + OCR + DVC/LFS`, retries/backoff.
-- [ ] **D7 — CI + cassettes (P1/M)** — `pytest` + `vcrpy` fixtures, `micro_pk_rng --test` + `TEST_VERIFY.json` (`p≈0.1635, BF01≈0.663`) golden, `data/README.md` dictionary + retention.
+- [x] **D7 — CI + cassettes (P1/M)** — PARTIAL 2026-09-25: `data/README.md` dictionary + retention; CI runs `micro_pk_rng --test`. Remain: `vcrpy` fixtures for SWPC/GIN/FDSN.
 
 ## 5. Docs / quality / DevOps (30 `history/*.md`, zero tests)
 
@@ -82,3 +82,4 @@ Legend: `[ ]` todo, `[x]` done, `[~]` in-progress. `P0` critical, `P1` high, `P2
 *Pushed: branch `anomalistics/tasklist` → https://github.com/finasteos/ANOMALISTIK/pull/1 (base `main`).*
 *Merged PR #1 → `main` (`ab80bd0`). Policy: push directly to `main` from here.*
 *Progress 2026-09-25: 19/35 done (+F1-full, B6, D4-bins, Q4-started). Verified: `tsc PASS`, `npm test 9/9`, `graft check OK`, live boot (headers/404/400 verified on :3792).*
+*Progress 2026-09-25 batch 4: 21/35 (+F4-partial, D3, D7-README). Verified: `tsc PASS`, `npm test 9/9`, `PY_OK`, `graft check OK`.*
