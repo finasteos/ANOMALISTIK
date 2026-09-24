@@ -1,20 +1,29 @@
 import zipfile
 import json
 import os
+import argparse
 from pathlib import Path
 
-ARCHIVE_DIR = Path("/Users/imacpro/Downloads")
-OUTPUT_JSON = Path("data/declassified_archive_index.json")
-OUTPUT_MD = Path("history/2026-08-17_declassified_archives_catalog.md")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_ARCHIVE_DIR = Path(os.environ.get("ANOMALISTICS_ARCHIVE_DIR", str(PROJECT_ROOT / "data" / "archives")))
+OUTPUT_JSON = PROJECT_ROOT / "data" / "declassified_archive_index.json"
+OUTPUT_MD = PROJECT_ROOT / "history" / "2026-08-17_declassified_archives_catalog.md"
 
-ARCHIVES = [
-    ARCHIVE_DIR / f"UFOFiles-Release{i}.zip" for i in range(1, 6)
-]
 
-def catalog_archives():
+def parse_args():
+    p = argparse.ArgumentParser(description="Catalog UFOFiles declassified archives")
+    p.add_argument("--archive-dir", type=Path, default=DEFAULT_ARCHIVE_DIR,
+                   help="Directory containing UFOFiles-Release1..5.zip")
+    p.add_argument("--pattern", default="UFOFiles-Release*.zip")
+    return p.parse_args()
+
+
+ARCHIVES: list[Path] = []
+
+def catalog_archives(archives: list[Path]):
     catalog = {
         "generated_at": "2026-08-17",
-        "total_archives": len(ARCHIVES),
+        "total_archives": len(archives),
         "total_files": 0,
         "total_uncompressed_bytes": 0,
         "archives": []
@@ -28,8 +37,9 @@ def catalog_archives():
         ""
     ]
 
-    for arc_path in ARCHIVES:
+    for arc_path in archives:
         if not arc_path.exists():
+            print(f"Skipping missing archive: {arc_path}")
             continue
         
         arc_stat = arc_path.stat()
@@ -91,4 +101,8 @@ def catalog_archives():
     print(f"Cataloged {catalog['total_files']} files ({round(catalog['total_uncompressed_bytes'] / (1024*1024*1024), 2)} GB uncompressed) successfully.")
 
 if __name__ == "__main__":
-    catalog_archives()
+    args = parse_args()
+    found = sorted(args.archive_dir.glob(args.pattern))
+    if not found:  # fallback to legacy Release1..5 naming
+        found = [args.archive_dir / f"UFOFiles-Release{i}.zip" for i in range(1, 6)]
+    catalog_archives(found)

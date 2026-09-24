@@ -40,6 +40,8 @@ import {
 } from 'lucide-react';
 import { DATA_DOMAINS, EPIGRAPHIC_CORPORA, M_ENGINES, LAB_MISSIONS } from '../data/labData';
 import { useTheme } from '../ThemeContext';
+import type { ActiveProjectSchema } from '../types';
+export type { ActiveProjectSchema };
 import { ProjectTrackerSection } from './ProjectTrackerSection';
 
 interface RealtimeAlert {
@@ -57,28 +59,7 @@ interface RealtimeAlert {
   sourceSensor: string;
 }
 
-export interface ActiveProjectSchema {
-  anomaly_id: string;
-  code: string;
-  title: string;
-  domain: string;
-  target_tab: string;
-  status: 'STRUCTURE_SIGNAL' | 'SEQUENCE_STRUCTURE' | 'DIP_STRUCTURE' | 'UNDERDETERMINED' | 'INSTRUMENT_SYSTEMATICS' | 'CLAIM_FAILS_NULL';
-  progress_percentage: number;
-  last_anomaly_timestamp: string;
-  metrics: {
-    z_score?: number | string;
-    conditional_entropy?: number | string;
-    snr_db?: number;
-    periodicity_days?: number;
-    elongation_pct?: number;
-    synchronicity_ly?: string;
-    [key: string]: any;
-  };
-  negative_controls_applied: string[];
-  repo_file_path: string;
-  summary: string;
-}
+// ActiveProjectSchema now canonical in ../types (TASKLIST F3).
 
 export const ACTIVE_PROJECTS_LIST: ActiveProjectSchema[] = [
   {

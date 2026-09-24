@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { Search, Sparkles, ExternalLink, RefreshCw, Send, Brain, ShieldAlert } from 'lucide-react';
 import { SearchGroundedResponse, HighThinkingResponse } from '../types';
 import { useTheme } from '../ThemeContext';
+import { apiPost } from '../lib/api';
 
 export const AiSearchAssistant: React.FC = () => {
   const { theme, themeId } = useTheme();
@@ -33,18 +34,10 @@ export const AiSearchAssistant: React.FC = () => {
     setSearchError(null);
 
     try {
-      const res = await fetch('/api/ai/search-grounded', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: searchQuery }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Search Grounded query failed');
-      }
-
-      const data: SearchGroundedResponse = await res.json();
+      const data = await apiPost<SearchGroundedResponse>(
+        '/api/ai/search-grounded',
+        { query: searchQuery.trim().slice(0, 4000) },
+      );
       setSearchResponse(data);
     } catch (err: any) {
       setSearchError(err.message || 'Error executing search');
@@ -60,18 +53,10 @@ export const AiSearchAssistant: React.FC = () => {
     setThinkingError(null);
 
     try {
-      const res = await fetch('/api/ai/high-thinking', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: thinkingPrompt, domainContext: thinkingDomain }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'High Thinking query failed');
-      }
-
-      const data: HighThinkingResponse = await res.json();
+      const data = await apiPost<HighThinkingResponse>(
+        '/api/ai/high-thinking',
+        { prompt: thinkingPrompt.trim().slice(0, 8000), domainContext: thinkingDomain },
+      );
       setThinkingResponse(data);
     } catch (err: any) {
       setThinkingError(err.message || 'Error executing high thinking');

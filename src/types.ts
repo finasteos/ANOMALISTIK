@@ -104,3 +104,47 @@ export interface HighThinkingResponse {
   modelUsed: string;
   queryTime: string;
 }
+
+// Canonical project schema (TASKLIST F3) — single source of truth.
+// AtlasOverview uses the base; ProjectTrackerSection extends with tasks/logs.
+export interface ActiveProjectSchema {
+  anomaly_id: string;
+  code: string;
+  title: string;
+  domain: string;
+  target_tab: string;
+  status: 'STRUCTURE_SIGNAL' | 'SEQUENCE_STRUCTURE' | 'DIP_STRUCTURE' | 'UNDERDETERMINED' | 'INSTRUMENT_SYSTEMATICS' | 'CLAIM_FAILS_NULL';
+  progress_percentage: number;
+  last_anomaly_timestamp: string;
+  metrics: {
+    z_score?: number | string;
+    conditional_entropy?: number | string;
+    snr_db?: number;
+    periodicity_days?: number;
+    elongation_pct?: number;
+    synchronicity_ly?: string;
+    [key: string]: any;
+  };
+  negative_controls_applied: string[];
+  repo_file_path: string;
+  summary: string;
+}
+
+export interface ProjectTaskItem {
+  id: string;
+  title: string;
+  completed: boolean;
+  assigned_role: string;
+}
+
+export interface ProjectLogEntry {
+  id: string;
+  timestamp: string;
+  author: string;
+  note: string;
+}
+
+export interface TrackedProject extends ActiveProjectSchema {
+  tasks: ProjectTaskItem[];
+  logs: ProjectLogEntry[];
+}

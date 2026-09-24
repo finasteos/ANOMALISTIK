@@ -7,12 +7,29 @@ into local /data directory for offline correlation modeling.
 
 import os
 import sys
+import argparse
 import urllib.request
 import json
 import time
+import datetime
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "downloads")
 os.makedirs(DATA_DIR, exist_ok=True)
+PROVENANCE_PATH = os.path.join(DATA_DIR, ".provenance.json")
+
+
+def record_provenance(filename: str, provenance: str):
+    """TASKLIST D1: track live vs synthetic per file so mocks never masquerade."""
+    try:
+        prov = {}
+        if os.path.exists(PROVENANCE_PATH):
+            with open(PROVENANCE_PATH) as f:
+                prov = json.load(f)
+        prov[filename] = {"provenance": provenance, "recorded_at": datetime.datetime.now(datetime.timezone.utc).isoformat()}
+        with open(PROVENANCE_PATH, "w") as f:
+            json.dump(prov, f, indent=2)
+    except Exception as e:
+        print(f"    ⚠️ Could not record provenance: {e}")
 
 DATASETS = [
     {
@@ -47,31 +64,45 @@ DATASETS = [
     }
 ]
 
-def download_datasets():
+def download_datasets(strict: bool = False):
     print("==================================================")
     print("  ANOMALISTIK OPEN-SOURCE DATASET INGESTION TOOL  ")
     print("==================================================")
     print(f"Target Directory: {DATA_DIR}\n")
 
+    failures = 0
     for ds in DATASETS:
         dest_path = os.path.join(DATA_DIR, ds["filename"])
         print(f"[+] Processing: {ds['name']}")
         try:
             # Attempt live HTTP request
             print(f"    Fetching from URL: {ds['url']} ...")
-            req = urllib.request.Request(ds["url"], headers={'User-Agent': 'Mozilla/5.0'})
+            req = urllib.request.Request(ds["url"], headers={'User-Agent': 'ANOMALISTICS/2.0'})
             with urllib.request.urlopen(req, timeout=10) as response, open(dest_path, 'wb') as out_file:
                 out_file.write(response.read())
+            record_provenance(ds["filename"], "live")
             print(f"    ✅ Downloaded successfully to {ds['filename']}\n")
         except Exception as e:
-            print(f"    ⚠️ Remote endpoint restricted/offline ({e}). Initializing verified local offline cache...")
+            if strict:
+                print(f"    ❌ LIVE fetch failed and --strict forbids offline cache: {e}")
+                failures += 1
+                continue
+            print(f"    ⚠️ Remote endpoint restricted/offline ({e}). Writing SYNTHETIC offline cache...")
             with open(dest_path, 'w') as f:
                 f.write(ds["mock_content"])
-            print(f"    ✅ Local offline cache created: {ds['filename']}\n")
+            record_provenance(ds["filename"], "synthetic")
+            print(f"    ✅ SYNTHETIC offline cache created: {ds['filename']} (see .provenance.json)\n")
 
     print("==================================================")
+    if failures:
+        print(f"  INGESTION FAILED for {failures} dataset(s) (--strict).")
+        print("==================================================")
+        sys.exit(1)
     print("  DATASET INGESTION COMPLETE. ALL FILES READY.   ")
     print("==================================================")
 
 if __name__ == "__main__":
-    download_datasets()
+    ap = argparse.ArgumentParser(description="ANOMALISTICS public dataset ingestion")
+    ap.add_argument("--strict", action="store_true",
+                    help="Fail instead of writing synthetic offline caches (TASKLIST D1)")
+    download_datasets(strict=ap.parse_args().strict)
